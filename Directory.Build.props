@@ -1,0 +1,25 @@
+<Project>
+  <!-- Stop inheriting from parent Directory.Build.props -->
+  <!-- This submodule is an independent project with its own settings -->
+
+  <PropertyGroup>
+    <!-- Reset target framework - each project defines its own -->
+    <TargetFramework></TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>iyulab</Authors>
+    <Company>iyulab</Company>
+    <Product>TokenMeter</Product>
+    <Copyright>Copyright (c) iyulab</Copyright>
+    <RepositoryUrl>https://github.com/iyulab/TokenMeter</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+</Project>

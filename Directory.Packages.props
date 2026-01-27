@@ -1,0 +1,6 @@
+<Project>
+  <!-- Opt-out of parent's Central Package Management -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+</Project>

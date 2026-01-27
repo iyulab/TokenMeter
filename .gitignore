@@ -1,0 +1,35 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.vs/
+.vscode/
+.idea/
+
+# Build outputs
+publish/
+artifacts/
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+
+# Test results
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+*.swp
+*~
+
+# Logs
+*.log
+logs/
