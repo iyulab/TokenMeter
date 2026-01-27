@@ -22,4 +22,10 @@
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
+  <!-- Release build: exclude PDB files -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
 </Project>
