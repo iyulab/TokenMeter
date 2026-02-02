@@ -19,11 +19,11 @@
 
   <ItemGroup>
     <!-- Microsoft ML Tokenizers for accurate token counting -->
-    <PackageReference Include="Microsoft.ML.Tokenizers" Version="1.0.3" />
+    <PackageReference Include="Microsoft.ML.Tokenizers" Version="2.0.0" />
     <!-- Tokenizer data for cl100k_base encoding (GPT-4, GPT-3.5-turbo, etc.) -->
-    <PackageReference Include="Microsoft.ML.Tokenizers.Data.Cl100kBase" Version="1.0.3" />
+    <PackageReference Include="Microsoft.ML.Tokenizers.Data.Cl100kBase" Version="2.0.0" />
     <!-- Tokenizer data for p50k_base encoding (GPT-3, Codex) -->
-    <PackageReference Include="Microsoft.ML.Tokenizers.Data.P50kBase" Version="1.0.3" />
+    <PackageReference Include="Microsoft.ML.Tokenizers.Data.P50kBase" Version="2.0.0" />
   </ItemGroup>
 
 </Project>
