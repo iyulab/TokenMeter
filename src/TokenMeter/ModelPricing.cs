@@ -49,7 +49,7 @@ public record ModelPricing
 
 /// <summary>
 /// Built-in pricing data for common models.
-/// Prices as of January 2026.
+/// Pricing data is loaded from embedded JSON resources per provider.
 ///
 /// Sources:
 /// - OpenAI: https://openai.com/api/pricing/
@@ -57,530 +57,163 @@ public record ModelPricing
 /// - Google: https://ai.google.dev/gemini-api/docs/pricing
 /// - Azure: https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/
 /// - xAI: https://docs.x.ai/docs/models
+/// - Mistral: https://mistral.ai/technology/
+/// - DeepSeek: https://platform.deepseek.com/api-docs/pricing
+/// - Amazon Nova: https://aws.amazon.com/bedrock/pricing/
+/// - Cohere: https://cohere.com/pricing
+/// - Meta Llama: https://llama.meta.com/
+/// - Perplexity: https://docs.perplexity.ai/guides/pricing
+/// - Qwen: https://help.aliyun.com/zh/model-studio/
 /// </summary>
 public static class ModelPricingData
 {
+    private static readonly IReadOnlyDictionary<string, ModelPricing> s_empty =
+        new Dictionary<string, ModelPricing>(StringComparer.OrdinalIgnoreCase);
+
+    private static readonly Dictionary<string, ModelPricing> _all;
+    private static readonly Dictionary<string, IReadOnlyDictionary<string, ModelPricing>> _byProvider;
+    private static readonly List<AliasRule> _allAliasRules;
+
+    static ModelPricingData()
+    {
+        var providers = PricingLoader.LoadAll();
+
+        var all = new Dictionary<string, ModelPricing>(StringComparer.OrdinalIgnoreCase);
+        var byProvider = new Dictionary<string, IReadOnlyDictionary<string, ModelPricing>>(StringComparer.OrdinalIgnoreCase);
+        var allAliasRules = new List<AliasRule>();
+
+        foreach (var provider in providers)
+        {
+            foreach (var kv in provider.Models)
+            {
+                all[kv.Key] = kv.Value;
+            }
+            byProvider[provider.ProviderName] = provider.Models;
+            allAliasRules.AddRange(provider.AliasRules);
+        }
+
+        _all = all;
+        _byProvider = byProvider;
+        _allAliasRules = allAliasRules;
+    }
+
     /// <summary>
     /// Last updated date for pricing data.
     /// </summary>
-    public static DateOnly LastUpdated { get; } = new(2026, 1, 28);
+    public static DateOnly LastUpdated { get; } = new(2026, 2, 10);
 
     /// <summary>
     /// Gets pricing for OpenAI models.
     /// </summary>
-    public static IReadOnlyDictionary<string, ModelPricing> OpenAI { get; } = new Dictionary<string, ModelPricing>(StringComparer.OrdinalIgnoreCase)
-    {
-        // GPT-4o Series
-        ["gpt-4o"] = new()
-        {
-            ModelId = "gpt-4o",
-            InputPricePerMillion = 2.50m,
-            OutputPricePerMillion = 10.00m,
-            Provider = "OpenAI",
-            DisplayName = "GPT-4o",
-            ContextWindow = 128000
-        },
-        ["gpt-4o-mini"] = new()
-        {
-            ModelId = "gpt-4o-mini",
-            InputPricePerMillion = 0.15m,
-            OutputPricePerMillion = 0.60m,
-            Provider = "OpenAI",
-            DisplayName = "GPT-4o mini",
-            ContextWindow = 128000
-        },
-
-        // GPT-4 Series (Legacy)
-        ["gpt-4-turbo"] = new()
-        {
-            ModelId = "gpt-4-turbo",
-            InputPricePerMillion = 10.00m,
-            OutputPricePerMillion = 30.00m,
-            Provider = "OpenAI",
-            DisplayName = "GPT-4 Turbo",
-            ContextWindow = 128000
-        },
-        ["gpt-4"] = new()
-        {
-            ModelId = "gpt-4",
-            InputPricePerMillion = 30.00m,
-            OutputPricePerMillion = 60.00m,
-            Provider = "OpenAI",
-            DisplayName = "GPT-4",
-            ContextWindow = 8192
-        },
-        ["gpt-3.5-turbo"] = new()
-        {
-            ModelId = "gpt-3.5-turbo",
-            InputPricePerMillion = 0.50m,
-            OutputPricePerMillion = 1.50m,
-            Provider = "OpenAI",
-            DisplayName = "GPT-3.5 Turbo",
-            ContextWindow = 16385
-        },
-
-        // o-Series (Reasoning Models)
-        ["o1"] = new()
-        {
-            ModelId = "o1",
-            InputPricePerMillion = 15.00m,
-            OutputPricePerMillion = 60.00m,
-            Provider = "OpenAI",
-            DisplayName = "o1",
-            ContextWindow = 200000
-        },
-        ["o1-mini"] = new()
-        {
-            ModelId = "o1-mini",
-            InputPricePerMillion = 3.00m,
-            OutputPricePerMillion = 12.00m,
-            Provider = "OpenAI",
-            DisplayName = "o1-mini",
-            ContextWindow = 128000
-        },
-        ["o3"] = new()
-        {
-            ModelId = "o3",
-            InputPricePerMillion = 2.00m,
-            OutputPricePerMillion = 8.00m,
-            Provider = "OpenAI",
-            DisplayName = "o3",
-            ContextWindow = 200000
-        },
-        ["o3-mini"] = new()
-        {
-            ModelId = "o3-mini",
-            InputPricePerMillion = 1.10m,
-            OutputPricePerMillion = 4.40m,
-            Provider = "OpenAI",
-            DisplayName = "o3-mini",
-            ContextWindow = 200000
-        }
-    };
+    public static IReadOnlyDictionary<string, ModelPricing> OpenAI => GetProviderDict("OpenAI");
 
     /// <summary>
     /// Gets pricing for Anthropic models.
     /// </summary>
-    public static IReadOnlyDictionary<string, ModelPricing> Anthropic { get; } = new Dictionary<string, ModelPricing>(StringComparer.OrdinalIgnoreCase)
-    {
-        // Claude 4.5 Series (Latest)
-        ["claude-4-5-opus"] = new()
-        {
-            ModelId = "claude-4-5-opus",
-            InputPricePerMillion = 5.00m,
-            OutputPricePerMillion = 25.00m,
-            Provider = "Anthropic",
-            DisplayName = "Claude 4.5 Opus",
-            ContextWindow = 200000
-        },
-        ["claude-4-5-sonnet"] = new()
-        {
-            ModelId = "claude-4-5-sonnet",
-            InputPricePerMillion = 3.00m,
-            OutputPricePerMillion = 15.00m,
-            Provider = "Anthropic",
-            DisplayName = "Claude 4.5 Sonnet",
-            ContextWindow = 200000
-        },
-        ["claude-4-5-haiku"] = new()
-        {
-            ModelId = "claude-4-5-haiku",
-            InputPricePerMillion = 1.00m,
-            OutputPricePerMillion = 5.00m,
-            Provider = "Anthropic",
-            DisplayName = "Claude 4.5 Haiku",
-            ContextWindow = 200000
-        },
-
-        // Claude 3.5 Series
-        ["claude-3-5-sonnet-20241022"] = new()
-        {
-            ModelId = "claude-3-5-sonnet-20241022",
-            InputPricePerMillion = 3.00m,
-            OutputPricePerMillion = 15.00m,
-            Provider = "Anthropic",
-            DisplayName = "Claude 3.5 Sonnet",
-            ContextWindow = 200000
-        },
-        ["claude-3-5-haiku-20241022"] = new()
-        {
-            ModelId = "claude-3-5-haiku-20241022",
-            InputPricePerMillion = 0.80m,
-            OutputPricePerMillion = 4.00m,
-            Provider = "Anthropic",
-            DisplayName = "Claude 3.5 Haiku",
-            ContextWindow = 200000
-        },
-
-        // Claude 3 Series (Legacy)
-        ["claude-3-opus-20240229"] = new()
-        {
-            ModelId = "claude-3-opus-20240229",
-            InputPricePerMillion = 15.00m,
-            OutputPricePerMillion = 75.00m,
-            Provider = "Anthropic",
-            DisplayName = "Claude 3 Opus",
-            ContextWindow = 200000
-        },
-        ["claude-3-sonnet-20240229"] = new()
-        {
-            ModelId = "claude-3-sonnet-20240229",
-            InputPricePerMillion = 3.00m,
-            OutputPricePerMillion = 15.00m,
-            Provider = "Anthropic",
-            DisplayName = "Claude 3 Sonnet",
-            ContextWindow = 200000
-        },
-        ["claude-3-haiku-20240307"] = new()
-        {
-            ModelId = "claude-3-haiku-20240307",
-            InputPricePerMillion = 0.25m,
-            OutputPricePerMillion = 1.25m,
-            Provider = "Anthropic",
-            DisplayName = "Claude 3 Haiku",
-            ContextWindow = 200000
-        }
-    };
+    public static IReadOnlyDictionary<string, ModelPricing> Anthropic => GetProviderDict("Anthropic");
 
     /// <summary>
     /// Gets pricing for Google Gemini models.
     /// </summary>
-    public static IReadOnlyDictionary<string, ModelPricing> Google { get; } = new Dictionary<string, ModelPricing>(StringComparer.OrdinalIgnoreCase)
-    {
-        // Gemini 2.5 Series
-        ["gemini-2.5-pro"] = new()
-        {
-            ModelId = "gemini-2.5-pro",
-            InputPricePerMillion = 1.25m,
-            OutputPricePerMillion = 10.00m,
-            Provider = "Google",
-            DisplayName = "Gemini 2.5 Pro",
-            ContextWindow = 1000000
-        },
-        ["gemini-2.5-flash"] = new()
-        {
-            ModelId = "gemini-2.5-flash",
-            InputPricePerMillion = 0.15m,
-            OutputPricePerMillion = 0.60m,
-            Provider = "Google",
-            DisplayName = "Gemini 2.5 Flash",
-            ContextWindow = 1000000
-        },
-
-        // Gemini 2.0 Series
-        ["gemini-2.0-flash"] = new()
-        {
-            ModelId = "gemini-2.0-flash",
-            InputPricePerMillion = 0.10m,
-            OutputPricePerMillion = 0.40m,
-            Provider = "Google",
-            DisplayName = "Gemini 2.0 Flash",
-            ContextWindow = 1000000
-        },
-        ["gemini-2.0-flash-lite"] = new()
-        {
-            ModelId = "gemini-2.0-flash-lite",
-            InputPricePerMillion = 0.075m,
-            OutputPricePerMillion = 0.30m,
-            Provider = "Google",
-            DisplayName = "Gemini 2.0 Flash-Lite",
-            ContextWindow = 1000000
-        },
-
-        // Gemini 1.5 Series (Legacy)
-        ["gemini-1.5-pro"] = new()
-        {
-            ModelId = "gemini-1.5-pro",
-            InputPricePerMillion = 1.25m,
-            OutputPricePerMillion = 5.00m,
-            Provider = "Google",
-            DisplayName = "Gemini 1.5 Pro",
-            ContextWindow = 2000000
-        },
-        ["gemini-1.5-flash"] = new()
-        {
-            ModelId = "gemini-1.5-flash",
-            InputPricePerMillion = 0.075m,
-            OutputPricePerMillion = 0.30m,
-            Provider = "Google",
-            DisplayName = "Gemini 1.5 Flash",
-            ContextWindow = 1000000
-        }
-    };
+    public static IReadOnlyDictionary<string, ModelPricing> Google => GetProviderDict("Google");
 
     /// <summary>
     /// Gets pricing for xAI Grok models.
     /// </summary>
-    public static IReadOnlyDictionary<string, ModelPricing> XAI { get; } = new Dictionary<string, ModelPricing>(StringComparer.OrdinalIgnoreCase)
-    {
-        // Grok 4 Series
-        ["grok-4"] = new()
-        {
-            ModelId = "grok-4",
-            InputPricePerMillion = 3.00m,
-            OutputPricePerMillion = 15.00m,
-            Provider = "xAI",
-            DisplayName = "Grok 4",
-            ContextWindow = 131072
-        },
-        ["grok-4-fast"] = new()
-        {
-            ModelId = "grok-4-fast",
-            InputPricePerMillion = 0.20m,
-            OutputPricePerMillion = 0.50m,
-            Provider = "xAI",
-            DisplayName = "Grok 4 Fast",
-            ContextWindow = 131072
-        },
-
-        // Grok 3 Series
-        ["grok-3"] = new()
-        {
-            ModelId = "grok-3",
-            InputPricePerMillion = 3.00m,
-            OutputPricePerMillion = 15.00m,
-            Provider = "xAI",
-            DisplayName = "Grok 3",
-            ContextWindow = 131072
-        },
-        ["grok-3-mini"] = new()
-        {
-            ModelId = "grok-3-mini",
-            InputPricePerMillion = 0.30m,
-            OutputPricePerMillion = 0.50m,
-            Provider = "xAI",
-            DisplayName = "Grok 3 Mini",
-            ContextWindow = 131072
-        }
-    };
+    public static IReadOnlyDictionary<string, ModelPricing> XAI => GetProviderDict("xAI");
 
     /// <summary>
     /// Gets pricing for Azure OpenAI models.
-    /// Note: Azure pricing is generally the same as OpenAI for equivalent models.
     /// </summary>
-    public static IReadOnlyDictionary<string, ModelPricing> Azure { get; } = new Dictionary<string, ModelPricing>(StringComparer.OrdinalIgnoreCase)
-    {
-        ["azure-gpt-4o"] = new()
-        {
-            ModelId = "azure-gpt-4o",
-            InputPricePerMillion = 2.50m,
-            OutputPricePerMillion = 10.00m,
-            Provider = "Azure",
-            DisplayName = "Azure GPT-4o",
-            ContextWindow = 128000
-        },
-        ["azure-gpt-4o-mini"] = new()
-        {
-            ModelId = "azure-gpt-4o-mini",
-            InputPricePerMillion = 0.15m,
-            OutputPricePerMillion = 0.60m,
-            Provider = "Azure",
-            DisplayName = "Azure GPT-4o mini",
-            ContextWindow = 128000
-        },
-        ["azure-gpt-4-turbo"] = new()
-        {
-            ModelId = "azure-gpt-4-turbo",
-            InputPricePerMillion = 10.00m,
-            OutputPricePerMillion = 30.00m,
-            Provider = "Azure",
-            DisplayName = "Azure GPT-4 Turbo",
-            ContextWindow = 128000
-        },
-        ["azure-gpt-4"] = new()
-        {
-            ModelId = "azure-gpt-4",
-            InputPricePerMillion = 30.00m,
-            OutputPricePerMillion = 60.00m,
-            Provider = "Azure",
-            DisplayName = "Azure GPT-4",
-            ContextWindow = 8192
-        },
-        ["azure-gpt-35-turbo"] = new()
-        {
-            ModelId = "azure-gpt-35-turbo",
-            InputPricePerMillion = 0.50m,
-            OutputPricePerMillion = 1.50m,
-            Provider = "Azure",
-            DisplayName = "Azure GPT-3.5 Turbo",
-            ContextWindow = 16385
-        }
-    };
+    public static IReadOnlyDictionary<string, ModelPricing> Azure => GetProviderDict("Azure");
+
+    /// <summary>
+    /// Gets pricing for Mistral models.
+    /// </summary>
+    public static IReadOnlyDictionary<string, ModelPricing> Mistral => GetProviderDict("Mistral");
+
+    /// <summary>
+    /// Gets pricing for DeepSeek models.
+    /// </summary>
+    public static IReadOnlyDictionary<string, ModelPricing> DeepSeek => GetProviderDict("DeepSeek");
+
+    /// <summary>
+    /// Gets pricing for Amazon Nova models.
+    /// </summary>
+    public static IReadOnlyDictionary<string, ModelPricing> AmazonNova => GetProviderDict("Amazon Nova");
+
+    /// <summary>
+    /// Gets pricing for Cohere models.
+    /// </summary>
+    public static IReadOnlyDictionary<string, ModelPricing> Cohere => GetProviderDict("Cohere");
+
+    /// <summary>
+    /// Gets pricing for Meta Llama models.
+    /// </summary>
+    public static IReadOnlyDictionary<string, ModelPricing> MetaLlama => GetProviderDict("Meta Llama");
+
+    /// <summary>
+    /// Gets pricing for Perplexity models.
+    /// </summary>
+    public static IReadOnlyDictionary<string, ModelPricing> Perplexity => GetProviderDict("Perplexity");
+
+    /// <summary>
+    /// Gets pricing for Qwen models.
+    /// </summary>
+    public static IReadOnlyDictionary<string, ModelPricing> Qwen => GetProviderDict("Qwen");
 
     /// <summary>
     /// Gets all built-in pricing data.
     /// </summary>
-    public static IReadOnlyDictionary<string, ModelPricing> All { get; } =
-        OpenAI
-            .Concat(Anthropic)
-            .Concat(Google)
-            .Concat(XAI)
-            .Concat(Azure)
-            .ToDictionary(kv => kv.Key, kv => kv.Value, StringComparer.OrdinalIgnoreCase);
+    public static IReadOnlyDictionary<string, ModelPricing> All => _all;
 
     /// <summary>
     /// Gets all providers with their pricing dictionaries.
     /// </summary>
-    public static IReadOnlyDictionary<string, IReadOnlyDictionary<string, ModelPricing>> ByProvider { get; } =
-        new Dictionary<string, IReadOnlyDictionary<string, ModelPricing>>(StringComparer.OrdinalIgnoreCase)
-        {
-            ["OpenAI"] = OpenAI,
-            ["Anthropic"] = Anthropic,
-            ["Google"] = Google,
-            ["xAI"] = XAI,
-            ["Azure"] = Azure
-        };
+    public static IReadOnlyDictionary<string, IReadOnlyDictionary<string, ModelPricing>> ByProvider => _byProvider;
 
     /// <summary>
     /// Tries to find pricing for a model by ID or alias.
+    /// Uses 3-pass matching: exact dictionary lookup, then alias matching (exact → prefix → contains).
     /// </summary>
     public static ModelPricing? FindPricing(string modelId)
     {
-        if (All.TryGetValue(modelId, out var pricing))
+        // Direct dictionary lookup (case-insensitive)
+        if (_all.TryGetValue(modelId, out var pricing))
         {
             return pricing;
         }
 
-        // Try to match by prefix/pattern
         var normalized = modelId.ToLowerInvariant();
 
-        // OpenAI patterns
-        if (normalized.StartsWith("gpt-4o-mini", StringComparison.Ordinal))
+        // Pass 1: Exact alias match
+        foreach (var rule in _allAliasRules)
         {
-            return OpenAI["gpt-4o-mini"];
+            if (rule.MatchType == AliasMatchType.Exact &&
+                normalized.Equals(rule.Pattern, StringComparison.Ordinal))
+            {
+                return rule.Target;
+            }
         }
 
-        if (normalized.StartsWith("gpt-4o", StringComparison.Ordinal))
+        // Pass 2: Prefix alias match
+        foreach (var rule in _allAliasRules)
         {
-            return OpenAI["gpt-4o"];
+            if (rule.MatchType == AliasMatchType.Prefix &&
+                normalized.StartsWith(rule.Pattern, StringComparison.Ordinal))
+            {
+                return rule.Target;
+            }
         }
 
-        if (normalized.StartsWith("gpt-4-turbo", StringComparison.Ordinal))
+        // Pass 3: Contains alias match
+        foreach (var rule in _allAliasRules)
         {
-            return OpenAI["gpt-4-turbo"];
-        }
-
-        if (normalized.StartsWith("gpt-4", StringComparison.Ordinal))
-        {
-            return OpenAI["gpt-4"];
-        }
-
-        if (normalized.StartsWith("gpt-3.5", StringComparison.Ordinal) || normalized.StartsWith("gpt-35", StringComparison.Ordinal))
-        {
-            return OpenAI["gpt-3.5-turbo"];
-        }
-
-        if (normalized.StartsWith("o1-mini", StringComparison.Ordinal))
-        {
-            return OpenAI["o1-mini"];
-        }
-
-        if (normalized.StartsWith("o1", StringComparison.Ordinal))
-        {
-            return OpenAI["o1"];
-        }
-
-        if (normalized.StartsWith("o3-mini", StringComparison.Ordinal))
-        {
-            return OpenAI["o3-mini"];
-        }
-
-        if (normalized.StartsWith("o3", StringComparison.Ordinal))
-        {
-            return OpenAI["o3"];
-        }
-
-        // Anthropic patterns
-        if (normalized.Contains("claude-4-5-opus", StringComparison.Ordinal) || normalized.Contains("claude-4.5-opus", StringComparison.Ordinal))
-        {
-            return Anthropic["claude-4-5-opus"];
-        }
-
-        if (normalized.Contains("claude-4-5-sonnet", StringComparison.Ordinal) || normalized.Contains("claude-4.5-sonnet", StringComparison.Ordinal))
-        {
-            return Anthropic["claude-4-5-sonnet"];
-        }
-
-        if (normalized.Contains("claude-4-5-haiku", StringComparison.Ordinal) || normalized.Contains("claude-4.5-haiku", StringComparison.Ordinal))
-        {
-            return Anthropic["claude-4-5-haiku"];
-        }
-
-        if (normalized.Contains("claude-3-5-sonnet", StringComparison.Ordinal) || normalized.Contains("claude-3.5-sonnet", StringComparison.Ordinal))
-        {
-            return Anthropic["claude-3-5-sonnet-20241022"];
-        }
-
-        if (normalized.Contains("claude-3-5-haiku", StringComparison.Ordinal) || normalized.Contains("claude-3.5-haiku", StringComparison.Ordinal))
-        {
-            return Anthropic["claude-3-5-haiku-20241022"];
-        }
-
-        if (normalized.Contains("claude-3-opus", StringComparison.Ordinal))
-        {
-            return Anthropic["claude-3-opus-20240229"];
-        }
-
-        if (normalized.Contains("claude-3-sonnet", StringComparison.Ordinal))
-        {
-            return Anthropic["claude-3-sonnet-20240229"];
-        }
-
-        if (normalized.Contains("claude-3-haiku", StringComparison.Ordinal))
-        {
-            return Anthropic["claude-3-haiku-20240307"];
-        }
-
-        // Google patterns
-        if (normalized.Contains("gemini-2.5-pro", StringComparison.Ordinal) || normalized.Contains("gemini-2-5-pro", StringComparison.Ordinal))
-        {
-            return Google["gemini-2.5-pro"];
-        }
-
-        if (normalized.Contains("gemini-2.5-flash", StringComparison.Ordinal) || normalized.Contains("gemini-2-5-flash", StringComparison.Ordinal))
-        {
-            return Google["gemini-2.5-flash"];
-        }
-
-        if (normalized.Contains("gemini-2.0-flash-lite", StringComparison.Ordinal) || normalized.Contains("gemini-2-0-flash-lite", StringComparison.Ordinal))
-        {
-            return Google["gemini-2.0-flash-lite"];
-        }
-
-        if (normalized.Contains("gemini-2.0-flash", StringComparison.Ordinal) || normalized.Contains("gemini-2-0-flash", StringComparison.Ordinal))
-        {
-            return Google["gemini-2.0-flash"];
-        }
-
-        if (normalized.Contains("gemini-1.5-pro", StringComparison.Ordinal) || normalized.Contains("gemini-1-5-pro", StringComparison.Ordinal))
-        {
-            return Google["gemini-1.5-pro"];
-        }
-
-        if (normalized.Contains("gemini-1.5-flash", StringComparison.Ordinal) || normalized.Contains("gemini-1-5-flash", StringComparison.Ordinal))
-        {
-            return Google["gemini-1.5-flash"];
-        }
-
-        // xAI/Grok patterns
-        if (normalized.Contains("grok-4-fast", StringComparison.Ordinal) || normalized.Contains("grok-4.1", StringComparison.Ordinal))
-        {
-            return XAI["grok-4-fast"];
-        }
-
-        if (normalized.Contains("grok-4", StringComparison.Ordinal))
-        {
-            return XAI["grok-4"];
-        }
-
-        if (normalized.Contains("grok-3-mini", StringComparison.Ordinal))
-        {
-            return XAI["grok-3-mini"];
-        }
-
-        if (normalized.Contains("grok-3", StringComparison.Ordinal))
-        {
-            return XAI["grok-3"];
+            if (rule.MatchType == AliasMatchType.Contains &&
+                normalized.Contains(rule.Pattern, StringComparison.Ordinal))
+            {
+                return rule.Target;
+            }
         }
 
         return null;
@@ -591,7 +224,7 @@ public static class ModelPricingData
     /// </summary>
     public static IEnumerable<ModelPricing> GetByProvider(string providerName)
     {
-        if (ByProvider.TryGetValue(providerName, out var provider))
+        if (_byProvider.TryGetValue(providerName, out var provider))
         {
             return provider.Values;
         }
@@ -602,5 +235,8 @@ public static class ModelPricingData
     /// <summary>
     /// Gets all available provider names.
     /// </summary>
-    public static IEnumerable<string> GetProviderNames() => ByProvider.Keys;
+    public static IEnumerable<string> GetProviderNames() => _byProvider.Keys;
+
+    private static IReadOnlyDictionary<string, ModelPricing> GetProviderDict(string name) =>
+        _byProvider.TryGetValue(name, out var dict) ? dict : s_empty;
 }

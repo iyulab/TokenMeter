@@ -9,7 +9,7 @@ Token counting, cost calculation, and usage tracking for LLM applications.
 ## Features
 
 - **Accurate Token Counting** - Uses Microsoft.ML.Tokenizers for precise token counting (cl100k_base, p50k_base)
-- **Multi-Provider Support** - Built-in pricing for OpenAI, Anthropic, Google, xAI, and Azure
+- **Multi-Provider Support** - Built-in pricing for 12 providers (OpenAI, Anthropic, Google, xAI, Azure, Mistral, DeepSeek, Amazon Nova, Cohere, Meta Llama, Perplexity, Qwen)
 - **Usage Tracking** - Session-based tracking with statistics and cost aggregation
 - **Thread-Safe** - All components are designed for concurrent access
 - **Extensible** - Register custom pricing for any model or provider
@@ -82,45 +82,63 @@ Console.WriteLine($"Total Cost: ${stats.TotalCost:F4}");
 
 | Provider | Models | Official Pricing |
 |----------|--------|------------------|
-| OpenAI | GPT-4o, GPT-4o-mini, o1, o3, etc. | [openai.com/api/pricing](https://openai.com/api/pricing/) |
-| Anthropic | Claude 4.5, Claude 3.5, Claude 3 | [docs.anthropic.com](https://docs.anthropic.com/en/docs/about-claude/pricing) |
-| Google | Gemini 2.5, Gemini 2.0, Gemini 1.5 | [ai.google.dev](https://ai.google.dev/gemini-api/docs/pricing) |
-| xAI | Grok 4, Grok 3 | [docs.x.ai](https://docs.x.ai/docs/models) |
+| OpenAI | GPT-4o, GPT-4.1, o3, o4-mini, etc. | [openai.com/api/pricing](https://openai.com/api/pricing/) |
+| Anthropic | Claude Opus 4.6, Claude Opus 4.1, Claude 4.5, Claude 3.7, Claude 3.5, Claude 3 | [docs.anthropic.com](https://docs.anthropic.com/en/docs/about-claude/pricing) |
+| Google | Gemini 3, Gemini 2.5, Gemini 2.0, Gemini 1.5 | [ai.google.dev](https://ai.google.dev/gemini-api/docs/pricing) |
+| xAI | Grok 4.1, Grok 4, Grok 3 | [docs.x.ai](https://docs.x.ai/docs/models) |
 | Azure | Azure OpenAI models | [azure.microsoft.com](https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/) |
+| Mistral | Mistral Large, Medium, Small, Codestral, Devstral | [mistral.ai](https://mistral.ai/technology/) |
+| DeepSeek | DeepSeek V3, R1, Coder | [deepseek.com](https://platform.deepseek.com/api-docs/pricing) |
+| Amazon Nova | Nova Premier, Pro, Lite, Micro | [aws.amazon.com](https://aws.amazon.com/bedrock/pricing/) |
+| Cohere | Command A, Command R+, Command R, Command R7B | [cohere.com](https://cohere.com/pricing) |
+| Meta Llama | Llama 4 Maverick, Scout | [llama.meta.com](https://llama.meta.com/) |
+| Perplexity | Sonar Pro, Sonar Deep Research, Sonar | [perplexity.ai](https://docs.perplexity.ai/guides/pricing) |
+| Qwen | Qwen Max, Plus | [aliyun.com](https://help.aliyun.com/zh/model-studio/) |
 
-## Model Pricing (January 2026)
+## Model Pricing (February 2026)
 
 ### OpenAI
 
 | Model | Input (per 1M) | Output (per 1M) | Context |
 |-------|---------------|-----------------|---------|
+| GPT-4.1 | $2.00 | $8.00 | 1M |
+| GPT-4.1 Mini | $0.40 | $1.60 | 1M |
+| GPT-4.1 Nano | $0.10 | $0.40 | 1M |
 | GPT-4o | $2.50 | $10.00 | 128K |
 | GPT-4o-mini | $0.15 | $0.60 | 128K |
-| o1 | $15.00 | $60.00 | 200K |
-| o1-mini | $3.00 | $12.00 | 128K |
+| o3-pro | $20.00 | $80.00 | 200K |
 | o3 | $2.00 | $8.00 | 200K |
 | o3-mini | $1.10 | $4.40 | 200K |
-| GPT-4 Turbo | $10.00 | $30.00 | 128K |
-| GPT-3.5 Turbo | $0.50 | $1.50 | 16K |
+| o4-mini | $1.10 | $4.40 | 200K |
+| o1 | $15.00 | $60.00 | 200K |
 
 ### Anthropic (Claude)
 
 | Model | Input (per 1M) | Output (per 1M) | Context |
 |-------|---------------|-----------------|---------|
+| Claude Opus 4.6 | $5.00 | $25.00 | 200K |
+| Claude Opus 4.1 | $15.00 | $75.00 | 200K |
 | Claude 4.5 Opus | $5.00 | $25.00 | 200K |
+| Claude Opus 4 | $15.00 | $75.00 | 200K |
 | Claude 4.5 Sonnet | $3.00 | $15.00 | 200K |
 | Claude 4.5 Haiku | $1.00 | $5.00 | 200K |
+| Claude Sonnet 4 | $3.00 | $15.00 | 200K |
+| Claude Sonnet 3.7 | $3.00 | $15.00 | 200K |
 | Claude 3.5 Sonnet | $3.00 | $15.00 | 200K |
 | Claude 3.5 Haiku | $0.80 | $4.00 | 200K |
 | Claude 3 Opus | $15.00 | $75.00 | 200K |
+| Claude 3 Sonnet | $3.00 | $15.00 | 200K |
 | Claude 3 Haiku | $0.25 | $1.25 | 200K |
 
 ### Google (Gemini)
 
 | Model | Input (per 1M) | Output (per 1M) | Context |
 |-------|---------------|-----------------|---------|
+| Gemini 3 Pro Preview | $2.00 | $12.00 | 1M |
+| Gemini 3 Flash Preview | $0.50 | $3.00 | 1M |
 | Gemini 2.5 Pro | $1.25 | $10.00 | 1M |
-| Gemini 2.5 Flash | $0.15 | $0.60 | 1M |
+| Gemini 2.5 Flash | $0.30 | $2.50 | 1M |
+| Gemini 2.5 Flash-Lite | $0.10 | $0.40 | 1M |
 | Gemini 2.0 Flash | $0.10 | $0.40 | 1M |
 | Gemini 2.0 Flash-Lite | $0.075 | $0.30 | 1M |
 | Gemini 1.5 Pro | $1.25 | $5.00 | 2M |
@@ -130,8 +148,12 @@ Console.WriteLine($"Total Cost: ${stats.TotalCost:F4}");
 
 | Model | Input (per 1M) | Output (per 1M) | Context |
 |-------|---------------|-----------------|---------|
-| Grok 4 | $3.00 | $15.00 | 131K |
-| Grok 4 Fast | $0.20 | $0.50 | 131K |
+| Grok 4.1 Fast Thinking | $0.20 | $0.50 | 2M |
+| Grok 4.1 Fast | $0.20 | $0.50 | 2M |
+| Grok 4 Fast Thinking | $0.20 | $0.50 | 2M |
+| Grok 4 Fast | $0.20 | $0.50 | 2M |
+| Grok 4 | $3.00 | $15.00 | 256K |
+| Grok Code Fast | $0.20 | $1.50 | 256K |
 | Grok 3 | $3.00 | $15.00 | 131K |
 | Grok 3 Mini | $0.30 | $0.50 | 131K |
 
@@ -141,8 +163,71 @@ Console.WriteLine($"Total Cost: ${stats.TotalCost:F4}");
 |-------|---------------|-----------------|---------|
 | Azure GPT-4o | $2.50 | $10.00 | 128K |
 | Azure GPT-4o-mini | $0.15 | $0.60 | 128K |
-| Azure GPT-4 Turbo | $10.00 | $30.00 | 128K |
-| Azure GPT-3.5 Turbo | $0.50 | $1.50 | 16K |
+| Azure GPT-4.1 | $2.00 | $8.00 | 1M |
+| Azure GPT-4.1 Mini | $0.40 | $1.60 | 1M |
+| Azure GPT-4.1 Nano | $0.10 | $0.40 | 1M |
+| Azure o3-pro | $20.00 | $80.00 | 200K |
+| Azure o4-mini | $1.10 | $4.40 | 200K |
+
+### Mistral
+
+| Model | Input (per 1M) | Output (per 1M) | Context |
+|-------|---------------|-----------------|---------|
+| Mistral Large | $2.00 | $6.00 | 128K |
+| Mistral Medium 3 | $0.40 | $2.00 | 128K |
+| Mistral Small | $0.20 | $0.60 | 128K |
+| Codestral | $0.30 | $0.90 | 256K |
+| Devstral Small | $0.10 | $0.30 | 128K |
+| Pixtral Large | $2.00 | $6.00 | 128K |
+
+### DeepSeek
+
+| Model | Input (per 1M) | Output (per 1M) | Context |
+|-------|---------------|-----------------|---------|
+| DeepSeek V3 | $0.28 | $0.42 | 128K |
+| DeepSeek R1 | $0.28 | $0.42 | 128K |
+| DeepSeek Coder | $0.14 | $0.28 | 128K |
+
+### Amazon Nova
+
+| Model | Input (per 1M) | Output (per 1M) | Context |
+|-------|---------------|-----------------|---------|
+| Nova Premier | $2.50 | $12.50 | 1M |
+| Nova Pro | $0.80 | $3.20 | 300K |
+| Nova Lite | $0.06 | $0.24 | 300K |
+| Nova Micro | $0.035 | $0.14 | 128K |
+
+### Cohere
+
+| Model | Input (per 1M) | Output (per 1M) | Context |
+|-------|---------------|-----------------|---------|
+| Command A | $2.50 | $10.00 | 256K |
+| Command R+ | $2.50 | $10.00 | 128K |
+| Command R | $0.50 | $1.50 | 128K |
+| Command R7B | $0.0375 | $0.15 | 128K |
+| Command Light | $0.30 | $0.60 | 4K |
+
+### Meta Llama
+
+| Model | Input (per 1M) | Output (per 1M) | Context |
+|-------|---------------|-----------------|---------|
+| Llama 4 Maverick | $0.22 | $0.85 | 1M |
+| Llama 4 Scout | $0.15 | $0.50 | 10M |
+
+### Perplexity
+
+| Model | Input (per 1M) | Output (per 1M) | Context |
+|-------|---------------|-----------------|---------|
+| Sonar Pro | $3.00 | $15.00 | 200K |
+| Sonar Deep Research | $2.00 | $8.00 | 200K |
+| Sonar | $1.00 | $1.00 | 128K |
+
+### Qwen
+
+| Model | Input (per 1M) | Output (per 1M) | Context |
+|-------|---------------|-----------------|---------|
+| Qwen Max | $1.20 | $6.00 | 128K |
+| Qwen Plus | $0.20 | $1.00 | 128K |
 
 > **Note**: Prices change frequently. See [docs/pricing-update-guide.md](docs/pricing-update-guide.md) for update instructions.
 
@@ -180,7 +265,7 @@ foreach (var model in googleModels)
 
 // List all providers
 var providers = ModelPricingData.GetProviderNames();
-// ["OpenAI", "Anthropic", "Google", "xAI", "Azure"]
+// ["OpenAI", "Anthropic", "Google", "xAI", "Azure", "Mistral", "DeepSeek", ...]
 
 // Check last update date
 Console.WriteLine($"Pricing last updated: {ModelPricingData.LastUpdated}");
@@ -304,8 +389,8 @@ foreach (var provider in ModelPricingData.GetProviderNames())
 
 ## Requirements
 
-- .NET 8.0, 9.0, or 10.0
-- Microsoft.ML.Tokenizers 1.0.3+
+- .NET 10.0
+- Microsoft.ML.Tokenizers 2.0.0+
 
 ## Related Projects
 

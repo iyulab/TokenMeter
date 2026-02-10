@@ -1,0 +1,37 @@
+{
+  "provider": "DeepSeek",
+  "models": [
+    {
+      "modelId": "deepseek-chat",
+      "inputPricePerMillion": 0.28,
+      "outputPricePerMillion": 0.42,
+      "displayName": "DeepSeek V3",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "deepseek-chat", "type": "prefix" },
+        { "pattern": "deepseek-v3", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "deepseek-reasoner",
+      "inputPricePerMillion": 0.28,
+      "outputPricePerMillion": 0.42,
+      "displayName": "DeepSeek R1",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "deepseek-reasoner", "type": "prefix" },
+        { "pattern": "deepseek-r1", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "deepseek-coder",
+      "inputPricePerMillion": 0.14,
+      "outputPricePerMillion": 0.28,
+      "displayName": "DeepSeek Coder",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "deepseek-coder", "type": "prefix" }
+      ]
+    }
+  ]
+}

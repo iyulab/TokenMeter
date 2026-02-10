@@ -1,0 +1,106 @@
+{
+  "provider": "Azure",
+  "models": [
+    {
+      "modelId": "azure-gpt-4o-mini",
+      "inputPricePerMillion": 0.15,
+      "outputPricePerMillion": 0.60,
+      "displayName": "Azure GPT-4o mini",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "azure-gpt-4o-mini", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "azure-gpt-4o",
+      "inputPricePerMillion": 2.50,
+      "outputPricePerMillion": 10.00,
+      "displayName": "Azure GPT-4o",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "azure-gpt-4o", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "azure-gpt-4-turbo",
+      "inputPricePerMillion": 10.00,
+      "outputPricePerMillion": 30.00,
+      "displayName": "Azure GPT-4 Turbo",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "azure-gpt-4-turbo", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "azure-gpt-4.1-nano",
+      "inputPricePerMillion": 0.10,
+      "outputPricePerMillion": 0.40,
+      "displayName": "Azure GPT-4.1 Nano",
+      "contextWindow": 1000000,
+      "aliases": [
+        { "pattern": "azure-gpt-4.1-nano", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "azure-gpt-4.1-mini",
+      "inputPricePerMillion": 0.40,
+      "outputPricePerMillion": 1.60,
+      "displayName": "Azure GPT-4.1 Mini",
+      "contextWindow": 1000000,
+      "aliases": [
+        { "pattern": "azure-gpt-4.1-mini", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "azure-gpt-4.1",
+      "inputPricePerMillion": 2.00,
+      "outputPricePerMillion": 8.00,
+      "displayName": "Azure GPT-4.1",
+      "contextWindow": 1000000,
+      "aliases": [
+        { "pattern": "azure-gpt-4.1", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "azure-gpt-4",
+      "inputPricePerMillion": 30.00,
+      "outputPricePerMillion": 60.00,
+      "displayName": "Azure GPT-4",
+      "contextWindow": 8192,
+      "aliases": [
+        { "pattern": "azure-gpt-4", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "azure-gpt-35-turbo",
+      "inputPricePerMillion": 0.50,
+      "outputPricePerMillion": 1.50,
+      "displayName": "Azure GPT-3.5 Turbo",
+      "contextWindow": 16385,
+      "aliases": [
+        { "pattern": "azure-gpt-35", "type": "prefix" },
+        { "pattern": "azure-gpt-3.5", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "azure-o3-pro",
+      "inputPricePerMillion": 20.00,
+      "outputPricePerMillion": 80.00,
+      "displayName": "Azure o3-pro",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "azure-o3-pro", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "azure-o4-mini",
+      "inputPricePerMillion": 1.10,
+      "outputPricePerMillion": 4.40,
+      "displayName": "Azure o4-mini",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "azure-o4-mini", "type": "prefix" }
+      ]
+    }
+  ]
+}

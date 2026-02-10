@@ -1,0 +1,27 @@
+{
+  "provider": "Qwen",
+  "models": [
+    {
+      "modelId": "qwen-max",
+      "inputPricePerMillion": 1.20,
+      "outputPricePerMillion": 6.00,
+      "displayName": "Qwen Max",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "qwen-max", "type": "prefix" },
+        { "pattern": "qwen3-max", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "qwen-plus",
+      "inputPricePerMillion": 0.20,
+      "outputPricePerMillion": 1.00,
+      "displayName": "Qwen Plus",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "qwen-plus", "type": "prefix" },
+        { "pattern": "qwen3-plus", "type": "prefix" }
+      ]
+    }
+  ]
+}

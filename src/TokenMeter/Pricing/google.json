@@ -1,0 +1,106 @@
+{
+  "provider": "Google",
+  "models": [
+    {
+      "modelId": "gemini-3-pro-preview",
+      "inputPricePerMillion": 2.00,
+      "outputPricePerMillion": 12.00,
+      "displayName": "Gemini 3 Pro Preview",
+      "contextWindow": 1000000,
+      "aliases": [
+        { "pattern": "gemini-3-pro", "type": "contains" },
+        { "pattern": "gemini-3.0-pro", "type": "contains" },
+        { "pattern": "gemini-3-0-pro", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-3-flash-preview",
+      "inputPricePerMillion": 0.50,
+      "outputPricePerMillion": 3.00,
+      "displayName": "Gemini 3 Flash Preview",
+      "contextWindow": 1000000,
+      "aliases": [
+        { "pattern": "gemini-3-flash", "type": "contains" },
+        { "pattern": "gemini-3.0-flash", "type": "contains" },
+        { "pattern": "gemini-3-0-flash", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-2.5-pro",
+      "inputPricePerMillion": 1.25,
+      "outputPricePerMillion": 10.00,
+      "displayName": "Gemini 2.5 Pro",
+      "contextWindow": 1000000,
+      "aliases": [
+        { "pattern": "gemini-2.5-pro", "type": "contains" },
+        { "pattern": "gemini-2-5-pro", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-2.5-flash-lite",
+      "inputPricePerMillion": 0.10,
+      "outputPricePerMillion": 0.40,
+      "displayName": "Gemini 2.5 Flash-Lite",
+      "contextWindow": 1000000,
+      "aliases": [
+        { "pattern": "gemini-2.5-flash-lite", "type": "contains" },
+        { "pattern": "gemini-2-5-flash-lite", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-2.5-flash",
+      "inputPricePerMillion": 0.30,
+      "outputPricePerMillion": 2.50,
+      "displayName": "Gemini 2.5 Flash",
+      "contextWindow": 1000000,
+      "aliases": [
+        { "pattern": "gemini-2.5-flash", "type": "contains" },
+        { "pattern": "gemini-2-5-flash", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-2.0-flash-lite",
+      "inputPricePerMillion": 0.075,
+      "outputPricePerMillion": 0.30,
+      "displayName": "Gemini 2.0 Flash-Lite",
+      "contextWindow": 1000000,
+      "aliases": [
+        { "pattern": "gemini-2.0-flash-lite", "type": "contains" },
+        { "pattern": "gemini-2-0-flash-lite", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-2.0-flash",
+      "inputPricePerMillion": 0.10,
+      "outputPricePerMillion": 0.40,
+      "displayName": "Gemini 2.0 Flash",
+      "contextWindow": 1000000,
+      "aliases": [
+        { "pattern": "gemini-2.0-flash", "type": "contains" },
+        { "pattern": "gemini-2-0-flash", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-1.5-pro",
+      "inputPricePerMillion": 1.25,
+      "outputPricePerMillion": 5.00,
+      "displayName": "Gemini 1.5 Pro",
+      "contextWindow": 2000000,
+      "aliases": [
+        { "pattern": "gemini-1.5-pro", "type": "contains" },
+        { "pattern": "gemini-1-5-pro", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-1.5-flash",
+      "inputPricePerMillion": 0.075,
+      "outputPricePerMillion": 0.30,
+      "displayName": "Gemini 1.5 Flash",
+      "contextWindow": 1000000,
+      "aliases": [
+        { "pattern": "gemini-1.5-flash", "type": "contains" },
+        { "pattern": "gemini-1-5-flash", "type": "contains" }
+      ]
+    }
+  ]
+}

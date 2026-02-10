@@ -1,0 +1,56 @@
+{
+  "provider": "Cohere",
+  "models": [
+    {
+      "modelId": "command-a",
+      "inputPricePerMillion": 2.50,
+      "outputPricePerMillion": 10.00,
+      "displayName": "Command A",
+      "contextWindow": 256000,
+      "aliases": [
+        { "pattern": "command-a", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "command-r-plus",
+      "inputPricePerMillion": 2.50,
+      "outputPricePerMillion": 10.00,
+      "displayName": "Command R+",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "command-r-plus", "type": "prefix" },
+        { "pattern": "command-r+", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "command-r",
+      "inputPricePerMillion": 0.50,
+      "outputPricePerMillion": 1.50,
+      "displayName": "Command R",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "command-r", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "command-r7b",
+      "inputPricePerMillion": 0.0375,
+      "outputPricePerMillion": 0.15,
+      "displayName": "Command R7B",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "command-r7b", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "command-light",
+      "inputPricePerMillion": 0.30,
+      "outputPricePerMillion": 0.60,
+      "displayName": "Command Light",
+      "contextWindow": 4096,
+      "aliases": [
+        { "pattern": "command-light", "type": "prefix" }
+      ]
+    }
+  ]
+}

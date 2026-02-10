@@ -1,0 +1,35 @@
+{
+  "provider": "Perplexity",
+  "models": [
+    {
+      "modelId": "sonar-pro",
+      "inputPricePerMillion": 3.00,
+      "outputPricePerMillion": 15.00,
+      "displayName": "Sonar Pro",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "sonar-pro", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "sonar-deep-research",
+      "inputPricePerMillion": 2.00,
+      "outputPricePerMillion": 8.00,
+      "displayName": "Sonar Deep Research",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "sonar-deep", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "sonar",
+      "inputPricePerMillion": 1.00,
+      "outputPricePerMillion": 1.00,
+      "displayName": "Sonar",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "sonar", "type": "prefix" }
+      ]
+    }
+  ]
+}

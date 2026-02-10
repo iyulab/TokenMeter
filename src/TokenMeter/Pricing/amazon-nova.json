@@ -1,0 +1,45 @@
+{
+  "provider": "Amazon Nova",
+  "models": [
+    {
+      "modelId": "amazon-nova-premier",
+      "inputPricePerMillion": 2.50,
+      "outputPricePerMillion": 12.50,
+      "displayName": "Amazon Nova Premier",
+      "contextWindow": 1000000,
+      "aliases": [
+        { "pattern": "nova-premier", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "amazon-nova-pro",
+      "inputPricePerMillion": 0.80,
+      "outputPricePerMillion": 3.20,
+      "displayName": "Amazon Nova Pro",
+      "contextWindow": 300000,
+      "aliases": [
+        { "pattern": "nova-pro", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "amazon-nova-lite",
+      "inputPricePerMillion": 0.06,
+      "outputPricePerMillion": 0.24,
+      "displayName": "Amazon Nova Lite",
+      "contextWindow": 300000,
+      "aliases": [
+        { "pattern": "nova-lite", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "amazon-nova-micro",
+      "inputPricePerMillion": 0.035,
+      "outputPricePerMillion": 0.14,
+      "displayName": "Amazon Nova Micro",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "nova-micro", "type": "contains" }
+      ]
+    }
+  ]
+}

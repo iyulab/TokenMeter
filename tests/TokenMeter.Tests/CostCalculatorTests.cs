@@ -95,6 +95,123 @@ public class CostCalculatorTests
         Assert.NotNull(pricing);
         Assert.Equal(expectedModelId, pricing.ModelId);
     }
+
+    [Fact]
+    public void All_IsNotEmpty_AndHasAtLeast79Models()
+    {
+        Assert.NotEmpty(ModelPricingData.All);
+        Assert.True(ModelPricingData.All.Count >= 79, $"Expected >= 79 models, got {ModelPricingData.All.Count}");
+    }
+
+    [Fact]
+    public void ByProvider_Has12Providers()
+    {
+        var providerNames = ModelPricingData.GetProviderNames().ToList();
+        Assert.Equal(12, providerNames.Count);
+    }
+
+    [Theory]
+    [InlineData("Mistral")]
+    [InlineData("DeepSeek")]
+    [InlineData("Amazon Nova")]
+    [InlineData("Cohere")]
+    [InlineData("Meta Llama")]
+    [InlineData("Perplexity")]
+    [InlineData("Qwen")]
+    public void NewProvider_HasModels(string providerName)
+    {
+        var models = ModelPricingData.GetByProvider(providerName).ToList();
+        Assert.NotEmpty(models);
+    }
+
+    [Fact]
+    public void NewProviderProperties_AreNotEmpty()
+    {
+        Assert.NotEmpty(ModelPricingData.Mistral);
+        Assert.NotEmpty(ModelPricingData.DeepSeek);
+        Assert.NotEmpty(ModelPricingData.AmazonNova);
+        Assert.NotEmpty(ModelPricingData.Cohere);
+        Assert.NotEmpty(ModelPricingData.MetaLlama);
+        Assert.NotEmpty(ModelPricingData.Perplexity);
+        Assert.NotEmpty(ModelPricingData.Qwen);
+    }
+
+    [Theory]
+    [InlineData("gpt-4.1", "gpt-4.1")]
+    [InlineData("gpt-4.1-mini", "gpt-4.1-mini")]
+    [InlineData("gpt-4.1-nano", "gpt-4.1-nano")]
+    [InlineData("o3-pro", "o3-pro")]
+    [InlineData("o4-mini", "o4-mini")]
+    [InlineData("claude-opus-4-6", "claude-opus-4-6")]
+    [InlineData("claude-sonnet-4", "claude-sonnet-4")]
+    [InlineData("deepseek-chat", "deepseek-chat")]
+    [InlineData("mistral-large-latest", "mistral-large-latest")]
+    [InlineData("gemini-3-pro-preview", "gemini-3-pro-preview")]
+    [InlineData("gemini-3-flash-preview", "gemini-3-flash-preview")]
+    [InlineData("claude-opus-4-1", "claude-opus-4-1")]
+    [InlineData("claude-opus-4-0", "claude-opus-4-0")]
+    [InlineData("claude-3-7-sonnet-20250219", "claude-3-7-sonnet-20250219")]
+    [InlineData("grok-4.1-fast-thinking", "grok-4.1-fast-thinking")]
+    [InlineData("grok-4-fast-thinking", "grok-4-fast-thinking")]
+    [InlineData("mistral-medium-latest", "mistral-medium-latest")]
+    [InlineData("devstral-small-latest", "devstral-small-latest")]
+    [InlineData("command-a", "command-a")]
+    [InlineData("command-r7b", "command-r7b")]
+    [InlineData("sonar-deep-research", "sonar-deep-research")]
+    public void FindPricing_NewModels_ReturnsCorrectPricing(string modelId, string expectedModelId)
+    {
+        var pricing = ModelPricingData.FindPricing(modelId);
+
+        Assert.NotNull(pricing);
+        Assert.Equal(expectedModelId, pricing.ModelId);
+    }
+
+    [Theory]
+    [InlineData("gpt-4.1-2025-04-14", "gpt-4.1")] // Prefix
+    [InlineData("claude-opus-4.6", "claude-opus-4-6")] // Contains (dot variant)
+    [InlineData("claude-4.5-sonnet", "claude-4-5-sonnet")] // Contains (dot variant)
+    [InlineData("deepseek-v3-latest", "deepseek-chat")] // Prefix alias
+    [InlineData("mistral-large-2025", "mistral-large-latest")] // Prefix alias
+    [InlineData("claude-opus-4-1-20250805", "claude-opus-4-1")] // Exact API ID alias
+    [InlineData("claude-opus-4-20250514", "claude-opus-4-0")] // Exact API ID alias
+    [InlineData("claude-3-7-sonnet-latest", "claude-3-7-sonnet-20250219")] // Exact alias
+    [InlineData("claude-3.7-sonnet", "claude-3-7-sonnet-20250219")] // Contains (dot variant)
+    [InlineData("gemini-3-pro", "gemini-3-pro-preview")] // Contains alias
+    [InlineData("gemini-3-flash", "gemini-3-flash-preview")] // Contains alias
+    [InlineData("sonar-deep", "sonar-deep-research")] // Prefix alias
+    public void FindPricing_AliasMatching_ReturnsCorrectModel(string alias, string expectedModelId)
+    {
+        var pricing = ModelPricingData.FindPricing(alias);
+
+        Assert.NotNull(pricing);
+        Assert.Equal(expectedModelId, pricing.ModelId);
+    }
+
+    [Theory]
+    [InlineData("gemini-3-pro-preview", 2.00, 12.00)]
+    [InlineData("gemini-2.5-flash", 0.30, 2.50)]
+    [InlineData("gemini-2.5-flash-lite", 0.10, 0.40)]
+    [InlineData("deepseek-chat", 0.28, 0.42)]
+    [InlineData("deepseek-reasoner", 0.28, 0.42)]
+    [InlineData("grok-code-fast-1", 0.20, 1.50)]
+    [InlineData("command-r", 0.50, 1.50)]
+    [InlineData("qwen-max", 1.20, 6.00)]
+    [InlineData("amazon-nova-premier", 2.50, 12.50)]
+    [InlineData("llama-4-maverick", 0.22, 0.85)]
+    public void FindPricing_VerifyUpdatedPrices(string modelId, decimal expectedInput, decimal expectedOutput)
+    {
+        var pricing = ModelPricingData.FindPricing(modelId);
+
+        Assert.NotNull(pricing);
+        Assert.Equal(expectedInput, pricing.InputPricePerMillion);
+        Assert.Equal(expectedOutput, pricing.OutputPricePerMillion);
+    }
+
+    [Fact]
+    public void LastUpdated_Is20260210()
+    {
+        Assert.Equal(new DateOnly(2026, 2, 10), ModelPricingData.LastUpdated);
+    }
 }
 
 public class ModelPricingTests

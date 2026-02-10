@@ -1,0 +1,65 @@
+{
+  "provider": "Mistral",
+  "models": [
+    {
+      "modelId": "mistral-large-latest",
+      "inputPricePerMillion": 2.00,
+      "outputPricePerMillion": 6.00,
+      "displayName": "Mistral Large",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "mistral-large", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "mistral-medium-latest",
+      "inputPricePerMillion": 0.40,
+      "outputPricePerMillion": 2.00,
+      "displayName": "Mistral Medium 3",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "mistral-medium", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "mistral-small-latest",
+      "inputPricePerMillion": 0.20,
+      "outputPricePerMillion": 0.60,
+      "displayName": "Mistral Small",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "mistral-small", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "codestral-latest",
+      "inputPricePerMillion": 0.30,
+      "outputPricePerMillion": 0.90,
+      "displayName": "Codestral",
+      "contextWindow": 256000,
+      "aliases": [
+        { "pattern": "codestral", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "devstral-small-latest",
+      "inputPricePerMillion": 0.10,
+      "outputPricePerMillion": 0.30,
+      "displayName": "Devstral Small",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "devstral", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "pixtral-large-latest",
+      "inputPricePerMillion": 2.00,
+      "outputPricePerMillion": 6.00,
+      "displayName": "Pixtral Large",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "pixtral", "type": "prefix" }
+      ]
+    }
+  ]
+}

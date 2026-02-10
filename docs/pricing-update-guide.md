@@ -9,200 +9,119 @@
 
 ## 공식 가격 정보 소스
 
-### OpenAI
-- **URL**: https://openai.com/api/pricing/
-- **API 문서**: https://platform.openai.com/docs/pricing
-- **주요 모델**: GPT-4o, GPT-4o-mini, o1, o3 시리즈
-- **특이사항**:
-  - o-series 모델은 "reasoning tokens"을 output으로 청구 (숨겨진 비용 주의)
-  - Batch API 50% 할인, Prompt Caching 최대 90% 할인
-
-### Anthropic (Claude)
-- **URL**: https://docs.anthropic.com/en/docs/about-claude/pricing
-- **API 콘솔**: https://console.anthropic.com/
-- **주요 모델**: Claude 4.5 시리즈, Claude 3.5 시리즈
-- **특이사항**:
-  - Prompt caching: 읽기 0.1x, 쓰기 1.25x~2x
-  - Extended thinking은 output 토큰으로 청구
-
-### Google (Gemini)
-- **URL**: https://ai.google.dev/gemini-api/docs/pricing
-- **Vertex AI**: https://cloud.google.com/vertex-ai/generative-ai/pricing
-- **주요 모델**: Gemini 2.5 Pro, Gemini 2.0 Flash
-- **특이사항**:
-  - Free tier 제공 (일 1,000 요청)
-  - Context >200K 토큰 시 2x 가격 (Pro 모델)
-  - Batch API 50% 할인
-
-### xAI (Grok)
-- **URL**: https://docs.x.ai/docs/models
-- **API**: https://x.ai/api
-- **주요 모델**: Grok 4, Grok 3 시리즈
-- **특이사항**:
-  - Live Search 기능 별도 과금 ($25/1,000 sources)
-  - Web/X Search 도구 호출 별도 과금 ($2.50-$5/1,000 calls)
-  - OpenAI API 호환 형식
-
-### Microsoft Azure
-- **URL**: https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/
-- **주요 모델**: Azure GPT-4o, Azure GPT-4o-mini
-- **특이사항**:
-  - Global 배포 vs Regional 배포 가격 차이
-  - PTU(Provisioned Throughput Units) 별도 가격 체계
-  - Fine-tuned 모델 호스팅 비용 ($2.52-$3.00/hour)
+| Provider | URL |
+|----------|-----|
+| OpenAI | https://openai.com/api/pricing/ |
+| Anthropic | https://docs.anthropic.com/en/docs/about-claude/pricing |
+| Google | https://ai.google.dev/gemini-api/docs/pricing |
+| xAI | https://docs.x.ai/docs/models |
+| Azure | https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/ |
+| Mistral | https://mistral.ai/technology/ |
+| DeepSeek | https://platform.deepseek.com/api-docs/pricing |
+| Amazon Nova | https://aws.amazon.com/bedrock/pricing/ |
+| Cohere | https://cohere.com/pricing |
+| Meta Llama | https://llama.meta.com/ |
+| Perplexity | https://docs.perplexity.ai/guides/pricing |
+| Qwen | https://help.aliyun.com/zh/model-studio/ |
 
 ## 업데이트 절차
 
 ### 1. 가격 정보 수집
 
-각 공급자의 공식 페이지에서 최신 가격을 확인합니다:
+각 공급자의 공식 페이지에서 최신 가격을 확인합니다.
 
-```markdown
-## 체크리스트
-- [ ] OpenAI - GPT-4o, GPT-4o-mini, o1, o3 시리즈
-- [ ] Anthropic - Claude 4.5, Claude 3.5 시리즈
-- [ ] Google - Gemini 2.5, Gemini 2.0 시리즈
-- [ ] xAI - Grok 4, Grok 3 시리즈
-- [ ] Azure - Azure OpenAI 모델들
-```
+### 2. JSON 파일 수정
 
-### 2. ModelPricing.cs 수정
+`src/TokenMeter/Pricing/` 디렉토리에서 해당 프로바이더의 JSON 파일을 편집합니다.
 
-`src/TokenMeter/ModelPricing.cs` 파일을 수정합니다:
+**기존 모델 가격 변경:**
 
-```csharp
-// 1. LastUpdated 날짜 업데이트
-public static DateOnly LastUpdated { get; } = new(2026, 2, 15);
-
-// 2. 가격 정보 수정
-["gpt-4o"] = new()
+```json
 {
-    ModelId = "gpt-4o",
-    InputPricePerMillion = 2.50m,  // 새 가격으로 수정
-    OutputPricePerMillion = 10.00m,
-    Provider = "OpenAI",
-    DisplayName = "GPT-4o",
-    ContextWindow = 128000
-},
-
-// 3. 새 모델 추가 시
-["new-model-id"] = new()
-{
-    ModelId = "new-model-id",
-    InputPricePerMillion = X.XXm,
-    OutputPricePerMillion = X.XXm,
-    Provider = "ProviderName",
-    DisplayName = "Display Name",
-    ContextWindow = XXXXX
-},
-```
-
-### 3. FindPricing 메서드 업데이트
-
-새 모델 추가 시 패턴 매칭 로직도 업데이트합니다:
-
-```csharp
-// 새 모델 패턴 추가
-if (normalized.Contains("new-model", StringComparison.Ordinal))
-{
-    return ProviderDict["new-model-id"];
+  "modelId": "gpt-4o",
+  "inputPricePerMillion": 2.50,
+  "outputPricePerMillion": 10.00,
+  "displayName": "GPT-4o",
+  "contextWindow": 128000,
+  "aliases": [
+    { "pattern": "gpt-4o", "type": "prefix" }
+  ]
 }
 ```
 
-### 4. README.md 업데이트
+**새 모델 추가:**
+
+JSON 파일의 `models` 배열에 새 항목을 추가합니다.
+**중요**: 모델 순서가 alias 매칭 우선순위를 결정합니다. 더 구체적인 패턴의 모델을 먼저 배치하세요.
+
+예시: `gpt-4o-mini`를 `gpt-4o` 보다 먼저 배치 (prefix "gpt-4o"가 "gpt-4o-mini"도 매칭하므로)
+
+**Alias 타입:**
+
+| Type | 설명 | 예시 |
+|------|------|------|
+| `exact` | 정확히 일치 | `"gpt-4o"` → `gpt-4o`만 매칭 |
+| `prefix` | 접두사 일치 | `"gpt-4o"` → `gpt-4o`, `gpt-4o-2024-08-06` 매칭 |
+| `contains` | 부분 문자열 일치 | `"claude-3.5-sonnet"` → 어디든 포함되면 매칭 |
+
+### 3. 새 프로바이더 추가
+
+`src/TokenMeter/Pricing/` 디렉토리에 새 JSON 파일을 생성합니다:
+
+```json
+{
+  "provider": "NewProvider",
+  "models": [
+    {
+      "modelId": "model-id",
+      "inputPricePerMillion": 1.00,
+      "outputPricePerMillion": 2.00,
+      "displayName": "Model Name",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "model", "type": "prefix" }
+      ]
+    }
+  ]
+}
+```
+
+JSON 파일을 추가하면 Embedded Resource로 자동 포함됩니다 (`TokenMeter.csproj`의 `Pricing\*.json` 와일드카드).
+
+`ModelPricingData`에 프로바이더 프로퍼티를 추가하려면 `ModelPricing.cs`에 다음을 추가:
+
+```csharp
+public static IReadOnlyDictionary<string, ModelPricing> NewProvider => GetProviderDict("NewProvider");
+```
+
+### 4. LastUpdated 날짜 업데이트
+
+`ModelPricing.cs`에서 `LastUpdated` 날짜를 업데이트합니다.
+
+### 5. README.md 업데이트
 
 가격표를 최신 정보로 업데이트합니다.
 
-### 5. 테스트 실행
+### 6. 테스트 실행
 
 ```bash
-cd submodules/TokenMeter
-dotnet test
+cd D:\data\TokenMeter
+dotnet test tests/TokenMeter.Tests/TokenMeter.Tests.csproj
 ```
 
-### 6. 변경 사항 커밋
+### 7. 변경 사항 커밋
 
 ```bash
 git add .
 git commit -m "chore: update model pricing (YYYY-MM-DD)
 
-- OpenAI: [변경 내용]
-- Anthropic: [변경 내용]
-- Google: [변경 내용]
-- xAI: [변경 내용]
-- Azure: [변경 내용]
+- [변경 내용 요약]
 
 Sources:
-- https://openai.com/api/pricing/
-- https://docs.anthropic.com/en/docs/about-claude/pricing
-- https://ai.google.dev/gemini-api/docs/pricing
-- https://docs.x.ai/docs/models
-- https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/"
-```
-
-## 새 공급자 추가
-
-### 1. 가격 Dictionary 추가
-
-```csharp
-/// <summary>
-/// Gets pricing for NewProvider models.
-/// </summary>
-public static IReadOnlyDictionary<string, ModelPricing> NewProvider { get; } =
-    new Dictionary<string, ModelPricing>(StringComparer.OrdinalIgnoreCase)
-{
-    ["model-1"] = new()
-    {
-        ModelId = "model-1",
-        InputPricePerMillion = X.XXm,
-        OutputPricePerMillion = X.XXm,
-        Provider = "NewProvider",
-        DisplayName = "Model 1"
-    }
-};
-```
-
-### 2. All Dictionary에 추가
-
-```csharp
-public static IReadOnlyDictionary<string, ModelPricing> All { get; } =
-    OpenAI
-        .Concat(Anthropic)
-        .Concat(Google)
-        .Concat(XAI)
-        .Concat(Azure)
-        .Concat(NewProvider)  // 추가
-        .ToDictionary(kv => kv.Key, kv => kv.Value, StringComparer.OrdinalIgnoreCase);
-```
-
-### 3. ByProvider에 추가
-
-```csharp
-public static IReadOnlyDictionary<string, IReadOnlyDictionary<string, ModelPricing>> ByProvider { get; } =
-    new Dictionary<string, IReadOnlyDictionary<string, ModelPricing>>(StringComparer.OrdinalIgnoreCase)
-    {
-        ["OpenAI"] = OpenAI,
-        ["Anthropic"] = Anthropic,
-        ["Google"] = Google,
-        ["xAI"] = XAI,
-        ["Azure"] = Azure,
-        ["NewProvider"] = NewProvider  // 추가
-    };
-```
-
-### 4. FindPricing 패턴 추가
-
-```csharp
-// NewProvider patterns
-if (normalized.Contains("newprovider-model", StringComparison.Ordinal))
-{
-    return NewProvider["model-1"];
-}
+- [참조 URL]"
 ```
 
 ## 가격 변동 알림 설정 (선택사항)
-
-주요 공급자의 가격 변동을 모니터링하려면:
 
 1. **OpenAI**: https://status.openai.com/ RSS 구독
 2. **Anthropic**: https://status.anthropic.com/ RSS 구독
@@ -210,8 +129,6 @@ if (normalized.Contains("newprovider-model", StringComparison.Ordinal))
 4. **xAI**: X(Twitter) @xaboratory 팔로우
 
 ## 참고: 가격 비교 사이트
-
-자동화된 가격 비교를 위해 다음 사이트를 참고할 수 있습니다:
 
 - https://pricepertoken.com/ - 실시간 토큰 가격 비교
 - https://artificialanalysis.ai/ - LLM 벤치마크 및 가격
@@ -221,8 +138,9 @@ if (normalized.Contains("newprovider-model", StringComparison.Ordinal))
 
 | 날짜 | 버전 | 변경 내용 |
 |------|------|----------|
+| 2026-02-10 | 0.3.0 | JSON 기반 가격 시스템으로 리팩토링, 12개 프로바이더 지원 |
 | 2026-01-28 | 0.1.0 | 초기 가격 데이터 (OpenAI, Anthropic, Google, xAI, Azure) |
 
 ---
 
-Last Updated: 2026-01-28
+Last Updated: 2026-02-10

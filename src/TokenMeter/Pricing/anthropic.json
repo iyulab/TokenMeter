@@ -1,0 +1,159 @@
+{
+  "provider": "Anthropic",
+  "models": [
+    {
+      "modelId": "claude-opus-4-6",
+      "inputPricePerMillion": 5.00,
+      "outputPricePerMillion": 25.00,
+      "displayName": "Claude Opus 4.6",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "claude-opus-4-6", "type": "contains" },
+        { "pattern": "claude-opus-4.6", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "claude-opus-4-1",
+      "inputPricePerMillion": 15.00,
+      "outputPricePerMillion": 75.00,
+      "displayName": "Claude Opus 4.1",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "claude-opus-4-1-20250805", "type": "exact" },
+        { "pattern": "claude-opus-4-1", "type": "contains" },
+        { "pattern": "claude-opus-4.1", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "claude-4-5-opus",
+      "inputPricePerMillion": 5.00,
+      "outputPricePerMillion": 25.00,
+      "displayName": "Claude 4.5 Opus",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "claude-4-5-opus", "type": "contains" },
+        { "pattern": "claude-4.5-opus", "type": "contains" },
+        { "pattern": "claude-opus-4-5", "type": "contains" },
+        { "pattern": "claude-opus-4.5", "type": "contains" },
+        { "pattern": "claude-opus-4-5-20251101", "type": "exact" }
+      ]
+    },
+    {
+      "modelId": "claude-opus-4-0",
+      "inputPricePerMillion": 15.00,
+      "outputPricePerMillion": 75.00,
+      "displayName": "Claude Opus 4",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "claude-opus-4-20250514", "type": "exact" },
+        { "pattern": "claude-opus-4-0", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "claude-4-5-sonnet",
+      "inputPricePerMillion": 3.00,
+      "outputPricePerMillion": 15.00,
+      "displayName": "Claude 4.5 Sonnet",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "claude-4-5-sonnet", "type": "contains" },
+        { "pattern": "claude-4.5-sonnet", "type": "contains" },
+        { "pattern": "claude-sonnet-4-5", "type": "contains" },
+        { "pattern": "claude-sonnet-4.5", "type": "contains" },
+        { "pattern": "claude-sonnet-4-5-20250929", "type": "exact" }
+      ]
+    },
+    {
+      "modelId": "claude-4-5-haiku",
+      "inputPricePerMillion": 1.00,
+      "outputPricePerMillion": 5.00,
+      "displayName": "Claude 4.5 Haiku",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "claude-4-5-haiku", "type": "contains" },
+        { "pattern": "claude-4.5-haiku", "type": "contains" },
+        { "pattern": "claude-haiku-4-5", "type": "contains" },
+        { "pattern": "claude-haiku-4.5", "type": "contains" },
+        { "pattern": "claude-haiku-4-5-20251001", "type": "exact" }
+      ]
+    },
+    {
+      "modelId": "claude-sonnet-4",
+      "inputPricePerMillion": 3.00,
+      "outputPricePerMillion": 15.00,
+      "displayName": "Claude Sonnet 4",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "claude-sonnet-4-20250514", "type": "exact" },
+        { "pattern": "claude-sonnet-4-0", "type": "exact" },
+        { "pattern": "claude-sonnet-4", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "claude-3-7-sonnet-20250219",
+      "inputPricePerMillion": 3.00,
+      "outputPricePerMillion": 15.00,
+      "displayName": "Claude Sonnet 3.7",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "claude-3-7-sonnet-latest", "type": "exact" },
+        { "pattern": "claude-3-7-sonnet", "type": "contains" },
+        { "pattern": "claude-3.7-sonnet", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "claude-3-5-sonnet-20241022",
+      "inputPricePerMillion": 3.00,
+      "outputPricePerMillion": 15.00,
+      "displayName": "Claude 3.5 Sonnet",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "claude-3-5-sonnet", "type": "contains" },
+        { "pattern": "claude-3.5-sonnet", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "claude-3-5-haiku-20241022",
+      "inputPricePerMillion": 0.80,
+      "outputPricePerMillion": 4.00,
+      "displayName": "Claude 3.5 Haiku",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "claude-3-5-haiku", "type": "contains" },
+        { "pattern": "claude-3.5-haiku", "type": "contains" },
+        { "pattern": "claude-haiku-3-5", "type": "contains" },
+        { "pattern": "claude-haiku-3.5", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "claude-3-opus-20240229",
+      "inputPricePerMillion": 15.00,
+      "outputPricePerMillion": 75.00,
+      "displayName": "Claude 3 Opus",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "claude-3-opus", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "claude-3-sonnet-20240229",
+      "inputPricePerMillion": 3.00,
+      "outputPricePerMillion": 15.00,
+      "displayName": "Claude 3 Sonnet",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "claude-3-sonnet", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "claude-3-haiku-20240307",
+      "inputPricePerMillion": 0.25,
+      "outputPricePerMillion": 1.25,
+      "displayName": "Claude 3 Haiku",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "claude-3-haiku", "type": "contains" }
+      ]
+    }
+  ]
+}

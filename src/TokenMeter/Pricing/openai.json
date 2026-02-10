@@ -1,0 +1,146 @@
+{
+  "provider": "OpenAI",
+  "models": [
+    {
+      "modelId": "gpt-4o-mini",
+      "inputPricePerMillion": 0.15,
+      "outputPricePerMillion": 0.60,
+      "displayName": "GPT-4o mini",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "gpt-4o-mini", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-4o",
+      "inputPricePerMillion": 2.50,
+      "outputPricePerMillion": 10.00,
+      "displayName": "GPT-4o",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "gpt-4o", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-4-turbo",
+      "inputPricePerMillion": 10.00,
+      "outputPricePerMillion": 30.00,
+      "displayName": "GPT-4 Turbo",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "gpt-4-turbo", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-4.1-nano",
+      "inputPricePerMillion": 0.10,
+      "outputPricePerMillion": 0.40,
+      "displayName": "GPT-4.1 Nano",
+      "contextWindow": 1000000,
+      "aliases": [
+        { "pattern": "gpt-4.1-nano", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-4.1-mini",
+      "inputPricePerMillion": 0.40,
+      "outputPricePerMillion": 1.60,
+      "displayName": "GPT-4.1 Mini",
+      "contextWindow": 1000000,
+      "aliases": [
+        { "pattern": "gpt-4.1-mini", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-4.1",
+      "inputPricePerMillion": 2.00,
+      "outputPricePerMillion": 8.00,
+      "displayName": "GPT-4.1",
+      "contextWindow": 1000000,
+      "aliases": [
+        { "pattern": "gpt-4.1", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-4",
+      "inputPricePerMillion": 30.00,
+      "outputPricePerMillion": 60.00,
+      "displayName": "GPT-4",
+      "contextWindow": 8192,
+      "aliases": [
+        { "pattern": "gpt-4", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-3.5-turbo",
+      "inputPricePerMillion": 0.50,
+      "outputPricePerMillion": 1.50,
+      "displayName": "GPT-3.5 Turbo",
+      "contextWindow": 16385,
+      "aliases": [
+        { "pattern": "gpt-3.5", "type": "prefix" },
+        { "pattern": "gpt-35", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "o1-mini",
+      "inputPricePerMillion": 3.00,
+      "outputPricePerMillion": 12.00,
+      "displayName": "o1-mini",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "o1-mini", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "o1",
+      "inputPricePerMillion": 15.00,
+      "outputPricePerMillion": 60.00,
+      "displayName": "o1",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "o1", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "o4-mini",
+      "inputPricePerMillion": 1.10,
+      "outputPricePerMillion": 4.40,
+      "displayName": "o4-mini",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "o4-mini", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "o3-pro",
+      "inputPricePerMillion": 20.00,
+      "outputPricePerMillion": 80.00,
+      "displayName": "o3-pro",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "o3-pro", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "o3-mini",
+      "inputPricePerMillion": 1.10,
+      "outputPricePerMillion": 4.40,
+      "displayName": "o3-mini",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "o3-mini", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "o3",
+      "inputPricePerMillion": 2.00,
+      "outputPricePerMillion": 8.00,
+      "displayName": "o3",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "o3", "type": "prefix" }
+      ]
+    }
+  ]
+}

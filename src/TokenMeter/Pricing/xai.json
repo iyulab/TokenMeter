@@ -1,0 +1,85 @@
+{
+  "provider": "xAI",
+  "models": [
+    {
+      "modelId": "grok-4.1-fast-thinking",
+      "inputPricePerMillion": 0.20,
+      "outputPricePerMillion": 0.50,
+      "displayName": "Grok 4.1 Fast Thinking",
+      "contextWindow": 2000000,
+      "aliases": [
+        { "pattern": "grok-4.1-fast-thinking", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "grok-4.1-fast",
+      "inputPricePerMillion": 0.20,
+      "outputPricePerMillion": 0.50,
+      "displayName": "Grok 4.1 Fast",
+      "contextWindow": 2000000,
+      "aliases": [
+        { "pattern": "grok-4.1", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "grok-4-fast-thinking",
+      "inputPricePerMillion": 0.20,
+      "outputPricePerMillion": 0.50,
+      "displayName": "Grok 4 Fast Thinking",
+      "contextWindow": 2000000,
+      "aliases": [
+        { "pattern": "grok-4-fast-thinking", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "grok-4-fast",
+      "inputPricePerMillion": 0.20,
+      "outputPricePerMillion": 0.50,
+      "displayName": "Grok 4 Fast",
+      "contextWindow": 2000000,
+      "aliases": [
+        { "pattern": "grok-4-fast", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "grok-4",
+      "inputPricePerMillion": 3.00,
+      "outputPricePerMillion": 15.00,
+      "displayName": "Grok 4",
+      "contextWindow": 256000,
+      "aliases": [
+        { "pattern": "grok-4", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "grok-code-fast-1",
+      "inputPricePerMillion": 0.20,
+      "outputPricePerMillion": 1.50,
+      "displayName": "Grok Code Fast",
+      "contextWindow": 256000,
+      "aliases": [
+        { "pattern": "grok-code", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "grok-3-mini",
+      "inputPricePerMillion": 0.30,
+      "outputPricePerMillion": 0.50,
+      "displayName": "Grok 3 Mini",
+      "contextWindow": 131072,
+      "aliases": [
+        { "pattern": "grok-3-mini", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "grok-3",
+      "inputPricePerMillion": 3.00,
+      "outputPricePerMillion": 15.00,
+      "displayName": "Grok 3",
+      "contextWindow": 131072,
+      "aliases": [
+        { "pattern": "grok-3", "type": "contains" }
+      ]
+    }
+  ]
+}
