@@ -8,7 +8,6 @@
 
     <!-- Package metadata -->
     <PackageId>TokenMeter</PackageId>
-    <Version>0.1.0</Version>
     <Authors>iyulab</Authors>
     <Company>iyulab</Company>
     <Description>Token counting, cost calculation, and usage tracking for LLM applications</Description>
