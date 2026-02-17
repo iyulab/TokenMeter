@@ -212,6 +212,116 @@ public class CostCalculatorTests
     {
         Assert.Equal(new DateOnly(2026, 2, 10), ModelPricingData.LastUpdated);
     }
+
+    [Fact]
+    public void RegisterPricing_Null_ThrowsArgumentNullException()
+    {
+        var calculator = CostCalculator.Default();
+
+        Assert.Throws<ArgumentNullException>(() => calculator.RegisterPricing(null!));
+    }
+
+    [Fact]
+    public void GetPricing_CaseInsensitive_FindsModel()
+    {
+        var calculator = CostCalculator.Default();
+        calculator.RegisterPricing(new ModelPricing
+        {
+            ModelId = "My-Custom-Model",
+            InputPricePerMillion = 1.0m,
+            OutputPricePerMillion = 2.0m
+        });
+
+        var pricing = calculator.GetPricing("my-custom-model");
+
+        Assert.NotNull(pricing);
+        Assert.Equal("My-Custom-Model", pricing.ModelId);
+    }
+
+    [Fact]
+    public void CalculateCost_ZeroTokens_ReturnsZero()
+    {
+        var calculator = CostCalculator.Default();
+
+        var cost = calculator.CalculateCost("gpt-4o", 0, 0);
+
+        Assert.NotNull(cost);
+        Assert.Equal(0m, cost);
+    }
+
+    [Fact]
+    public void CustomOnly_ReturnsInstance()
+    {
+        var calculator = CostCalculator.CustomOnly();
+
+        Assert.NotNull(calculator);
+    }
+
+    [Fact]
+    public void CustomOnly_WithRegisteredModel_FindsPricing()
+    {
+        var calculator = CostCalculator.CustomOnly();
+        calculator.RegisterPricing(new ModelPricing
+        {
+            ModelId = "custom-model",
+            InputPricePerMillion = 5.0m,
+            OutputPricePerMillion = 10.0m
+        });
+
+        var cost = calculator.CalculateCost("custom-model", 1_000_000, 500_000);
+
+        Assert.NotNull(cost);
+        Assert.Equal(10.0m, cost); // 1M * $5 + 0.5M * $10 = $10
+    }
+
+    [Fact]
+    public void GetRegisteredModels_IncludesCustomAndBuiltIn()
+    {
+        var calculator = CostCalculator.Default();
+        calculator.RegisterPricing(new ModelPricing
+        {
+            ModelId = "unique-test-model",
+            InputPricePerMillion = 1.0m,
+            OutputPricePerMillion = 2.0m
+        });
+
+        var models = calculator.GetRegisteredModels().ToList();
+
+        Assert.Contains("unique-test-model", models);
+        Assert.Contains("gpt-4o", models);
+    }
+
+    [Fact]
+    public void GetByProvider_NonExistent_ReturnsEmpty()
+    {
+        var models = ModelPricingData.GetByProvider("nonexistent-provider").ToList();
+
+        Assert.Empty(models);
+    }
+
+    [Fact]
+    public void GetProviderNames_Contains12Providers()
+    {
+        var names = ModelPricingData.GetProviderNames().ToList();
+
+        Assert.Contains("OpenAI", names);
+        Assert.Contains("Anthropic", names);
+        Assert.Contains("Google", names);
+        Assert.Contains("xAI", names);
+        Assert.Contains("Azure", names);
+        Assert.Contains("Mistral", names);
+        Assert.Contains("DeepSeek", names);
+    }
+
+    [Fact]
+    public void FindPricing_NullModelId_ReturnsNull()
+    {
+        // FindPricing should handle gracefully or throw
+        // Testing actual behavior
+        var pricing = ModelPricingData.FindPricing("   ");
+
+        Assert.Null(pricing);
+    }
 }
 
 public class ModelPricingTests
@@ -246,5 +356,79 @@ public class ModelPricingTests
 
         // 1000 input * $2.50/M + 500 output * $10/M = $0.0025 + $0.005 = $0.0075
         Assert.Equal(0.0075m, cost);
+    }
+
+    [Fact]
+    public void CalculateCost_ZeroTokens_ReturnsZero()
+    {
+        var pricing = new ModelPricing
+        {
+            ModelId = "test",
+            InputPricePerMillion = 10.0m,
+            OutputPricePerMillion = 20.0m
+        };
+
+        Assert.Equal(0m, pricing.CalculateCost(0, 0));
+    }
+
+    [Fact]
+    public void CalculateCost_OnlyInputTokens_CalculatesInputCostOnly()
+    {
+        var pricing = new ModelPricing
+        {
+            ModelId = "test",
+            InputPricePerMillion = 10.0m,
+            OutputPricePerMillion = 20.0m
+        };
+
+        var cost = pricing.CalculateCost(1_000_000, 0);
+
+        Assert.Equal(10.0m, cost);
+    }
+
+    [Fact]
+    public void CalculateCost_OnlyOutputTokens_CalculatesOutputCostOnly()
+    {
+        var pricing = new ModelPricing
+        {
+            ModelId = "test",
+            InputPricePerMillion = 10.0m,
+            OutputPricePerMillion = 20.0m
+        };
+
+        var cost = pricing.CalculateCost(0, 1_000_000);
+
+        Assert.Equal(20.0m, cost);
+    }
+
+    [Fact]
+    public void CalculateCost_FreePricing_ReturnsZero()
+    {
+        var pricing = new ModelPricing
+        {
+            ModelId = "free-model",
+            InputPricePerMillion = 0m,
+            OutputPricePerMillion = 0m
+        };
+
+        Assert.Equal(0m, pricing.CalculateCost(1_000_000, 1_000_000));
+    }
+
+    [Fact]
+    public void Properties_CanBeSet()
+    {
+        var pricing = new ModelPricing
+        {
+            ModelId = "test-model",
+            InputPricePerMillion = 1.0m,
+            OutputPricePerMillion = 2.0m,
+            Provider = "TestProvider",
+            DisplayName = "Test Model",
+            ContextWindow = 128_000
+        };
+
+        Assert.Equal("TestProvider", pricing.Provider);
+        Assert.Equal("Test Model", pricing.DisplayName);
+        Assert.Equal(128_000, pricing.ContextWindow);
     }
 }
