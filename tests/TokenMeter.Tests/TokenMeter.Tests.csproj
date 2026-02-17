@@ -6,8 +6,7 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <!-- Allow underscores in test method names (common convention) -->
-    <NoWarn>$(NoWarn);CA1707</NoWarn>
+
   </PropertyGroup>
 
   <ItemGroup>
