@@ -42,3 +42,10 @@ private sealed class CustomOnlyCostCalculator : CostCalculator
 
 ## 심각도
 major — CustomOnly() API가 문서된 의도와 다르게 동작
+
+## 해결
+**Resolved in cycle-134** (2026-02-18):
+- `GetPricing()` → `virtual` 변경
+- `GetRegisteredModels()` → `virtual` 변경
+- `CustomOnlyCostCalculator` → `override` 사용
+- 3개 테스트 추가: `CustomOnly_BuiltInModel_ReturnsNull`, `CustomOnly_BuiltInModel_CalculateCostReturnsNull`, `CustomOnly_GetRegisteredModels_ExcludesBuiltIn`

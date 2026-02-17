@@ -21,7 +21,7 @@ public class CostCalculator : ICostCalculator
     }
 
     /// <inheritdoc />
-    public ModelPricing? GetPricing(string modelId)
+    public virtual ModelPricing? GetPricing(string modelId)
     {
         // Check custom pricing first
         if (_customPricing.TryGetValue(modelId, out var customPricing))
@@ -41,7 +41,7 @@ public class CostCalculator : ICostCalculator
     }
 
     /// <inheritdoc />
-    public IEnumerable<string> GetRegisteredModels()
+    public virtual IEnumerable<string> GetRegisteredModels()
     {
         return _customPricing.Keys.Concat(ModelPricingData.All.Keys).Distinct(StringComparer.OrdinalIgnoreCase);
     }
@@ -58,9 +58,14 @@ public class CostCalculator : ICostCalculator
 
     private sealed class CustomOnlyCostCalculator : CostCalculator
     {
-        public new ModelPricing? GetPricing(string modelId)
+        public override ModelPricing? GetPricing(string modelId)
         {
             return _customPricing.TryGetValue(modelId, out var pricing) ? pricing : null;
+        }
+
+        public override IEnumerable<string> GetRegisteredModels()
+        {
+            return _customPricing.Keys;
         }
     }
 }

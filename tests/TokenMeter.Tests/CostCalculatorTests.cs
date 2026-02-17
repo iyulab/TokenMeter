@@ -322,6 +322,46 @@ public class CostCalculatorTests
 
         Assert.Null(pricing);
     }
+
+    [Fact]
+    public void CustomOnly_BuiltInModel_ReturnsNull()
+    {
+        var calculator = CostCalculator.CustomOnly();
+
+        // CustomOnly should NOT find built-in models
+        var pricing = calculator.GetPricing("gpt-4o");
+
+        Assert.Null(pricing);
+    }
+
+    [Fact]
+    public void CustomOnly_BuiltInModel_CalculateCostReturnsNull()
+    {
+        var calculator = CostCalculator.CustomOnly();
+
+        // CustomOnly should NOT be able to calculate cost for built-in models
+        var cost = calculator.CalculateCost("gpt-4o", 1000, 500);
+
+        Assert.Null(cost);
+    }
+
+    [Fact]
+    public void CustomOnly_GetRegisteredModels_ExcludesBuiltIn()
+    {
+        var calculator = CostCalculator.CustomOnly();
+        calculator.RegisterPricing(new ModelPricing
+        {
+            ModelId = "my-model",
+            InputPricePerMillion = 1.0m,
+            OutputPricePerMillion = 2.0m
+        });
+
+        var models = calculator.GetRegisteredModels().ToList();
+
+        Assert.Single(models);
+        Assert.Equal("my-model", models[0]);
+        Assert.DoesNotContain("gpt-4o", models);
+    }
 }
 
 public class ModelPricingTests
