@@ -21,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TokenMeter.Abstractions\TokenMeter.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <!-- Microsoft ML Tokenizers for accurate token counting -->
     <PackageReference Include="Microsoft.ML.Tokenizers" Version="2.0.0" />
     <!-- Tokenizer data for cl100k_base encoding (GPT-4, GPT-3.5-turbo, etc.) -->

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- Package metadata -->
+    <PackageId>TokenMeter.Abstractions</PackageId>
+    <Authors>iyulab</Authors>
+    <Company>iyulab</Company>
+    <Description>Shared token counting abstractions for LLM applications. Provides ITokenCounter interface for cross-package interoperability.</Description>
+    <PackageTags>llm;tokens;abstractions;ai</PackageTags>
+    <RepositoryUrl>https://github.com/iyulab/TokenMeter</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+</Project>

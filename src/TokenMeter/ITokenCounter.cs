@@ -2,8 +2,9 @@ namespace TokenMeter;
 
 /// <summary>
 /// Interface for counting tokens in text.
+/// Extends the shared <see cref="Abstractions.ITokenCounter"/> with TokenMeter-specific members.
 /// </summary>
-public interface ITokenCounter
+public interface ITokenCounter : Abstractions.ITokenCounter
 {
     /// <summary>
     /// Counts the number of tokens in the given text.

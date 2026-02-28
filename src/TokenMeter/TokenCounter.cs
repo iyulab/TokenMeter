@@ -50,6 +50,40 @@ public class TokenCounter : ITokenCounter
         return texts.Sum(CountTokens);
     }
 
+    /// <summary>
+    /// Counts the number of tokens in the given text.
+    /// Implementation of <see cref="Abstractions.ITokenCounter.Count(string)"/>.
+    /// </summary>
+    int Abstractions.ITokenCounter.Count(string text) => CountTokens(text);
+
+    /// <summary>
+    /// Counts the total number of tokens across the given texts.
+    /// Implementation of <see cref="Abstractions.ITokenCounter.Count(IEnumerable{string})"/>.
+    /// </summary>
+    int Abstractions.ITokenCounter.Count(IEnumerable<string> texts) => CountTokens(texts);
+
+    /// <inheritdoc />
+    public bool SupportsModel(string modelId)
+    {
+        if (string.IsNullOrEmpty(modelId))
+        {
+            return false;
+        }
+
+        var lower = modelId.ToLowerInvariant();
+
+        // GPT models — native support via tiktoken
+        if (lower.StartsWith("gpt-", StringComparison.Ordinal) ||
+            lower.StartsWith("text-davinci", StringComparison.Ordinal) ||
+            lower.StartsWith("code-", StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        // Claude, Gemini, etc. — approximate (cl100k_base fallback)
+        return false;
+    }
+
     private static TiktokenTokenizer CreateTokenizer(string modelName)
     {
         // Map model names to encoding names

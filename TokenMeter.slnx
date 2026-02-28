@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/TokenMeter.Abstractions/TokenMeter.Abstractions.csproj" />
     <Project Path="src/TokenMeter/TokenMeter.csproj" />
   </Folder>
   <Folder Name="/tests/">
