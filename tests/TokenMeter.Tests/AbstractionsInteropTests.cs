@@ -93,4 +93,65 @@ public sealed class AbstractionsInteropTests
             counter.SupportsModel("claude-3"),
             ((Abstractions.ITokenCounter)counter).SupportsModel("claude-3"));
     }
+
+    [Fact]
+    public void IsApproximate_GptModels_ReturnsFalse()
+    {
+        var counter = TokenCounter.Default();
+
+        Assert.False(counter.IsApproximate("gpt-4"));
+        Assert.False(counter.IsApproximate("gpt-4o"));
+        Assert.False(counter.IsApproximate("gpt-3.5-turbo"));
+        Assert.False(counter.IsApproximate("text-davinci-003"));
+        Assert.False(counter.IsApproximate("code-davinci-002"));
+    }
+
+    [Fact]
+    public void IsApproximate_ClaudeModels_ReturnsTrue()
+    {
+        var counter = TokenCounter.Default();
+
+        // Claude uses cl100k_base as fallback — approximate
+        Assert.True(counter.IsApproximate("claude-3.5-sonnet"));
+        Assert.True(counter.IsApproximate("claude-3-opus"));
+        Assert.True(counter.IsApproximate("claude-sonnet-4-5-20250929"));
+    }
+
+    [Fact]
+    public void IsApproximate_GeminiModels_ReturnsTrue()
+    {
+        var counter = TokenCounter.Default();
+
+        Assert.True(counter.IsApproximate("gemini-2.0-flash"));
+        Assert.True(counter.IsApproximate("gemini-1.5-pro"));
+    }
+
+    [Fact]
+    public void IsApproximate_NullOrEmpty_ReturnsFalse()
+    {
+        var counter = TokenCounter.Default();
+
+        Assert.False(counter.IsApproximate(""));
+        Assert.False(counter.IsApproximate(null!));
+    }
+
+    [Fact]
+    public void IsApproximate_DefaultInterfaceImplementation_ReturnsFalse()
+    {
+        // Default interface method should return false
+        var mock = new MinimalTokenCounter();
+        Abstractions.ITokenCounter shared = mock;
+
+        Assert.False(shared.IsApproximate("any-model"));
+    }
+
+    /// <summary>
+    /// Minimal implementation to test default interface method behavior.
+    /// </summary>
+    private sealed class MinimalTokenCounter : Abstractions.ITokenCounter
+    {
+        public int Count(string text) => 0;
+        public int Count(IEnumerable<string> texts) => 0;
+        public bool SupportsModel(string modelId) => false;
+    }
 }

@@ -84,6 +84,28 @@ public class TokenCounter : ITokenCounter
         return false;
     }
 
+    /// <inheritdoc />
+    public bool IsApproximate(string modelId)
+    {
+        if (string.IsNullOrEmpty(modelId))
+        {
+            return false;
+        }
+
+        var lower = modelId.ToLowerInvariant();
+
+        // GPT models have native tiktoken support — not approximate
+        if (lower.StartsWith("gpt-", StringComparison.Ordinal) ||
+            lower.StartsWith("text-davinci", StringComparison.Ordinal) ||
+            lower.StartsWith("code-", StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        // All other models (Claude, Gemini, etc.) use cl100k_base as fallback
+        return true;
+    }
+
     private static TiktokenTokenizer CreateTokenizer(string modelName)
     {
         // Map model names to encoding names

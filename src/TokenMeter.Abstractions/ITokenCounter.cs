@@ -27,4 +27,15 @@ public interface ITokenCounter
     /// <param name="modelId">The model identifier (e.g., "gpt-4o", "claude-3.5-sonnet").</param>
     /// <returns>True if this counter provides accurate counts for the model; otherwise, false.</returns>
     bool SupportsModel(string modelId);
+
+    /// <summary>
+    /// Indicates whether token counting for the specified model uses an approximate
+    /// fallback tokenizer rather than the model's native tokenizer.
+    /// </summary>
+    /// <param name="modelId">The model identifier (e.g., "claude-3.5-sonnet", "gpt-4o").</param>
+    /// <returns>
+    /// <c>true</c> if the counter can produce token counts but uses a fallback encoding
+    /// (e.g., cl100k_base for non-OpenAI models); <c>false</c> if counting is exact or not supported.
+    /// </returns>
+    bool IsApproximate(string modelId) => false;
 }

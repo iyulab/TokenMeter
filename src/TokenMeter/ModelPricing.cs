@@ -103,6 +103,19 @@ public static class ModelPricingData
     public static DateOnly LastUpdated { get; } = new(2026, 2, 10);
 
     /// <summary>
+    /// Gets how many days old the pricing data is relative to the current UTC date.
+    /// </summary>
+    public static int PricingAgeDays =>
+        DateOnly.FromDateTime(DateTime.UtcNow).DayNumber - LastUpdated.DayNumber;
+
+    /// <summary>
+    /// Checks if pricing data is older than the given threshold.
+    /// </summary>
+    /// <param name="maxAgeDays">Maximum acceptable age in days (default: 90).</param>
+    /// <returns><c>true</c> if pricing data is older than the threshold.</returns>
+    public static bool IsPricingStale(int maxAgeDays = 90) => PricingAgeDays > maxAgeDays;
+
+    /// <summary>
     /// Gets pricing for OpenAI models.
     /// </summary>
     public static IReadOnlyDictionary<string, ModelPricing> OpenAI => GetProviderDict("OpenAI");

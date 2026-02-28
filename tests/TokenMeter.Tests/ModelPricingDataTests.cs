@@ -215,7 +215,7 @@ public class ModelPricingDataTests
 
     #endregion
 
-    #region LastUpdated
+    #region LastUpdated & Staleness
 
     [Fact]
     public void LastUpdated_IsReasonableDate()
@@ -223,6 +223,28 @@ public class ModelPricingDataTests
         var date = ModelPricingData.LastUpdated;
 
         Assert.True(date.Year >= 2025);
+    }
+
+    [Fact]
+    public void PricingAgeDays_ReturnsNonNegative()
+    {
+        var ageDays = ModelPricingData.PricingAgeDays;
+
+        Assert.True(ageDays >= 0);
+    }
+
+    [Fact]
+    public void IsPricingStale_VeryLargeThreshold_ReturnsFalse()
+    {
+        // With a threshold of 10 years, pricing should not be stale
+        Assert.False(ModelPricingData.IsPricingStale(3650));
+    }
+
+    [Fact]
+    public void IsPricingStale_ZeroThreshold_ReturnsTrue()
+    {
+        // Data was updated in the past, so with 0-day threshold it should be stale
+        Assert.True(ModelPricingData.IsPricingStale(0));
     }
 
     #endregion
