@@ -2,6 +2,109 @@
   "provider": "OpenAI",
   "models": [
     {
+      "modelId": "gpt-5.4",
+      "inputPricePerMillion": 2.50,
+      "outputPricePerMillion": 15.00,
+      "displayName": "GPT-5.4",
+      "contextWindow": 1050000,
+      "aliases": [
+        { "pattern": "gpt-5.4", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-5.4-mini",
+      "inputPricePerMillion": 0.75,
+      "outputPricePerMillion": 4.50,
+      "displayName": "GPT-5.4 Mini",
+      "contextWindow": 400000,
+      "aliases": [
+        { "pattern": "gpt-5.4-mini", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-5.4-nano",
+      "inputPricePerMillion": 0.20,
+      "outputPricePerMillion": 1.25,
+      "displayName": "GPT-5.4 Nano",
+      "contextWindow": 400000,
+      "aliases": [
+        { "pattern": "gpt-5.4-nano", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-5.3-codex",
+      "inputPricePerMillion": 1.75,
+      "outputPricePerMillion": 14.00,
+      "displayName": "GPT-5.3 Codex",
+      "contextWindow": 400000,
+      "aliases": [
+        { "pattern": "gpt-5.3-codex", "type": "prefix" },
+        { "pattern": "gpt-5.3", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-5.2-codex",
+      "inputPricePerMillion": 1.75,
+      "outputPricePerMillion": 14.00,
+      "displayName": "GPT-5.2 Codex",
+      "contextWindow": 400000,
+      "aliases": [
+        { "pattern": "gpt-5.2-codex", "type": "prefix" },
+        { "pattern": "gpt-5.2", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-5.1-codex-max",
+      "inputPricePerMillion": 1.25,
+      "outputPricePerMillion": 10.00,
+      "displayName": "GPT-5.1 Codex Max",
+      "contextWindow": 400000,
+      "aliases": [
+        { "pattern": "gpt-5.1-codex-max", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-5.1-codex-mini",
+      "inputPricePerMillion": 0.25,
+      "outputPricePerMillion": 2.00,
+      "displayName": "GPT-5.1 Codex Mini",
+      "contextWindow": 400000,
+      "aliases": [
+        { "pattern": "gpt-5.1-codex-mini", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-5.1-codex",
+      "inputPricePerMillion": 1.25,
+      "outputPricePerMillion": 10.00,
+      "displayName": "GPT-5.1 Codex",
+      "contextWindow": 400000,
+      "aliases": [
+        { "pattern": "gpt-5.1-codex", "type": "prefix" },
+        { "pattern": "gpt-5.1", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-5-mini",
+      "inputPricePerMillion": 0.25,
+      "outputPricePerMillion": 2.00,
+      "displayName": "GPT-5 Mini",
+      "contextWindow": 400000,
+      "aliases": [
+        { "pattern": "gpt-5-mini", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-5",
+      "inputPricePerMillion": 1.25,
+      "outputPricePerMillion": 10.00,
+      "displayName": "GPT-5",
+      "contextWindow": 400000,
+      "aliases": [
+        { "pattern": "gpt-5", "type": "prefix" }
+      ]
+    },
+    {
       "modelId": "gpt-4o-mini",
       "inputPricePerMillion": 0.15,
       "outputPricePerMillion": 0.60,
@@ -140,6 +243,26 @@
       "contextWindow": 200000,
       "aliases": [
         { "pattern": "o3", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "o3-deep-research",
+      "inputPricePerMillion": 10.00,
+      "outputPricePerMillion": 40.00,
+      "displayName": "o3 Deep Research",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "o3-deep-research", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "o4-mini-deep-research",
+      "inputPricePerMillion": 2.00,
+      "outputPricePerMillion": 8.00,
+      "displayName": "o4-mini Deep Research",
+      "contextWindow": 200000,
+      "aliases": [
+        { "pattern": "o4-mini-deep-research", "type": "prefix" }
       ]
     }
   ]
