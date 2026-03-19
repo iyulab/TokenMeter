@@ -6,10 +6,21 @@
       "inputPricePerMillion": 5.00,
       "outputPricePerMillion": 25.00,
       "displayName": "Claude Opus 4.6",
-      "contextWindow": 200000,
+      "contextWindow": 1000000,
       "aliases": [
         { "pattern": "claude-opus-4-6", "type": "contains" },
         { "pattern": "claude-opus-4.6", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "claude-sonnet-4-6",
+      "inputPricePerMillion": 3.00,
+      "outputPricePerMillion": 15.00,
+      "displayName": "Claude Sonnet 4.6",
+      "contextWindow": 1000000,
+      "aliases": [
+        { "pattern": "claude-sonnet-4-6", "type": "contains" },
+        { "pattern": "claude-sonnet-4.6", "type": "contains" }
       ]
     },
     {

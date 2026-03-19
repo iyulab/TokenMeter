@@ -241,10 +241,10 @@ public class ModelPricingDataTests
     }
 
     [Fact]
-    public void IsPricingStale_ZeroThreshold_ReturnsTrue()
+    public void IsPricingStale_NegativeThreshold_ReturnsTrue()
     {
-        // Data was updated in the past, so with 0-day threshold it should be stale
-        Assert.True(ModelPricingData.IsPricingStale(0));
+        // With a negative threshold, pricing is always stale
+        Assert.True(ModelPricingData.IsPricingStale(-1));
     }
 
     #endregion

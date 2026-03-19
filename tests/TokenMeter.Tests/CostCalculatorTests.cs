@@ -208,9 +208,9 @@ public class CostCalculatorTests
     }
 
     [Fact]
-    public void LastUpdated_Is20260210()
+    public void LastUpdated_Is20260319()
     {
-        Assert.Equal(new DateOnly(2026, 2, 10), ModelPricingData.LastUpdated);
+        Assert.Equal(new DateOnly(2026, 3, 19), ModelPricingData.LastUpdated);
     }
 
     [Fact]
