@@ -194,7 +194,7 @@ public class CostCalculatorTests
     [InlineData("deepseek-chat", 0.28, 0.42)]
     [InlineData("deepseek-reasoner", 0.28, 0.42)]
     [InlineData("grok-code-fast-1", 0.20, 1.50)]
-    [InlineData("command-r", 0.50, 1.50)]
+    [InlineData("command-r", 0.15, 0.60)]
     [InlineData("qwen-max", 1.20, 6.00)]
     [InlineData("amazon-nova-premier", 2.50, 12.50)]
     [InlineData("llama-4-maverick", 0.22, 0.85)]
@@ -208,9 +208,9 @@ public class CostCalculatorTests
     }
 
     [Fact]
-    public void LastUpdated_Is20260319()
+    public void LastUpdated_Is20260413()
     {
-        Assert.Equal(new DateOnly(2026, 3, 19), ModelPricingData.LastUpdated);
+        Assert.Equal(new DateOnly(2026, 4, 13), ModelPricingData.LastUpdated);
     }
 
     [Fact]

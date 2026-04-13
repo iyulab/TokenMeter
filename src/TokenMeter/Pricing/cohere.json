@@ -24,8 +24,8 @@
     },
     {
       "modelId": "command-r",
-      "inputPricePerMillion": 0.50,
-      "outputPricePerMillion": 1.50,
+      "inputPricePerMillion": 0.15,
+      "outputPricePerMillion": 0.60,
       "displayName": "Command R",
       "contextWindow": 128000,
       "aliases": [

@@ -22,6 +22,26 @@
       ]
     },
     {
+      "modelId": "sonar-reasoning-pro",
+      "inputPricePerMillion": 2.00,
+      "outputPricePerMillion": 8.00,
+      "displayName": "Sonar Reasoning Pro",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "sonar-reasoning-pro", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "sonar-reasoning",
+      "inputPricePerMillion": 1.00,
+      "outputPricePerMillion": 5.00,
+      "displayName": "Sonar Reasoning",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "sonar-reasoning", "type": "prefix" }
+      ]
+    },
+    {
       "modelId": "sonar",
       "inputPricePerMillion": 1.00,
       "outputPricePerMillion": 1.00,
