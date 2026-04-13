@@ -27,13 +27,6 @@ jobs:
             9.0.x
             10.0.x
 
-      - name: Extract version
-        id: version
-        run: |
-          VERSION=$(grep -oP '(?<=<Version>)[^<]+' Directory.Build.props)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Extracted version: $VERSION"
-
       - name: Restore dependencies
         run: dotnet restore
 
@@ -52,13 +45,3 @@ jobs:
         run: |
           dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
           dotnet nuget push ./nupkg/*.snupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ steps.version.outputs.version }}
-          name: v${{ steps.version.outputs.version }}
-          generate_release_notes: true
-          files: ./nupkg/*.nupkg
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
