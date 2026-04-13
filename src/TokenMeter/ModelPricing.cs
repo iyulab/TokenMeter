@@ -191,6 +191,8 @@ public static class ModelPricingData
     /// </summary>
     public static ModelPricing? FindPricing(string modelId)
     {
+        if (string.IsNullOrWhiteSpace(modelId)) return null;
+
         // Direct dictionary lookup (case-insensitive)
         if (_all.TryGetValue(modelId, out var pricing))
         {
@@ -209,23 +211,43 @@ public static class ModelPricingData
             }
         }
 
-        // Pass 2: Prefix alias match
-        foreach (var rule in _allAliasRules)
+        // Pass 2: Prefix alias match — longest match wins to avoid short-prefix collisions
         {
-            if (rule.MatchType == AliasMatchType.Prefix &&
-                normalized.StartsWith(rule.Pattern, StringComparison.Ordinal))
+            AliasRule? bestPrefix = null;
+            foreach (var rule in _allAliasRules)
             {
-                return rule.Target;
+                if (rule.MatchType == AliasMatchType.Prefix &&
+                    normalized.StartsWith(rule.Pattern, StringComparison.Ordinal))
+                {
+                    if (bestPrefix is null || rule.Pattern.Length > bestPrefix.Pattern.Length)
+                    {
+                        bestPrefix = rule;
+                    }
+                }
+            }
+            if (bestPrefix is not null)
+            {
+                return bestPrefix.Target;
             }
         }
 
-        // Pass 3: Contains alias match
-        foreach (var rule in _allAliasRules)
+        // Pass 3: Contains alias match — longest match wins
         {
-            if (rule.MatchType == AliasMatchType.Contains &&
-                normalized.Contains(rule.Pattern, StringComparison.Ordinal))
+            AliasRule? bestContains = null;
+            foreach (var rule in _allAliasRules)
             {
-                return rule.Target;
+                if (rule.MatchType == AliasMatchType.Contains &&
+                    normalized.Contains(rule.Pattern, StringComparison.Ordinal))
+                {
+                    if (bestContains is null || rule.Pattern.Length > bestContains.Pattern.Length)
+                    {
+                        bestContains = rule;
+                    }
+                }
+            }
+            if (bestContains is not null)
+            {
+                return bestContains.Target;
             }
         }
 

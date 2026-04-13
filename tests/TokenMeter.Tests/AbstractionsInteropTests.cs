@@ -1,5 +1,7 @@
 using TokenMeter.Abstractions;
 
+#pragma warning disable CA1859 // Use concrete types for improved performance — tests intentionally use interface types to verify dispatch
+
 namespace TokenMeter.Tests;
 
 /// <summary>
@@ -143,6 +145,114 @@ public sealed class AbstractionsInteropTests
         Abstractions.ITokenCounter shared = mock;
 
         Assert.False(shared.IsApproximate("any-model"));
+    }
+
+    // ── Issue 1: IsApproximate dispatch through Abstractions.ITokenCounter ──
+
+    [Fact]
+    public void SharedInterface_IsApproximate_Claude_ReturnsTrue()
+    {
+        // Regression: accessing IsApproximate via Abstractions.ITokenCounter
+        // previously returned false (the default) instead of true.
+        Abstractions.ITokenCounter shared = TokenCounter.Default();
+
+        Assert.True(shared.IsApproximate("claude-3.5-sonnet"));
+        Assert.True(shared.IsApproximate("claude-3-opus"));
+    }
+
+    [Fact]
+    public void SharedInterface_IsApproximate_Gpt_ReturnsFalse()
+    {
+        Abstractions.ITokenCounter shared = TokenCounter.Default();
+
+        Assert.False(shared.IsApproximate("gpt-4"));
+        Assert.False(shared.IsApproximate("gpt-4o"));
+    }
+
+    // ── Issue 1: SupportsModel dispatch through Abstractions.ITokenCounter ──
+
+    [Fact]
+    public void SharedInterface_SupportsModel_Gpt_ReturnsTrue()
+    {
+        Abstractions.ITokenCounter shared = TokenCounter.Default();
+
+        Assert.True(shared.SupportsModel("gpt-4"));
+        Assert.True(shared.SupportsModel("gpt-4o"));
+        Assert.True(shared.SupportsModel("gpt-3.5-turbo"));
+    }
+
+    [Fact]
+    public void SharedInterface_SupportsModel_Claude_ReturnsFalse()
+    {
+        Abstractions.ITokenCounter shared = TokenCounter.Default();
+
+        Assert.False(shared.SupportsModel("claude-3.5-sonnet"));
+    }
+
+    // ── Issue 2: Count ↔ CountTokens bridge via interface default impl ──
+
+    [Fact]
+    public void SharedInterface_Count_MatchesCountTokens()
+    {
+        var counter = TokenCounter.Default();
+        Abstractions.ITokenCounter shared = counter;
+
+        var text = "The quick brown fox jumps over the lazy dog.";
+        Assert.Equal(counter.CountTokens(text), shared.Count(text));
+    }
+
+    [Fact]
+    public void SharedInterface_CountBatch_MatchesCountTokensBatch()
+    {
+        var counter = TokenCounter.Default();
+        Abstractions.ITokenCounter shared = counter;
+
+        var texts = new[] { "Hello", "world", "testing bridge" };
+        Assert.Equal(counter.CountTokens(texts), shared.Count(texts));
+    }
+
+    // ── Issue 3: CountTokens null guard ──
+
+    [Fact]
+    public void CountTokens_NullEnumerable_ReturnsZero()
+    {
+        var counter = TokenCounter.Default();
+
+        var count = counter.CountTokens((IEnumerable<string>)null!);
+
+        Assert.Equal(0, count);
+    }
+
+    // ── Issue 4: IDisposable ──
+
+    [Fact]
+    public void TokenCounter_ImplementsIDisposable()
+    {
+        var counter = TokenCounter.Default();
+
+        Assert.IsAssignableFrom<IDisposable>(counter);
+    }
+
+    [Fact]
+    public void TokenCounter_Dispose_DoesNotThrow()
+    {
+        var counter = TokenCounter.Default();
+
+        var exception = Record.Exception(() => counter.Dispose());
+
+        Assert.Null(exception);
+    }
+
+    [Fact]
+    public void TokenCounter_UsingPattern_Works()
+    {
+        int count;
+        using (var counter = TokenCounter.Default())
+        {
+            count = counter.CountTokens("Hello, world!");
+        }
+
+        Assert.True(count > 0);
     }
 
     /// <summary>

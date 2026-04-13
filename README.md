@@ -307,6 +307,7 @@ public interface IUsageTracker
     UsageStatistics GetStatistics(DateTimeOffset startTime, DateTimeOffset endTime);
     UsageStatistics GetTodayStatistics();
     IReadOnlyList<UsageRecord> GetRecords();
+    IReadOnlyList<UsageRecord> GetRecords(string sessionId);
     void Clear();
     string SessionId { get; }
     string StartNewSession();

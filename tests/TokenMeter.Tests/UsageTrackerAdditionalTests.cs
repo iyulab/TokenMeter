@@ -332,12 +332,12 @@ public class UsageStatisticsAdditionalTests
     }
 
     [Fact]
-    public void Empty_HasPeriodSet()
+    public void Empty_HasSentinelPeriod()
     {
         var stats = UsageStatistics.Empty;
 
-        Assert.True(stats.PeriodStart <= DateTimeOffset.UtcNow);
-        Assert.True(stats.PeriodEnd <= DateTimeOffset.UtcNow);
+        Assert.Equal(DateTimeOffset.MinValue, stats.PeriodStart);
+        Assert.Equal(DateTimeOffset.MinValue, stats.PeriodEnd);
     }
 
     [Fact]
@@ -409,8 +409,8 @@ public class UsageRecordAdditionalTests
             OutputTokens = int.MaxValue / 2
         };
 
-        // int overflow risk: MaxValue/2 + MaxValue/2 = MaxValue - 1
-        Assert.Equal(int.MaxValue - 1, record.TotalTokens);
+        // Now returns long, so no overflow risk
+        Assert.Equal((long)(int.MaxValue / 2) + int.MaxValue / 2, record.TotalTokens);
     }
 
     [Fact]

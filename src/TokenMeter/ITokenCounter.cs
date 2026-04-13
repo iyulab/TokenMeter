@@ -24,4 +24,31 @@ public interface ITokenCounter : Abstractions.ITokenCounter
     /// Gets the model/encoding name used for tokenization.
     /// </summary>
     string ModelName { get; }
+
+    // ── Bridges to Abstractions.ITokenCounter ──
+    // Default implementations ensure all TokenMeter.ITokenCounter implementers
+    // automatically satisfy the shared interface without manual wiring.
+
+    /// <summary>
+    /// Bridges <see cref="Abstractions.ITokenCounter.Count(string)"/> to <see cref="CountTokens(string)"/>.
+    /// </summary>
+    int Abstractions.ITokenCounter.Count(string text) => CountTokens(text);
+
+    /// <summary>
+    /// Bridges <see cref="Abstractions.ITokenCounter.Count(IEnumerable{string})"/> to <see cref="CountTokens(IEnumerable{string})"/>.
+    /// </summary>
+    int Abstractions.ITokenCounter.Count(IEnumerable<string> texts) => CountTokens(texts);
+
+    /// <summary>
+    /// Bridges <see cref="Abstractions.ITokenCounter.IsApproximate(string)"/> default implementation
+    /// to the local <see cref="IsApproximate(string)"/> method, ensuring correct dispatch
+    /// when accessed via an <see cref="Abstractions.ITokenCounter"/> typed variable.
+    /// </summary>
+    bool Abstractions.ITokenCounter.IsApproximate(string modelId) => IsApproximate(modelId);
+
+    /// <summary>
+    /// Indicates whether token counting for the specified model uses an approximate
+    /// fallback tokenizer rather than the model's native tokenizer.
+    /// </summary>
+    new bool IsApproximate(string modelId);
 }

@@ -1,16 +1,21 @@
+using System.Collections.Concurrent;
+
 namespace TokenMeter;
 
 /// <summary>
 /// Default implementation of cost calculator.
 /// Uses built-in pricing data and supports custom pricing registration.
+/// Thread-safe for concurrent reads and writes.
 /// </summary>
 public class CostCalculator : ICostCalculator
 {
-    private readonly Dictionary<string, ModelPricing> _customPricing = new(StringComparer.OrdinalIgnoreCase);
+    private readonly ConcurrentDictionary<string, ModelPricing> _customPricing = new(StringComparer.OrdinalIgnoreCase);
 
     /// <inheritdoc />
     public decimal? CalculateCost(string modelId, int inputTokens, int outputTokens)
     {
+        ArgumentNullException.ThrowIfNull(modelId);
+
         var pricing = GetPricing(modelId);
         if (pricing == null)
         {
@@ -23,6 +28,8 @@ public class CostCalculator : ICostCalculator
     /// <inheritdoc />
     public virtual ModelPricing? GetPricing(string modelId)
     {
+        ArgumentNullException.ThrowIfNull(modelId);
+
         // Check custom pricing first
         if (_customPricing.TryGetValue(modelId, out var customPricing))
         {
@@ -60,6 +67,8 @@ public class CostCalculator : ICostCalculator
     {
         public override ModelPricing? GetPricing(string modelId)
         {
+            ArgumentNullException.ThrowIfNull(modelId);
+
             return _customPricing.TryGetValue(modelId, out var pricing) ? pricing : null;
         }
 

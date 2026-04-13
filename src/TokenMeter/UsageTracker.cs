@@ -45,13 +45,19 @@ public class UsageTracker : IUsageTracker
             cost = _costCalculator.CalculateCost(modelId, inputTokens, outputTokens);
         }
 
+        string resolvedSessionId;
+        lock (_lock)
+        {
+            resolvedSessionId = sessionId ?? SessionId;
+        }
+
         var record = new UsageRecord
         {
             ModelId = modelId,
             InputTokens = inputTokens,
             OutputTokens = outputTokens,
             Cost = cost,
-            SessionId = sessionId ?? SessionId
+            SessionId = resolvedSessionId
         };
 
         Record(record);
@@ -119,8 +125,11 @@ public class UsageTracker : IUsageTracker
     /// <inheritdoc />
     public string StartNewSession()
     {
-        SessionId = GenerateSessionId();
-        return SessionId;
+        lock (_lock)
+        {
+            SessionId = GenerateSessionId();
+            return SessionId;
+        }
     }
 
     private static UsageStatistics CalculateStatistics(List<UsageRecord> records, DateTimeOffset start, DateTimeOffset end)
@@ -140,6 +149,7 @@ public class UsageTracker : IUsageTracker
             TotalInputTokens = records.Sum(r => (long)r.InputTokens),
             TotalOutputTokens = records.Sum(r => (long)r.OutputTokens),
             TotalCost = records.Where(r => r.Cost.HasValue).Sum(r => r.Cost!.Value),
+            UnpricedRequestCount = records.Count(r => !r.Cost.HasValue),
             PeriodStart = start,
             PeriodEnd = end
         };

@@ -6,7 +6,7 @@ namespace TokenMeter;
 /// Token counter implementation using Microsoft.ML.Tokenizers.
 /// Supports various models including GPT-4, GPT-3.5, Claude, etc.
 /// </summary>
-public class TokenCounter : ITokenCounter
+public class TokenCounter : ITokenCounter, IDisposable
 {
     private readonly TiktokenTokenizer _tokenizer;
 
@@ -47,20 +47,9 @@ public class TokenCounter : ITokenCounter
     /// <inheritdoc />
     public int CountTokens(IEnumerable<string> texts)
     {
+        if (texts is null) return 0;
         return texts.Sum(CountTokens);
     }
-
-    /// <summary>
-    /// Counts the number of tokens in the given text.
-    /// Implementation of <see cref="Abstractions.ITokenCounter.Count(string)"/>.
-    /// </summary>
-    int Abstractions.ITokenCounter.Count(string text) => CountTokens(text);
-
-    /// <summary>
-    /// Counts the total number of tokens across the given texts.
-    /// Implementation of <see cref="Abstractions.ITokenCounter.Count(IEnumerable{string})"/>.
-    /// </summary>
-    int Abstractions.ITokenCounter.Count(IEnumerable<string> texts) => CountTokens(texts);
 
     /// <inheritdoc />
     public bool SupportsModel(string modelId)
@@ -145,4 +134,15 @@ public class TokenCounter : ITokenCounter
     /// Creates a token counter using cl100k_base encoding (default for most modern models).
     /// </summary>
     public static TokenCounter Default() => new("cl100k_base");
+
+    /// <summary>
+    /// Releases resources used by the token counter.
+    /// Currently a no-op because <see cref="TiktokenTokenizer"/> does not implement
+    /// <see cref="IDisposable"/>, but included so callers can use a <c>using</c> pattern
+    /// that will automatically benefit when the underlying tokenizer becomes disposable.
+    /// </summary>
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+    }
 }

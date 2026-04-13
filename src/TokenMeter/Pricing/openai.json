@@ -171,7 +171,9 @@
       "displayName": "GPT-4",
       "contextWindow": 8192,
       "aliases": [
-        { "pattern": "gpt-4", "type": "prefix" }
+        { "pattern": "gpt-4", "type": "exact" },
+        { "pattern": "gpt-4-0613", "type": "exact" },
+        { "pattern": "gpt-4-0314", "type": "exact" }
       ]
     },
     {

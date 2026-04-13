@@ -28,7 +28,7 @@ public record UsageRecord
     /// <summary>
     /// Total tokens (input + output).
     /// </summary>
-    public int TotalTokens => InputTokens + OutputTokens;
+    public long TotalTokens => (long)InputTokens + OutputTokens;
 
     /// <summary>
     /// Calculated cost for this usage (if pricing available).
@@ -82,6 +82,11 @@ public record UsageStatistics
     public decimal TotalCost { get; init; }
 
     /// <summary>
+    /// Number of requests that had no pricing information available.
+    /// </summary>
+    public int UnpricedRequestCount { get; init; }
+
+    /// <summary>
     /// Start of the period for these statistics.
     /// </summary>
     public DateTimeOffset PeriodStart { get; init; }
@@ -107,11 +112,11 @@ public record UsageStatistics
     public decimal AverageCost => RequestCount > 0 ? TotalCost / RequestCount : 0;
 
     /// <summary>
-    /// Empty statistics.
+    /// Empty statistics with sentinel timestamp values.
     /// </summary>
-    public static UsageStatistics Empty => new()
+    public static readonly UsageStatistics Empty = new()
     {
-        PeriodStart = DateTimeOffset.UtcNow,
-        PeriodEnd = DateTimeOffset.UtcNow
+        PeriodStart = DateTimeOffset.MinValue,
+        PeriodEnd = DateTimeOffset.MinValue
     };
 }

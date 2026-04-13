@@ -41,6 +41,11 @@ internal static class PricingLoader
             var json = JsonSerializer.Deserialize<ProviderPricingJson>(stream, s_jsonOptions);
             if (json is null) continue;
 
+            if (string.IsNullOrWhiteSpace(json.Provider))
+                throw new InvalidOperationException($"Pricing resource '{resourceName}' has empty provider name");
+            if (json.Models is null || json.Models.Count == 0)
+                throw new InvalidOperationException($"Pricing resource '{resourceName}' has no models");
+
             providers.Add(BuildProviderData(json));
         }
         return [.. providers];

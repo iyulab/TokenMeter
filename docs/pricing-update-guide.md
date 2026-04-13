@@ -52,17 +52,24 @@
 **새 모델 추가:**
 
 JSON 파일의 `models` 배열에 새 항목을 추가합니다.
-**중요**: 모델 순서가 alias 매칭 우선순위를 결정합니다. 더 구체적인 패턴의 모델을 먼저 배치하세요.
 
-예시: `gpt-4o-mini`를 `gpt-4o` 보다 먼저 배치 (prefix "gpt-4o"가 "gpt-4o-mini"도 매칭하므로)
+> **참고**: v0.4.0부터 prefix/contains 매칭에 **longest match** 규칙이 적용됩니다.
+> 동일 타입의 alias가 여러 개 매칭되면 가장 긴 패턴이 우선합니다.
+> 따라서 JSON 내 모델 정의 순서는 매칭 결과에 영향을 주지 않습니다.
 
 **Alias 타입:**
 
 | Type | 설명 | 예시 |
 |------|------|------|
 | `exact` | 정확히 일치 | `"gpt-4o"` → `gpt-4o`만 매칭 |
-| `prefix` | 접두사 일치 | `"gpt-4o"` → `gpt-4o`, `gpt-4o-2024-08-06` 매칭 |
-| `contains` | 부분 문자열 일치 | `"claude-3.5-sonnet"` → 어디든 포함되면 매칭 |
+| `prefix` | 접두사 일치 (longest match) | `"gpt-4o"` → `gpt-4o`, `gpt-4o-2024-08-06` 매칭 |
+| `contains` | 부분 문자열 일치 (longest match) | `"claude-3.5-sonnet"` → 어디든 포함되면 매칭 |
+
+**Alias 설계 권장사항:**
+
+- 날짜 스냅샷만 다른 기본 모델(예: `gpt-4`)은 `exact` 타입 + 개별 날짜 alias를 사용하세요
+- `prefix`는 패밀리 모델(예: `gpt-4o` → `gpt-4o-2024-08-06`)에 적합합니다
+- 짧은 prefix가 다른 모델 패밀리와 충돌하지 않는지 확인하세요 (예: `gpt-4` prefix는 `gpt-4o`도 매칭)
 
 ### 3. 새 프로바이더 추가
 
@@ -87,6 +94,8 @@ JSON 파일의 `models` 배열에 새 항목을 추가합니다.
 ```
 
 JSON 파일을 추가하면 Embedded Resource로 자동 포함됩니다 (`TokenMeter.csproj`의 `Pricing\*.json` 와일드카드).
+
+**검증**: `PricingLoader`가 로드 시 provider 이름이 비어있거나 models가 없는 JSON을 자동 감지하여 `InvalidOperationException`을 throw합니다. 새 JSON 파일 추가 후 반드시 테스트를 실행하세요.
 
 `ModelPricingData`에 프로바이더 프로퍼티를 추가하려면 `ModelPricing.cs`에 다음을 추가:
 
@@ -138,9 +147,10 @@ Sources:
 
 | 날짜 | 버전 | 변경 내용 |
 |------|------|----------|
+| 2026-03-09 | 0.4.0 | Longest prefix match 알고리즘, PricingLoader 검증, gpt-4 alias 정확도 개선 |
 | 2026-02-10 | 0.3.0 | JSON 기반 가격 시스템으로 리팩토링, 12개 프로바이더 지원 |
 | 2026-01-28 | 0.1.0 | 초기 가격 데이터 (OpenAI, Anthropic, Google, xAI, Azure) |
 
 ---
 
-Last Updated: 2026-02-10
+Last Updated: 2026-03-09
