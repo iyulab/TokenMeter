@@ -1,13 +1,13 @@
 # LLM Pricing Update Guide
 
-이 문서는 TokenMeter의 모델 가격 정보를 주기적으로 업데이트하기 위한 가이드입니다.
+This document describes how to keep TokenMeter's model pricing data current.
 
-## 업데이트 주기
+## Update Cadence
 
-- **권장 주기**: 월 1회 또는 주요 모델 출시 시
-- **긴급 업데이트**: 가격 정책 변경 발표 시 즉시
+- **Recommended**: Once a month, or whenever a major model is released.
+- **Urgent**: Immediately when a provider announces a pricing policy change.
 
-## 공식 가격 정보 소스
+## Official Pricing Sources
 
 | Provider | URL |
 |----------|-----|
@@ -24,17 +24,17 @@
 | Perplexity | https://docs.perplexity.ai/guides/pricing |
 | Qwen | https://help.aliyun.com/zh/model-studio/ |
 
-## 업데이트 절차
+## Update Procedure
 
-### 1. 가격 정보 수집
+### 1. Collect Pricing Information
 
-각 공급자의 공식 페이지에서 최신 가격을 확인합니다.
+Check each provider's official pricing page for the latest rates.
 
-### 2. JSON 파일 수정
+### 2. Edit JSON Files
 
-`src/TokenMeter/Pricing/` 디렉토리에서 해당 프로바이더의 JSON 파일을 편집합니다.
+Edit the corresponding provider JSON file in `src/TokenMeter/Pricing/`.
 
-**기존 모델 가격 변경:**
+**Updating an existing model's price:**
 
 ```json
 {
@@ -49,31 +49,31 @@
 }
 ```
 
-**새 모델 추가:**
+**Adding a new model:**
 
-JSON 파일의 `models` 배열에 새 항목을 추가합니다.
+Append a new entry to the `models` array in the appropriate JSON file.
 
-> **참고**: v0.4.0부터 prefix/contains 매칭에 **longest match** 규칙이 적용됩니다.
-> 동일 타입의 alias가 여러 개 매칭되면 가장 긴 패턴이 우선합니다.
-> 따라서 JSON 내 모델 정의 순서는 매칭 결과에 영향을 주지 않습니다.
+> **Note**: Since v0.4.0, prefix/contains matching uses a **longest-match** rule.
+> When multiple aliases of the same type match, the longest pattern wins.
+> This means the order of model entries in JSON does not affect matching results.
 
-**Alias 타입:**
+**Alias types:**
 
-| Type | 설명 | 예시 |
-|------|------|------|
-| `exact` | 정확히 일치 | `"gpt-4o"` → `gpt-4o`만 매칭 |
-| `prefix` | 접두사 일치 (longest match) | `"gpt-4o"` → `gpt-4o`, `gpt-4o-2024-08-06` 매칭 |
-| `contains` | 부분 문자열 일치 (longest match) | `"claude-3.5-sonnet"` → 어디든 포함되면 매칭 |
+| Type | Behavior | Example |
+|------|----------|---------|
+| `exact` | Matches the full string only | `"gpt-4o"` → matches only `gpt-4o` |
+| `prefix` | Matches any string starting with the pattern (longest match wins) | `"gpt-4o"` → matches `gpt-4o`, `gpt-4o-2024-08-06` |
+| `contains` | Matches any string containing the pattern (longest match wins) | `"claude-3.5-sonnet"` → matches if found anywhere in the string |
 
-**Alias 설계 권장사항:**
+**Alias design guidelines:**
 
-- 날짜 스냅샷만 다른 기본 모델(예: `gpt-4`)은 `exact` 타입 + 개별 날짜 alias를 사용하세요
-- `prefix`는 패밀리 모델(예: `gpt-4o` → `gpt-4o-2024-08-06`)에 적합합니다
-- 짧은 prefix가 다른 모델 패밀리와 충돌하지 않는지 확인하세요 (예: `gpt-4` prefix는 `gpt-4o`도 매칭)
+- For base models that differ only by date snapshot (e.g., `gpt-4`), use `exact` type with individual date aliases.
+- `prefix` works well for model families (e.g., `gpt-4o` → `gpt-4o-2024-08-06`).
+- Verify that a short prefix won't collide with another model family (e.g., a `gpt-4` prefix also matches `gpt-4o`).
 
-### 3. 새 프로바이더 추가
+### 3. Add a New Provider
 
-`src/TokenMeter/Pricing/` 디렉토리에 새 JSON 파일을 생성합니다:
+Create a new JSON file in `src/TokenMeter/Pricing/`:
 
 ```json
 {
@@ -93,63 +93,62 @@ JSON 파일의 `models` 배열에 새 항목을 추가합니다.
 }
 ```
 
-JSON 파일을 추가하면 Embedded Resource로 자동 포함됩니다 (`TokenMeter.csproj`의 `Pricing\*.json` 와일드카드).
+New JSON files are automatically included as embedded resources via the `Pricing\*.json` wildcard in `TokenMeter.csproj`.
 
-**검증**: `PricingLoader`가 로드 시 provider 이름이 비어있거나 models가 없는 JSON을 자동 감지하여 `InvalidOperationException`을 throw합니다. 새 JSON 파일 추가 후 반드시 테스트를 실행하세요.
+**Validation**: `PricingLoader` checks at load time that the provider name is not empty and models are present. It throws `InvalidOperationException` on invalid data. Always run tests after adding a new JSON file.
 
-`ModelPricingData`에 프로바이더 프로퍼티를 추가하려면 `ModelPricing.cs`에 다음을 추가:
+To expose a convenience property, add the following to `ModelPricing.cs`:
 
 ```csharp
 public static IReadOnlyDictionary<string, ModelPricing> NewProvider => GetProviderDict("NewProvider");
 ```
 
-### 4. LastUpdated 날짜 업데이트
+### 4. Update LastUpdated Date
 
-`ModelPricing.cs`에서 `LastUpdated` 날짜를 업데이트합니다.
+Update the `LastUpdated` date in `ModelPricing.cs` to reflect the current date.
 
-### 5. README.md 업데이트
+### 5. Update README.md
 
-가격표를 최신 정보로 업데이트합니다.
+Update the pricing tables in `README.md` to reflect the latest data.
 
-### 6. 테스트 실행
+### 6. Run Tests
 
 ```bash
-cd D:\data\TokenMeter
 dotnet test tests/TokenMeter.Tests/TokenMeter.Tests.csproj
 ```
 
-### 7. 변경 사항 커밋
+### 7. Commit Changes
 
 ```bash
 git add .
 git commit -m "chore: update model pricing (YYYY-MM-DD)
 
-- [변경 내용 요약]
+- [Change summary]
 
 Sources:
-- [참조 URL]"
+- [Referenced URLs]"
 ```
 
-## 가격 변동 알림 설정 (선택사항)
+## Price Change Notifications (Optional)
 
-1. **OpenAI**: https://status.openai.com/ RSS 구독
-2. **Anthropic**: https://status.anthropic.com/ RSS 구독
-3. **Google**: Cloud 알림 설정
-4. **xAI**: X(Twitter) @xaboratory 팔로우
+1. **OpenAI**: Subscribe to RSS at https://status.openai.com/
+2. **Anthropic**: Subscribe to RSS at https://status.anthropic.com/
+3. **Google**: Configure Cloud notifications
+4. **xAI**: Follow @xaboratory on X (Twitter)
 
-## 참고: 가격 비교 사이트
+## Reference: Price Comparison Sites
 
-- https://pricepertoken.com/ - 실시간 토큰 가격 비교
-- https://artificialanalysis.ai/ - LLM 벤치마크 및 가격
-- https://llmpricecheck.com/ - 가격 계산기
+- https://pricepertoken.com/ — Real-time token price comparison
+- https://artificialanalysis.ai/ — LLM benchmarks and pricing
+- https://llmpricecheck.com/ — Pricing calculator
 
-## 버전 히스토리
+## Version History
 
-| 날짜 | 버전 | 변경 내용 |
-|------|------|----------|
-| 2026-03-09 | 0.4.0 | Longest prefix match 알고리즘, PricingLoader 검증, gpt-4 alias 정확도 개선 |
-| 2026-02-10 | 0.3.0 | JSON 기반 가격 시스템으로 리팩토링, 12개 프로바이더 지원 |
-| 2026-01-28 | 0.1.0 | 초기 가격 데이터 (OpenAI, Anthropic, Google, xAI, Azure) |
+| Date | Version | Changes |
+|------|---------|---------|
+| 2026-03-09 | 0.4.0 | Longest-match alias algorithm, PricingLoader validation, improved gpt-4 alias accuracy |
+| 2026-02-10 | 0.3.0 | Refactored to JSON-based pricing system, 12 providers supported |
+| 2026-01-28 | 0.1.0 | Initial pricing data (OpenAI, Anthropic, Google, xAI, Azure) |
 
 ---
 
