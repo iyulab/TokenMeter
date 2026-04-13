@@ -14,6 +14,28 @@
       ]
     },
     {
+      "modelId": "gemini-3.1-pro-preview",
+      "inputPricePerMillion": 2.00,
+      "outputPricePerMillion": 12.00,
+      "displayName": "Gemini 3.1 Pro Preview",
+      "contextWindow": 1048576,
+      "aliases": [
+        { "pattern": "gemini-3.1-pro", "type": "contains" },
+        { "pattern": "gemini-3-1-pro", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-3.1-flash-lite-preview",
+      "inputPricePerMillion": 0.25,
+      "outputPricePerMillion": 1.50,
+      "displayName": "Gemini 3.1 Flash-Lite Preview",
+      "contextWindow": 1048576,
+      "aliases": [
+        { "pattern": "gemini-3.1-flash-lite", "type": "contains" },
+        { "pattern": "gemini-3-1-flash-lite", "type": "contains" }
+      ]
+    },
+    {
       "modelId": "gemini-3-flash-preview",
       "inputPricePerMillion": 0.50,
       "outputPricePerMillion": 3.00,

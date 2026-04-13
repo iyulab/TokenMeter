@@ -40,6 +40,16 @@
       "aliases": [
         { "pattern": "nova-micro", "type": "contains" }
       ]
+    },
+    {
+      "modelId": "amazon-nova-2-lite",
+      "inputPricePerMillion": 0.30,
+      "outputPricePerMillion": 2.50,
+      "displayName": "Amazon Nova 2 Lite",
+      "contextWindow": 1000000,
+      "aliases": [
+        { "pattern": "nova-2-lite", "type": "contains" }
+      ]
     }
   ]
 }

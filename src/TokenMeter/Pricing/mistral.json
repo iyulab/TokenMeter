@@ -3,10 +3,10 @@
   "models": [
     {
       "modelId": "mistral-large-latest",
-      "inputPricePerMillion": 2.00,
-      "outputPricePerMillion": 6.00,
-      "displayName": "Mistral Large",
-      "contextWindow": 128000,
+      "inputPricePerMillion": 0.50,
+      "outputPricePerMillion": 1.50,
+      "displayName": "Mistral Large 3",
+      "contextWindow": 262144,
       "aliases": [
         { "pattern": "mistral-large", "type": "prefix" }
       ]
@@ -23,10 +23,10 @@
     },
     {
       "modelId": "mistral-small-latest",
-      "inputPricePerMillion": 0.20,
-      "outputPricePerMillion": 0.60,
-      "displayName": "Mistral Small",
-      "contextWindow": 128000,
+      "inputPricePerMillion": 0.06,
+      "outputPricePerMillion": 0.18,
+      "displayName": "Mistral Small 3.2",
+      "contextWindow": 131072,
       "aliases": [
         { "pattern": "mistral-small", "type": "prefix" }
       ]
@@ -59,6 +59,37 @@
       "contextWindow": 128000,
       "aliases": [
         { "pattern": "pixtral", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "magistral-medium-latest",
+      "inputPricePerMillion": 2.00,
+      "outputPricePerMillion": 5.00,
+      "displayName": "Magistral Medium",
+      "contextWindow": 40000,
+      "aliases": [
+        { "pattern": "magistral-medium", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "magistral-small-latest",
+      "inputPricePerMillion": 0.50,
+      "outputPricePerMillion": 1.50,
+      "displayName": "Magistral Small",
+      "contextWindow": 40000,
+      "aliases": [
+        { "pattern": "magistral-small", "type": "prefix" },
+        { "pattern": "magistral", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "devstral-medium-latest",
+      "inputPricePerMillion": 0.40,
+      "outputPricePerMillion": 2.00,
+      "displayName": "Devstral Medium",
+      "contextWindow": 128000,
+      "aliases": [
+        { "pattern": "devstral-medium", "type": "prefix" }
       ]
     }
   ]

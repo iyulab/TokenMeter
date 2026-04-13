@@ -100,7 +100,7 @@ public static class ModelPricingData
     /// <summary>
     /// Last updated date for pricing data.
     /// </summary>
-    public static DateOnly LastUpdated { get; } = new(2026, 3, 19);
+    public static DateOnly LastUpdated { get; } = new(2026, 4, 13);
 
     /// <summary>
     /// Gets how many days old the pricing data is relative to the current UTC date.

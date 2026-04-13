@@ -95,6 +95,16 @@
       ]
     },
     {
+      "modelId": "gpt-5-nano",
+      "inputPricePerMillion": 0.05,
+      "outputPricePerMillion": 0.40,
+      "displayName": "GPT-5 Nano",
+      "contextWindow": 272000,
+      "aliases": [
+        { "pattern": "gpt-5-nano", "type": "prefix" }
+      ]
+    },
+    {
       "modelId": "gpt-5",
       "inputPricePerMillion": 1.25,
       "outputPricePerMillion": 10.00,
