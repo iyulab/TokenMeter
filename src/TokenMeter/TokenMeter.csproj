@@ -26,7 +26,7 @@
 
   <ItemGroup>
     <!-- Pin transitive Microsoft.Bcl.Memory to patched version (GHSA-73j8-2gch-69rq) -->
-    <PackageReference Include="Microsoft.Bcl.Memory" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Bcl.Memory" Version="10.0.7" />
     <!-- Microsoft ML Tokenizers for accurate token counting -->
     <PackageReference Include="Microsoft.ML.Tokenizers" Version="2.0.0" />
     <!-- Tokenizer data for cl100k_base encoding (GPT-4, GPT-3.5-turbo, etc.) -->
