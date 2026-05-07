@@ -26,13 +26,13 @@
 
   <ItemGroup>
     <!-- Pin transitive Microsoft.Bcl.Memory to patched version (GHSA-73j8-2gch-69rq) -->
-    <PackageReference Include="Microsoft.Bcl.Memory" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Bcl.Memory" />
     <!-- Microsoft ML Tokenizers for accurate token counting -->
-    <PackageReference Include="Microsoft.ML.Tokenizers" Version="2.0.0" />
+    <PackageReference Include="Microsoft.ML.Tokenizers" />
     <!-- Tokenizer data for cl100k_base encoding (GPT-4, GPT-3.5-turbo, etc.) -->
-    <PackageReference Include="Microsoft.ML.Tokenizers.Data.Cl100kBase" Version="2.0.0" />
+    <PackageReference Include="Microsoft.ML.Tokenizers.Data.Cl100kBase" />
     <!-- Tokenizer data for p50k_base encoding (GPT-3, Codex) -->
-    <PackageReference Include="Microsoft.ML.Tokenizers.Data.P50kBase" Version="2.0.0" />
+    <PackageReference Include="Microsoft.ML.Tokenizers.Data.P50kBase" />
   </ItemGroup>
 
 </Project>
