@@ -20,6 +20,12 @@ Token counting, cost calculation, and usage tracking for LLM applications.
 dotnet add package TokenMeter
 ```
 
+If you only need the shared `ITokenCounter` interface (e.g., for cross-package interoperability without pulling in tokenizer dependencies):
+
+```bash
+dotnet add package TokenMeter.Abstractions
+```
+
 ## Quick Start
 
 ### Token Counting
@@ -231,20 +237,41 @@ var googleModels = ModelPricingData.GetByProvider("Google");
 var providers = ModelPricingData.GetProviderNames();
 // => ["OpenAI", "Anthropic", "Google", "xAI", "Azure", "Mistral", "DeepSeek", ...]
 
-// Last update date
+// Alias-aware lookup (exact → prefix → contains, longest-match wins)
+ModelPricing? pricing = ModelPricingData.FindPricing("gpt-4o-2024-08-06");
+
+// Last update date and staleness helpers
 Console.WriteLine($"Pricing last updated: {ModelPricingData.LastUpdated}");
+Console.WriteLine($"Pricing age: {ModelPricingData.PricingAgeDays} days");
+bool isStale = ModelPricingData.IsPricingStale(maxAgeDays: 90);
 ```
 
 ## API Reference
 
 ### ITokenCounter
 
+`TokenMeter` package (full interface with tokenizer):
+
 ```csharp
-public interface ITokenCounter
+public interface ITokenCounter : Abstractions.ITokenCounter
 {
     int CountTokens(string text);
     int CountTokens(IEnumerable<string> texts);
     string ModelName { get; }
+    bool IsApproximate(string modelId);
+    bool SupportsModel(string modelId);
+}
+```
+
+`TokenMeter.Abstractions` package (lightweight shared interface):
+
+```csharp
+public interface ITokenCounter
+{
+    int Count(string text);
+    int Count(IEnumerable<string> texts);
+    bool SupportsModel(string modelId);
+    bool IsApproximate(string modelId); // default: false
 }
 ```
 
@@ -258,6 +285,13 @@ public interface ICostCalculator
     void RegisterPricing(ModelPricing pricing);
     IEnumerable<string> GetRegisteredModels();
 }
+```
+
+`CostCalculator` provides two factory methods:
+
+```csharp
+CostCalculator.Default()     // built-in pricing + custom overrides
+CostCalculator.CustomOnly()  // custom-registered pricing only (no built-in data)
 ```
 
 ### IUsageTracker
