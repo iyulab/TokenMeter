@@ -5,34 +5,19 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-    <!-- Package metadata -->
     <PackageId>TokenMeter</PackageId>
     <Authors>iyulab</Authors>
     <Company>iyulab</Company>
-    <Description>Token counting, cost calculation, and usage tracking for LLM applications</Description>
-    <PackageTags>llm;tokens;cost;usage;ai</PackageTags>
+    <Description>LLM model metadata catalog and cost calculator. Provides context windows, pricing, capabilities (vision, audio, reasoning, tool calling, prompt caching) for 12+ providers.</Description>
+    <PackageTags>llm;models;metadata;cost;ai;pricing</PackageTags>
     <RepositoryUrl>https://github.com/iyulab/TokenMeter</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Pricing\*.json" LogicalName="TokenMeter.Pricing.%(Filename)%(Extension)" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\TokenMeter.Abstractions\TokenMeter.Abstractions.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!-- Pin transitive Microsoft.Bcl.Memory to patched version (GHSA-73j8-2gch-69rq) -->
-    <PackageReference Include="Microsoft.Bcl.Memory" />
-    <!-- Microsoft ML Tokenizers for accurate token counting -->
-    <PackageReference Include="Microsoft.ML.Tokenizers" />
-    <!-- Tokenizer data for cl100k_base encoding (GPT-4, GPT-3.5-turbo, etc.) -->
-    <PackageReference Include="Microsoft.ML.Tokenizers.Data.Cl100kBase" />
-    <!-- Tokenizer data for p50k_base encoding (GPT-3, Codex) -->
-    <PackageReference Include="Microsoft.ML.Tokenizers.Data.P50kBase" />
   </ItemGroup>
 
 </Project>
