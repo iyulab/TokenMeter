@@ -27,6 +27,8 @@
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "reasoningMode": "Always",
+      "thinkingFormat": "InlineTag",
+      "thinkingTagPattern": "<think>...</think>",
       "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "sonar-deep", "type": "prefix" }
@@ -43,6 +45,8 @@
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "reasoningMode": "Always",
+      "thinkingFormat": "InlineTag",
+      "thinkingTagPattern": "<think>...</think>",
       "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "sonar-reasoning-pro", "type": "prefix" }
@@ -59,6 +63,8 @@
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "reasoningMode": "Always",
+      "thinkingFormat": "InlineTag",
+      "thinkingTagPattern": "<think>...</think>",
       "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "sonar-reasoning", "type": "prefix" }

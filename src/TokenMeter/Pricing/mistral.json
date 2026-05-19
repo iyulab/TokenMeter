@@ -104,6 +104,7 @@
       "contextWindow": 128000,
       "inputPricePerMillion": 2.00,
       "outputPricePerMillion": 6.00,
+      "supportsImageInput": true,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
       "supportsStructuredOutput": true,
@@ -129,6 +130,8 @@
       "supportsJsonMode": true,
       "supportsStreaming": true,
       "supportsStopSequences": true,
+      "reasoningMode": "Always",
+      "thinkingFormat": "Block",
       "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "magistral-medium", "type": "prefix" }
@@ -148,6 +151,8 @@
       "supportsJsonMode": true,
       "supportsStreaming": true,
       "supportsStopSequences": true,
+      "reasoningMode": "Always",
+      "thinkingFormat": "Block",
       "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "magistral-small", "type": "prefix" },

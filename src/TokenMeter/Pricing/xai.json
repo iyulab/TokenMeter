@@ -16,6 +16,8 @@
       "supportsJsonMode": true,
       "supportsStreaming": true,
       "supportsStopSequences": true,
+      "reasoningMode": "Always",
+      "thinkingFormat": "Block",
       "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "grok-4.1-fast-thinking", "type": "prefix" }
@@ -56,6 +58,8 @@
       "supportsJsonMode": true,
       "supportsStreaming": true,
       "supportsStopSequences": true,
+      "reasoningMode": "Always",
+      "thinkingFormat": "Block",
       "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "grok-4-fast-thinking", "type": "prefix" }
