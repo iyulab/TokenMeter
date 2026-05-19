@@ -77,6 +77,19 @@ public class CostCalculatorConcurrencyTests
     }
 }
 
+public class CostCalculatorKnownModelTests
+{
+    [Fact]
+    public void CalculateCost_WithCacheTokens_KnownAnthropicModel()
+    {
+        var calc = CostCalculator.Default();
+        // claude-sonnet-4-6: input=$3, output=$15, cacheRead=$0.30, cacheWrite=$3.75
+        var cost = calc.CalculateCost("claude-sonnet-4-6", 0, 0, 1_000_000, 1_000_000);
+        Assert.NotNull(cost);
+        Assert.Equal(4.05m, cost.Value); // $0.30 + $3.75
+    }
+}
+
 public class CostCalculatorNullGuardTests
 {
     [Fact]

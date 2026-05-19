@@ -144,4 +144,44 @@ public class CostCalculatorTests
 
         Assert.Null(cost);
     }
+
+    [Fact]
+    public void CalculateCost_KnownModel_ReturnsCorrectCost()
+    {
+        var calc = CostCalculator.Default();
+        // claude-sonnet-4-6: $3/$15 per 1M
+        var cost = calc.CalculateCost("claude-sonnet-4-6", 1_000_000, 1_000_000);
+        Assert.NotNull(cost);
+        Assert.Equal(18.00m, cost.Value);
+    }
+
+    [Fact]
+    public void GetModel_KnownModel_ReturnsModelInfo()
+    {
+        var calc = CostCalculator.Default();
+        var model = calc.GetModel("claude-sonnet-4-6");
+        Assert.NotNull(model);
+        Assert.Equal("Anthropic", model!.Provider);
+        Assert.Equal(ToolCallingFormat.Anthropic, model.ToolCallingFormat);
+        Assert.Equal(PromptCachingMode.Explicit, model.PromptCachingMode);
+    }
+
+    [Fact]
+    public void GetModel_WithAlias_ReturnsCanonicalModel()
+    {
+        var calc = CostCalculator.Default();
+        var byAlias = calc.GetModel("claude-sonnet-4.6");
+        var byId = calc.GetModel("claude-sonnet-4-6");
+        Assert.NotNull(byAlias);
+        Assert.Equal(byId!.ModelId, byAlias!.ModelId);
+    }
+
+    [Fact]
+    public void GetRegisteredModels_Default_ContainsBuiltInModels()
+    {
+        var calc = CostCalculator.Default();
+        var models = calc.GetRegisteredModels().ToList();
+        Assert.Contains("claude-sonnet-4-6", models, StringComparer.OrdinalIgnoreCase);
+        Assert.Contains("gpt-4o", models, StringComparer.OrdinalIgnoreCase);
+    }
 }

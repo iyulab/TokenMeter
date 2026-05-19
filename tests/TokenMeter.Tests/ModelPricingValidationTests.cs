@@ -181,6 +181,71 @@ public class ModelPricingValidationTests
 
     #endregion
 
+    #region Capability Validation
+
+    [Fact]
+    public void ChatModels_HaveContextWindow()
+    {
+        var chatModels = ModelCatalog.GetByType(ModelType.Chat).ToList();
+        Assert.All(chatModels, m => Assert.True(m.ContextWindow.HasValue,
+            $"{m.ModelId} missing ContextWindow"));
+    }
+
+    [Fact]
+    public void ModelsWithReasoning_HaveThinkingFormat()
+    {
+        var reasoningModels = ModelCatalog.All.Values
+            .Where(m => m.ReasoningMode != ReasoningMode.None).ToList();
+        Assert.All(reasoningModels, m =>
+            Assert.NotEqual(ThinkingFormat.None, m.ThinkingFormat));
+    }
+
+    [Fact]
+    public void ModelsWithInlineTagThinking_HaveTagPattern()
+    {
+        var inlineModels = ModelCatalog.All.Values
+            .Where(m => m.ThinkingFormat == ThinkingFormat.InlineTag).ToList();
+        Assert.All(inlineModels, m =>
+            Assert.False(string.IsNullOrWhiteSpace(m.ThinkingTagPattern),
+                $"{m.ModelId} has InlineTag thinking but no ThinkingTagPattern"));
+    }
+
+    [Fact]
+    public void ModelsWithSeparateFieldThinking_HaveFieldName()
+    {
+        var sfModels = ModelCatalog.All.Values
+            .Where(m => m.ThinkingFormat == ThinkingFormat.SeparateField).ToList();
+        Assert.All(sfModels, m =>
+            Assert.False(string.IsNullOrWhiteSpace(m.ThinkingFieldName),
+                $"{m.ModelId} has SeparateField thinking but no ThinkingFieldName"));
+    }
+
+    [Fact]
+    public void ModelsWithExplicitCaching_HaveCachePrices()
+    {
+        var explicitCacheModels = ModelCatalog.All.Values
+            .Where(m => m.PromptCachingMode == PromptCachingMode.Explicit).ToList();
+        Assert.All(explicitCacheModels, m =>
+            Assert.True(m.CacheReadPricePerMillion.HasValue && m.CacheWritePricePerMillion.HasValue,
+                $"{m.ModelId} uses Explicit caching but missing cache prices"));
+    }
+
+    [Fact]
+    public void AnthropicModels_UseAnthropicToolFormat()
+    {
+        Assert.All(ModelCatalog.Anthropic.Values, m =>
+            Assert.Equal(ToolCallingFormat.Anthropic, m.ToolCallingFormat));
+    }
+
+    [Fact]
+    public void GoogleModels_UseGeminiToolFormat()
+    {
+        Assert.All(ModelCatalog.Google.Values, m =>
+            Assert.Equal(ToolCallingFormat.Gemini, m.ToolCallingFormat));
+    }
+
+    #endregion
+
     #region CostCalculator — Edge Cases
 
     [Fact]
