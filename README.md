@@ -4,15 +4,15 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-10.0-blue.svg)](https://dotnet.microsoft.com/)
 
-Token counting, cost calculation, and usage tracking for LLM applications.
+LLM model metadata catalog and cost calculator for .NET.
 
-## Features
+Provides context windows, pricing, capability flags (vision, audio, reasoning, tool calling, prompt caching), and thinking/reasoning format metadata for 12+ providers including OpenAI, Anthropic, Google, xAI, Mistral, DeepSeek, and more.
 
-- **Accurate Token Counting** — Microsoft.ML.Tokenizers for precise counts (cl100k_base, p50k_base)
-- **12 Providers Built-in** — OpenAI, Anthropic, Google, xAI, Azure, Mistral, DeepSeek, Amazon Nova, Cohere, Meta Llama, Perplexity, Qwen
-- **Usage Tracking** — Session-based tracking with statistics and cost aggregation
-- **Thread-Safe** — All components are designed for concurrent access
-- **Extensible** — Register custom pricing for any model or provider
+## Packages
+
+| Package | Description |
+|---------|-------------|
+| `TokenMeter` | Full model catalog + cost calculation |
 
 ## Installation
 
@@ -20,396 +20,181 @@ Token counting, cost calculation, and usage tracking for LLM applications.
 dotnet add package TokenMeter
 ```
 
-If you only need the shared `ITokenCounter` interface (e.g., for cross-package interoperability without pulling in tokenizer dependencies):
-
-```bash
-dotnet add package TokenMeter.Abstractions
-```
-
 ## Quick Start
 
-### Token Counting
+### Model Lookup
 
 ```csharp
-using TokenMeter;
+// Find a model by ID or alias
+var model = ModelCatalog.FindModel("claude-sonnet-4-6");
 
-var counter = TokenCounter.Default();
-
-int tokens = counter.CountTokens("Hello, how are you today?");
-// => 7
+Console.WriteLine(model?.ContextWindow);          // 1000000
+Console.WriteLine(model?.SupportsReasoning);       // True (via ReasoningMode)
+Console.WriteLine(model?.ReasoningMode);           // Optional
+Console.WriteLine(model?.ThinkingFormat);          // Block
+Console.WriteLine(model?.PromptCachingMode);       // Explicit
+Console.WriteLine(model?.ToolCallingFormat);       // Anthropic
+Console.WriteLine(model?.SupportsMcpToolUse);      // True
 ```
 
 ### Cost Calculation
 
 ```csharp
-using TokenMeter;
+// Basic cost (input + output tokens)
+var cost = model?.CalculateCost(inputTokens: 500_000, outputTokens: 200_000);
 
-var calculator = CostCalculator.Default();
+// Cost including prompt cache tokens
+var costWithCache = model?.CalculateCost(
+    inputTokens: 100_000,
+    outputTokens: 50_000,
+    cacheReadTokens: 400_000,
+    cacheWriteTokens: 50_000);
 
-decimal? cost = calculator.CalculateCost("gpt-4o", inputTokens: 1000, outputTokens: 500);
-// => 0.007500
-
-ModelPricing? pricing = calculator.GetPricing("claude-4-5-sonnet");
-// pricing.InputPricePerMillion  => 3.00
-// pricing.OutputPricePerMillion => 15.00
+// Via CostCalculator (DI-friendly)
+ICostCalculator calc = CostCalculator.Default();
+var price = calc.CalculateCost("gpt-4o", inputTokens: 1_000, outputTokens: 500);
 ```
 
-### Usage Tracking
+### Browsing the Catalog
 
 ```csharp
-using TokenMeter;
+// By provider
+foreach (var m in ModelCatalog.Anthropic.Values)
+    Console.WriteLine($"{m.ModelId}: ctx={m.ContextWindow}, ${m.InputPricePerMillion}/M");
 
-var tracker = new UsageTracker(CostCalculator.Default());
+// By model type
+var embeddingModels = ModelCatalog.GetByType(ModelType.Embedding);
+var chatModels      = ModelCatalog.GetByType(ModelType.Chat);
 
-tracker.Record("gpt-4o-mini", inputTokens: 500, outputTokens: 200);
-tracker.Record("gemini-2.0-flash", inputTokens: 800, outputTokens: 350);
-
-UsageStatistics stats = tracker.GetSessionStatistics();
-// stats.RequestCount      => 2
-// stats.TotalInputTokens  => 1300
-// stats.TotalOutputTokens => 550
-// stats.TotalCost         => 0.000265
+// All providers
+var providers = ModelCatalog.GetProviderNames();
 ```
 
-## Supported Providers & Pricing
-
-> Prices are in **USD per 1 million tokens**. See [docs/pricing-update-guide.md](docs/pricing-update-guide.md) for update instructions.
-
-### OpenAI
-
-| Model | Input | Output | Context |
-|-------|------:|-------:|--------:|
-| GPT-4.1 | $2.00 | $8.00 | 1M |
-| GPT-4.1 Mini | $0.40 | $1.60 | 1M |
-| GPT-4.1 Nano | $0.10 | $0.40 | 1M |
-| GPT-4o | $2.50 | $10.00 | 128K |
-| GPT-4o-mini | $0.15 | $0.60 | 128K |
-| o3-pro | $20.00 | $80.00 | 200K |
-| o3 | $2.00 | $8.00 | 200K |
-| o3-mini | $1.10 | $4.40 | 200K |
-| o4-mini | $1.10 | $4.40 | 200K |
-| o1 | $15.00 | $60.00 | 200K |
-
-### Anthropic
-
-| Model | Input | Output | Context |
-|-------|------:|-------:|--------:|
-| Claude Opus 4.6 | $5.00 | $25.00 | 200K |
-| Claude Opus 4.1 | $15.00 | $75.00 | 200K |
-| Claude 4.5 Opus | $5.00 | $25.00 | 200K |
-| Claude Opus 4 | $15.00 | $75.00 | 200K |
-| Claude 4.5 Sonnet | $3.00 | $15.00 | 200K |
-| Claude 4.5 Haiku | $1.00 | $5.00 | 200K |
-| Claude Sonnet 4 | $3.00 | $15.00 | 200K |
-| Claude Sonnet 3.7 | $3.00 | $15.00 | 200K |
-| Claude 3.5 Sonnet | $3.00 | $15.00 | 200K |
-| Claude 3.5 Haiku | $0.80 | $4.00 | 200K |
-| Claude 3 Opus | $15.00 | $75.00 | 200K |
-| Claude 3 Sonnet | $3.00 | $15.00 | 200K |
-| Claude 3 Haiku | $0.25 | $1.25 | 200K |
-
-### Google
-
-| Model | Input | Output | Context |
-|-------|------:|-------:|--------:|
-| Gemini 3 Pro Preview | $2.00 | $12.00 | 1M |
-| Gemini 3 Flash Preview | $0.50 | $3.00 | 1M |
-| Gemini 2.5 Pro | $1.25 | $10.00 | 1M |
-| Gemini 2.5 Flash | $0.30 | $2.50 | 1M |
-| Gemini 2.5 Flash-Lite | $0.10 | $0.40 | 1M |
-| Gemini 2.0 Flash | $0.10 | $0.40 | 1M |
-| Gemini 2.0 Flash-Lite | $0.075 | $0.30 | 1M |
-| Gemini 1.5 Pro | $1.25 | $5.00 | 2M |
-| Gemini 1.5 Flash | $0.075 | $0.30 | 1M |
-
-### xAI
-
-| Model | Input | Output | Context |
-|-------|------:|-------:|--------:|
-| Grok 4.1 Fast Thinking | $0.20 | $0.50 | 2M |
-| Grok 4.1 Fast | $0.20 | $0.50 | 2M |
-| Grok 4 Fast Thinking | $0.20 | $0.50 | 2M |
-| Grok 4 Fast | $0.20 | $0.50 | 2M |
-| Grok 4 | $3.00 | $15.00 | 256K |
-| Grok Code Fast | $0.20 | $1.50 | 256K |
-| Grok 3 | $3.00 | $15.00 | 131K |
-| Grok 3 Mini | $0.30 | $0.50 | 131K |
-
-### Azure OpenAI
-
-| Model | Input | Output | Context |
-|-------|------:|-------:|--------:|
-| Azure GPT-4o | $2.50 | $10.00 | 128K |
-| Azure GPT-4o-mini | $0.15 | $0.60 | 128K |
-| Azure GPT-4.1 | $2.00 | $8.00 | 1M |
-| Azure GPT-4.1 Mini | $0.40 | $1.60 | 1M |
-| Azure GPT-4.1 Nano | $0.10 | $0.40 | 1M |
-| Azure o3-pro | $20.00 | $80.00 | 200K |
-| Azure o4-mini | $1.10 | $4.40 | 200K |
-
-### Mistral
-
-| Model | Input | Output | Context |
-|-------|------:|-------:|--------:|
-| Mistral Large | $2.00 | $6.00 | 128K |
-| Mistral Medium 3 | $0.40 | $2.00 | 128K |
-| Mistral Small | $0.20 | $0.60 | 128K |
-| Codestral | $0.30 | $0.90 | 256K |
-| Devstral Small | $0.10 | $0.30 | 128K |
-| Pixtral Large | $2.00 | $6.00 | 128K |
-
-### DeepSeek
-
-| Model | Input | Output | Context |
-|-------|------:|-------:|--------:|
-| DeepSeek V3 | $0.28 | $0.42 | 128K |
-| DeepSeek R1 | $0.28 | $0.42 | 128K |
-| DeepSeek Coder | $0.14 | $0.28 | 128K |
-
-### Amazon Nova
-
-| Model | Input | Output | Context |
-|-------|------:|-------:|--------:|
-| Nova Premier | $2.50 | $12.50 | 1M |
-| Nova Pro | $0.80 | $3.20 | 300K |
-| Nova Lite | $0.06 | $0.24 | 300K |
-| Nova Micro | $0.035 | $0.14 | 128K |
-
-### Cohere
-
-| Model | Input | Output | Context |
-|-------|------:|-------:|--------:|
-| Command A | $2.50 | $10.00 | 256K |
-| Command R+ | $2.50 | $10.00 | 128K |
-| Command R | $0.50 | $1.50 | 128K |
-| Command R7B | $0.0375 | $0.15 | 128K |
-| Command Light | $0.30 | $0.60 | 4K |
-
-### Meta Llama
-
-| Model | Input | Output | Context |
-|-------|------:|-------:|--------:|
-| Llama 4 Maverick | $0.22 | $0.85 | 1M |
-| Llama 4 Scout | $0.15 | $0.50 | 10M |
-
-### Perplexity
-
-| Model | Input | Output | Context |
-|-------|------:|-------:|--------:|
-| Sonar Pro | $3.00 | $15.00 | 200K |
-| Sonar Deep Research | $2.00 | $8.00 | 200K |
-| Sonar | $1.00 | $1.00 | 128K |
-
-### Qwen
-
-| Model | Input | Output | Context |
-|-------|------:|-------:|--------:|
-| Qwen Max | $1.20 | $6.00 | 128K |
-| Qwen Plus | $0.20 | $1.00 | 128K |
-
-## Custom Pricing
-
-Register custom pricing for local models or other providers:
+### Custom Models
 
 ```csharp
-var calculator = CostCalculator.Default();
-
-calculator.RegisterPricing(new ModelPricing
+var calc = CostCalculator.Default();
+calc.RegisterModel(new ModelInfo
 {
-    ModelId = "llama-3.2-70b",
-    InputPricePerMillion = 0.50m,
-    OutputPricePerMillion = 0.75m,
-    Provider = "Local",
-    DisplayName = "Llama 3.2 70B",
-    ContextWindow = 128000
+    ModelId = "my-fine-tuned-model",
+    Provider = "MyCompany",
+    InputPricePerMillion = 2.00m,
+    OutputPricePerMillion = 8.00m,
+    ContextWindow = 128_000,
+    SupportsToolCalling = true,
+    ToolCallingFormat = ToolCallingFormat.OpenAI
 });
 
-decimal? cost = calculator.CalculateCost("llama-3.2-70b", 1000, 500);
+var cost = calc.CalculateCost("my-fine-tuned-model", 10_000, 5_000);
 ```
 
-## Query by Provider
+## Model Metadata
+
+`ModelInfo` provides the following metadata:
+
+### Identity
+| Property | Type | Description |
+|----------|------|-------------|
+| `ModelId` | `string` | Canonical model identifier for API calls |
+| `Provider` | `string?` | Provider name (e.g., "OpenAI", "Anthropic") |
+| `DisplayName` | `string?` | Human-readable name |
+| `ModelType` | `ModelType` | Chat, Embedding, Reranker, ImageGeneration, TextToSpeech, SpeechToText |
+| `IsInstructTuned` | `bool` | Instruction-tuned vs. base model |
+
+### Limits
+| Property | Type | Description |
+|----------|------|-------------|
+| `ContextWindow` | `int?` | Maximum input tokens |
+| `MaxOutputTokens` | `int?` | Maximum generated tokens per response |
+
+### Pricing (USD / 1M tokens)
+| Property | Description |
+|----------|-------------|
+| `InputPricePerMillion` | Standard input token price |
+| `OutputPricePerMillion` | Standard output token price |
+| `CacheReadPricePerMillion` | Prompt cache hit price (often 90% discount) |
+| `CacheWritePricePerMillion` | Prompt cache population price |
+| `ImageInputPrice` | Per-image input cost |
+| `AudioInputPricePerSecond` | Audio input cost per second |
+| `AudioOutputPricePerSecond` | Audio output cost per second |
+
+### Input Modalities
+| Property | Description |
+|----------|-------------|
+| `SupportsImageInput` | Accepts image data |
+| `SupportsAudioInput` | Accepts audio data |
+| `SupportsVideoInput` | Accepts video data |
+| `SupportsDocumentInput` | Accepts PDF/document files natively |
+
+### API Capabilities
+| Property | Description |
+|----------|-------------|
+| `SupportsToolCalling` | Tool/function calling |
+| `SupportsParallelToolCalling` | Multiple tools per turn |
+| `SupportsStructuredOutput` | JSON Schema-enforced output |
+| `SupportsJsonMode` | JSON-guided output (soft) |
+| `SupportsStreaming` | SSE streaming |
+| `PromptCachingMode` | None / Explicit / Automatic |
+| `SupportsMcpToolUse` | Native MCP tool support |
+
+### Reasoning & Thinking
+| Property | Description |
+|----------|-------------|
+| `ReasoningMode` | None / Optional / Always |
+| `ThinkingFormat` | None / Block / InlineTag / SeparateField |
+| `ThinkingTagPattern` | Tag pattern (e.g., `<think>...</think>`) for InlineTag format |
+| `ThinkingFieldName` | Field name (e.g., `reasoning_content`) for SeparateField format |
+| `SupportsInterleavedThinking` | Reasoning between tool calls |
+| `MaxThinkingTokens` | Maximum reasoning budget |
+
+### Tool Calling Wire Format
+| Value | Description |
+|-------|-------------|
+| `ToolCallingFormat.OpenAI` | `tool_calls` / `tool` role (default) |
+| `ToolCallingFormat.Anthropic` | `tool_use` / `tool_result` content blocks |
+| `ToolCallingFormat.Gemini` | Google Gemini format |
+
+## Supported Providers
+
+| Provider | Models |
+|----------|--------|
+| OpenAI | GPT-5.x, GPT-4.1, GPT-4o, o1, o3, o4-mini series |
+| Anthropic | Claude 4.x, 3.x families (Opus, Sonnet, Haiku) |
+| Google | Gemini 3.x, 2.5, 2.0, 1.5 families |
+| xAI | Grok 4.x, 3.x series |
+| Azure | Azure OpenAI equivalents |
+| Mistral | Large, Medium, Small, Magistral, Pixtral |
+| DeepSeek | R1 (reasoning), V3, Coder |
+| Amazon Nova | Premier, Pro, Lite, Micro |
+| Cohere | Command A, R+, R, R7B |
+| Meta Llama | Maverick, Scout |
+| Perplexity | Sonar Pro, Deep Research, Reasoning |
+| Qwen | Max, Plus, Turbo |
+
+## Data Freshness
 
 ```csharp
-// All models for a provider
-var googleModels = ModelPricingData.GetByProvider("Google");
-
-// All provider names
-var providers = ModelPricingData.GetProviderNames();
-// => ["OpenAI", "Anthropic", "Google", "xAI", "Azure", "Mistral", "DeepSeek", ...]
-
-// Alias-aware lookup (exact → prefix → contains, longest-match wins)
-ModelPricing? pricing = ModelPricingData.FindPricing("gpt-4o-2024-08-06");
-
-// Last update date and staleness helpers
-Console.WriteLine($"Pricing last updated: {ModelPricingData.LastUpdated}");
-Console.WriteLine($"Pricing age: {ModelPricingData.PricingAgeDays} days");
-bool isStale = ModelPricingData.IsPricingStale(maxAgeDays: 90);
+Console.WriteLine(ModelCatalog.LastUpdated);        // 2026-05-19
+Console.WriteLine(ModelCatalog.DataAgeDays);        // days since last update
+Console.WriteLine(ModelCatalog.IsDataStale());      // true if > 90 days old
 ```
 
-## API Reference
+## Migration from 0.3.x
 
-### ITokenCounter
+The following APIs were removed in 0.4.0:
 
-`TokenMeter` package (full interface with tokenizer):
-
-```csharp
-public interface ITokenCounter : Abstractions.ITokenCounter
-{
-    int CountTokens(string text);
-    int CountTokens(IEnumerable<string> texts);
-    string ModelName { get; }
-    bool IsApproximate(string modelId);
-    bool SupportsModel(string modelId);
-}
-```
-
-`TokenMeter.Abstractions` package (lightweight shared interface):
-
-```csharp
-public interface ITokenCounter
-{
-    int Count(string text);
-    int Count(IEnumerable<string> texts);
-    bool SupportsModel(string modelId);
-    bool IsApproximate(string modelId); // default: false
-}
-```
-
-### ICostCalculator
-
-```csharp
-public interface ICostCalculator
-{
-    decimal? CalculateCost(string modelId, int inputTokens, int outputTokens);
-    ModelPricing? GetPricing(string modelId);
-    void RegisterPricing(ModelPricing pricing);
-    IEnumerable<string> GetRegisteredModels();
-}
-```
-
-`CostCalculator` provides two factory methods:
-
-```csharp
-CostCalculator.Default()     // built-in pricing + custom overrides
-CostCalculator.CustomOnly()  // custom-registered pricing only (no built-in data)
-```
-
-### IUsageTracker
-
-```csharp
-public interface IUsageTracker
-{
-    void Record(UsageRecord record);
-    UsageRecord Record(string? modelId, int inputTokens, int outputTokens, string? sessionId = null);
-    UsageStatistics GetSessionStatistics();
-    UsageStatistics GetStatistics(DateTimeOffset startTime, DateTimeOffset endTime);
-    UsageStatistics GetTodayStatistics();
-    IReadOnlyList<UsageRecord> GetRecords();
-    IReadOnlyList<UsageRecord> GetRecords(string sessionId);
-    void Clear();
-    string SessionId { get; }
-    string StartNewSession();
-}
-```
-
-### ModelPricing
-
-```csharp
-public record ModelPricing
-{
-    public required string ModelId { get; init; }
-    public required decimal InputPricePerMillion { get; init; }
-    public required decimal OutputPricePerMillion { get; init; }
-    public string? Provider { get; init; }
-    public string? DisplayName { get; init; }
-    public int? ContextWindow { get; init; }
-
-    public decimal CalculateCost(int inputTokens, int outputTokens);
-}
-```
-
-## Advanced Usage
-
-### Multi-Session Tracking
-
-```csharp
-var tracker = new UsageTracker(CostCalculator.Default());
-
-tracker.Record("gpt-4o", 1000, 500);
-var session1Stats = tracker.GetSessionStatistics();
-
-tracker.StartNewSession();
-tracker.Record("gpt-4o-mini", 2000, 800);
-var session2Stats = tracker.GetSessionStatistics();
-
-var todayStats = tracker.GetTodayStatistics();
-```
-
-### Token Counting for Chat Messages
-
-```csharp
-var counter = TokenCounter.Default();
-
-var messages = new[]
-{
-    "You are a helpful assistant.",   // System
-    "What is the capital of France?", // User
-    "The capital of France is Paris." // Assistant
-};
-
-int totalTokens = counter.CountTokens(messages);
-// Add ~4 tokens per message for chat formatting overhead
-int estimated = totalTokens + (messages.Length * 4);
-```
-
-### Cost Comparison Across Providers
-
-```csharp
-var calculator = CostCalculator.Default();
-int inputTokens = 10_000;
-int outputTokens = 2_000;
-
-foreach (var provider in ModelPricingData.GetProviderNames())
-{
-    Console.WriteLine($"\n{provider}:");
-    foreach (var model in ModelPricingData.GetByProvider(provider).Take(3))
-    {
-        var cost = model.CalculateCost(inputTokens, outputTokens);
-        Console.WriteLine($"  {model.DisplayName}: ${cost:F4}");
-    }
-}
-```
+- `TokenMeter.Abstractions` package (removed entirely)
+- `ITokenCounter`, `TokenCounter` — use your own tokenizer library
+- `IUsageTracker`, `UsageTracker`, `UsageRecord`, `UsageStatistics` — implement in your application
+- `ModelPricing` → replaced by `ModelInfo`
+- `ModelPricingData` → replaced by `ModelCatalog`
+- `ICostCalculator.GetPricing()` → `GetModel()`
+- `ICostCalculator.RegisterPricing()` → `RegisterModel()`
 
 ## Requirements
 
-- .NET 10.0
-- Microsoft.ML.Tokenizers 2.0.0+
-
-## Related Projects
-
-- [ironhive-cli](https://github.com/iyulab/ironhive-cli) — CLI agent using TokenMeter
-- [ToolCallParser](https://github.com/iyulab/ToolCallParser) — Multi-provider tool call parsing
-
-## Documentation
-
-- [Pricing Update Guide](docs/pricing-update-guide.md) — How to update model pricing
+- .NET 10.0 or later
 
 ## License
 
-MIT License — see [LICENSE](LICENSE) for details.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-For pricing data updates, see [docs/pricing-update-guide.md](docs/pricing-update-guide.md).
-
----
-
-Made with care by [iyulab](https://github.com/iyulab)
+MIT
