@@ -1,34 +1,38 @@
 namespace TokenMeter;
 
 /// <summary>
-/// Interface for calculating costs based on token usage.
+/// Calculates LLM API costs using model pricing information.
+/// Supports built-in pricing from <see cref="ModelCatalog"/> and custom model registration.
 /// </summary>
 public interface ICostCalculator
 {
     /// <summary>
-    /// Calculates the cost for the given token usage.
+    /// Calculates cost for standard input/output token usage.
+    /// Returns <c>null</c> if pricing is unavailable for the model.
     /// </summary>
-    /// <param name="modelId">The model identifier</param>
-    /// <param name="inputTokens">Number of input tokens</param>
-    /// <param name="outputTokens">Number of output tokens</param>
-    /// <returns>The calculated cost, or null if pricing is not available</returns>
     decimal? CalculateCost(string modelId, int inputTokens, int outputTokens);
 
     /// <summary>
-    /// Gets the pricing information for a model.
+    /// Calculates cost including prompt cache tokens.
+    /// Cache tokens without a specific price fall back to the model's input price.
+    /// Returns <c>null</c> if pricing is unavailable for the model.
     /// </summary>
-    /// <param name="modelId">The model identifier</param>
-    /// <returns>The pricing information, or null if not available</returns>
-    ModelPricing? GetPricing(string modelId);
+    decimal? CalculateCost(
+        string modelId,
+        int inputTokens, int outputTokens,
+        int cacheReadTokens, int cacheWriteTokens);
 
     /// <summary>
-    /// Registers custom pricing for a model.
+    /// Retrieves the model metadata used for cost calculation.
+    /// Applies alias matching. Returns <c>null</c> if not found.
     /// </summary>
-    /// <param name="pricing">The pricing information</param>
-    void RegisterPricing(ModelPricing pricing);
+    ModelInfo? GetModel(string modelId);
 
     /// <summary>
-    /// Gets all registered model IDs.
+    /// Registers a custom model, overriding any built-in entry with the same ID.
     /// </summary>
+    void RegisterModel(ModelInfo model);
+
+    /// <summary>All model IDs known to this calculator (built-in + custom).</summary>
     IEnumerable<string> GetRegisteredModels();
 }

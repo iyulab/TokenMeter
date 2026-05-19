@@ -7,7 +7,7 @@ namespace TokenMeter.Tests;
 public class CostCalculatorConcurrencyTests
 {
     [Fact]
-    public async Task ConcurrentRegisterAndGetPricing_NoExceptions()
+    public async Task ConcurrentRegisterAndGetModel_NoExceptions()
     {
         var calculator = CostCalculator.Default();
         const int threadCount = 10;
@@ -22,18 +22,17 @@ public class CostCalculatorConcurrencyTests
                     // Half the threads write, half read
                     if (t % 2 == 0)
                     {
-                        calculator.RegisterPricing(new ModelPricing
+                        calculator.RegisterModel(new ModelInfo
                         {
                             ModelId = $"concurrent-model-{t}-{i}",
                             InputPricePerMillion = 1.0m,
-                            OutputPricePerMillion = 2.0m,
-                            Provider = "Test"
+                            OutputPricePerMillion = 2.0m
                         });
                     }
                     else
                     {
                         // Read operations — may or may not find the model
-                        _ = calculator.GetPricing($"concurrent-model-{t - 1}-{i}");
+                        _ = calculator.GetModel($"concurrent-model-{t - 1}-{i}");
                         _ = calculator.CalculateCost($"concurrent-model-{t - 1}-{i}", 100, 50);
                         _ = calculator.GetRegisteredModels().ToList();
                     }
@@ -55,12 +54,11 @@ public class CostCalculatorConcurrencyTests
         const int iterations = 100;
 
         // Pre-register a model so all threads can calculate cost
-        calculator.RegisterPricing(new ModelPricing
+        calculator.RegisterModel(new ModelInfo
         {
             ModelId = "shared-model",
             InputPricePerMillion = 10.0m,
-            OutputPricePerMillion = 20.0m,
-            Provider = "Test"
+            OutputPricePerMillion = 20.0m
         });
 
         var tasks = Enumerable.Range(0, threadCount).Select(_ =>
@@ -82,34 +80,35 @@ public class CostCalculatorConcurrencyTests
 public class CostCalculatorNullGuardTests
 {
     [Fact]
-    public void CalculateCost_NullModelId_ThrowsArgumentNullException()
+    public void CalculateCost_NullModelId_ReturnsNull()
     {
         var calculator = CostCalculator.Default();
 
-        Assert.Throws<ArgumentNullException>(() => calculator.CalculateCost(null!, 100, 100));
+        // New API: null/empty returns null instead of throwing
+        Assert.Null(calculator.CalculateCost(null!, 100, 100));
     }
 
     [Fact]
-    public void GetPricing_NullModelId_ThrowsArgumentNullException()
+    public void GetModel_NullModelId_ReturnsNull()
     {
         var calculator = CostCalculator.Default();
 
-        Assert.Throws<ArgumentNullException>(() => calculator.GetPricing(null!));
+        Assert.Null(calculator.GetModel(null!));
     }
 
     [Fact]
-    public void CustomOnly_GetPricing_NullModelId_ThrowsArgumentNullException()
+    public void CustomOnly_GetModel_NullModelId_ReturnsNull()
     {
         var calculator = CostCalculator.CustomOnly();
 
-        Assert.Throws<ArgumentNullException>(() => calculator.GetPricing(null!));
+        Assert.Null(calculator.GetModel(null!));
     }
 
     [Fact]
-    public void CustomOnly_CalculateCost_NullModelId_ThrowsArgumentNullException()
+    public void CustomOnly_CalculateCost_NullModelId_ReturnsNull()
     {
         var calculator = CostCalculator.CustomOnly();
 
-        Assert.Throws<ArgumentNullException>(() => calculator.CalculateCost(null!, 100, 100));
+        Assert.Null(calculator.CalculateCost(null!, 100, 100));
     }
 }
