@@ -1,5 +1,6 @@
 namespace TokenMeter.Tests;
 
+// Migrated from ModelPricingData API → ModelCatalog + ModelInfo (Task 7 refactoring)
 public class ModelPricingDataTests
 {
     #region All
@@ -7,7 +8,7 @@ public class ModelPricingDataTests
     [Fact]
     public void All_ContainsModels()
     {
-        var all = ModelPricingData.All;
+        var all = ModelCatalog.All;
 
         Assert.True(all.Count > 0);
     }
@@ -25,7 +26,7 @@ public class ModelPricingDataTests
     [InlineData("DeepSeek")]
     public void ByProvider_KnownProviders_ContainModels(string provider)
     {
-        var models = ModelPricingData.GetByProvider(provider);
+        var models = ModelCatalog.GetByProvider(provider);
 
         Assert.True(models.Any());
     }
@@ -33,7 +34,7 @@ public class ModelPricingDataTests
     [Fact]
     public void GetByProvider_UnknownProvider_ReturnsEmpty()
     {
-        var models = ModelPricingData.GetByProvider("UnknownProvider");
+        var models = ModelCatalog.GetByProvider("UnknownProvider");
 
         Assert.Empty(models);
     }
@@ -41,7 +42,7 @@ public class ModelPricingDataTests
     [Fact]
     public void GetProviderNames_ReturnsMultipleProviders()
     {
-        var providers = ModelPricingData.GetProviderNames().ToList();
+        var providers = ModelCatalog.GetProviderNames().ToList();
 
         Assert.True(providers.Count >= 6); // At least OpenAI, Anthropic, Google, xAI, Mistral, DeepSeek
     }
@@ -49,153 +50,158 @@ public class ModelPricingDataTests
     [Fact]
     public void OpenAI_ContainsModels()
     {
-        Assert.True(ModelPricingData.OpenAI.Count > 0);
+        Assert.True(ModelCatalog.OpenAI.Count > 0);
     }
 
     [Fact]
     public void Anthropic_ContainsModels()
     {
-        Assert.True(ModelPricingData.Anthropic.Count > 0);
+        Assert.True(ModelCatalog.Anthropic.Count > 0);
     }
 
     [Fact]
     public void Google_ContainsModels()
     {
-        Assert.True(ModelPricingData.Google.Count > 0);
+        Assert.True(ModelCatalog.Google.Count > 0);
     }
 
     #endregion
 
-    #region FindPricing — Exact Match
+    #region FindModel — Exact Match
 
     [Fact]
-    public void FindPricing_KnownModel_ReturnsPricing()
+    public void FindModel_KnownModel_ReturnsInfo()
     {
         // gpt-4o is a well-known model
-        var pricing = ModelPricingData.FindPricing("gpt-4o");
+        var model = ModelCatalog.FindModel("gpt-4o");
 
-        Assert.NotNull(pricing);
-        Assert.Equal("gpt-4o", pricing.ModelId);
+        Assert.NotNull(model);
+        Assert.Equal("gpt-4o", model.ModelId);
     }
 
     [Fact]
-    public void FindPricing_CaseInsensitive_ReturnsPricing()
+    public void FindModel_CaseInsensitive_ReturnsInfo()
     {
-        var pricing = ModelPricingData.FindPricing("GPT-4O");
+        var model = ModelCatalog.FindModel("GPT-4O");
 
-        Assert.NotNull(pricing);
+        Assert.NotNull(model);
     }
 
     [Fact]
-    public void FindPricing_Unknown_ReturnsNull()
+    public void FindModel_Unknown_ReturnsNull()
     {
-        var pricing = ModelPricingData.FindPricing("totally-unknown-model-xyz");
+        var model = ModelCatalog.FindModel("totally-unknown-model-xyz");
 
-        Assert.Null(pricing);
+        Assert.Null(model);
     }
 
     #endregion
 
-    #region FindPricing — Alias Matching
+    #region FindModel — Alias Matching
 
     [Fact]
-    public void FindPricing_AnthropicModel_ReturnsPricing()
+    public void FindModel_AnthropicModel_ReturnsInfo()
     {
         // Try a known Anthropic model
-        var pricing = ModelPricingData.FindPricing("claude-sonnet-4-5-20250929");
+        var model = ModelCatalog.FindModel("claude-sonnet-4-5-20250929");
 
-        Assert.NotNull(pricing);
-        Assert.Equal("Anthropic", pricing.Provider);
+        Assert.NotNull(model);
+        Assert.Equal("Anthropic", model.Provider);
     }
 
     #endregion
 
-    #region ModelPricing — CalculateCost
+    #region ModelInfo — CalculateCost
 
     [Fact]
     public void CalculateCost_ZeroTokens_ReturnsZero()
     {
-        var pricing = new ModelPricing
+        var info = new ModelInfo
         {
             ModelId = "test",
             InputPricePerMillion = 10m,
             OutputPricePerMillion = 30m
         };
 
-        var cost = pricing.CalculateCost(0, 0);
+        var cost = info.CalculateCost(0, 0);
 
-        Assert.Equal(0m, cost);
+        Assert.NotNull(cost);
+        Assert.Equal(0m, cost.Value);
     }
 
     [Fact]
     public void CalculateCost_OneMillionTokens_ReturnsExactPrice()
     {
-        var pricing = new ModelPricing
+        var info = new ModelInfo
         {
             ModelId = "test",
             InputPricePerMillion = 10m,
             OutputPricePerMillion = 30m
         };
 
-        var cost = pricing.CalculateCost(1_000_000, 1_000_000);
+        var cost = info.CalculateCost(1_000_000, 1_000_000);
 
-        Assert.Equal(40m, cost); // 10 + 30
+        Assert.NotNull(cost);
+        Assert.Equal(40m, cost.Value); // 10 + 30
     }
 
     [Fact]
     public void CalculateCost_SmallTokenCount_ReturnsFraction()
     {
-        var pricing = new ModelPricing
+        var info = new ModelInfo
         {
             ModelId = "test",
             InputPricePerMillion = 10m,
             OutputPricePerMillion = 30m
         };
 
-        var cost = pricing.CalculateCost(1000, 500);
+        var cost = info.CalculateCost(1000, 500);
 
+        Assert.NotNull(cost);
         // 1000/1M * 10 + 500/1M * 30 = 0.01 + 0.015 = 0.025
-        Assert.Equal(0.025m, cost);
+        Assert.Equal(0.025m, cost.Value);
     }
 
     [Fact]
     public void CalculateCost_InputOnly_ReturnsInputCost()
     {
-        var pricing = new ModelPricing
+        var info = new ModelInfo
         {
             ModelId = "test",
             InputPricePerMillion = 10m,
             OutputPricePerMillion = 30m
         };
 
-        var cost = pricing.CalculateCost(1_000_000, 0);
+        var cost = info.CalculateCost(1_000_000, 0);
 
-        Assert.Equal(10m, cost);
+        Assert.NotNull(cost);
+        Assert.Equal(10m, cost.Value);
     }
 
     [Fact]
     public void CalculateCost_OutputOnly_ReturnsOutputCost()
     {
-        var pricing = new ModelPricing
+        var info = new ModelInfo
         {
             ModelId = "test",
             InputPricePerMillion = 10m,
             OutputPricePerMillion = 30m
         };
 
-        var cost = pricing.CalculateCost(0, 1_000_000);
+        var cost = info.CalculateCost(0, 1_000_000);
 
-        Assert.Equal(30m, cost);
+        Assert.NotNull(cost);
+        Assert.Equal(30m, cost.Value);
     }
 
     #endregion
 
-    #region ModelPricing — Properties
+    #region ModelInfo — Properties
 
     [Fact]
-    public void ModelPricing_RequiredProperties()
+    public void ModelInfo_RequiredProperties()
     {
-        var pricing = new ModelPricing
+        var info = new ModelInfo
         {
             ModelId = "test-model",
             InputPricePerMillion = 5m,
@@ -205,12 +211,12 @@ public class ModelPricingDataTests
             ContextWindow = 128000
         };
 
-        Assert.Equal("test-model", pricing.ModelId);
-        Assert.Equal(5m, pricing.InputPricePerMillion);
-        Assert.Equal(15m, pricing.OutputPricePerMillion);
-        Assert.Equal("TestProvider", pricing.Provider);
-        Assert.Equal("Test Model", pricing.DisplayName);
-        Assert.Equal(128000, pricing.ContextWindow);
+        Assert.Equal("test-model", info.ModelId);
+        Assert.Equal(5m, info.InputPricePerMillion);
+        Assert.Equal(15m, info.OutputPricePerMillion);
+        Assert.Equal("TestProvider", info.Provider);
+        Assert.Equal("Test Model", info.DisplayName);
+        Assert.Equal(128000, info.ContextWindow);
     }
 
     #endregion
@@ -220,31 +226,31 @@ public class ModelPricingDataTests
     [Fact]
     public void LastUpdated_IsReasonableDate()
     {
-        var date = ModelPricingData.LastUpdated;
+        var date = ModelCatalog.LastUpdated;
 
         Assert.True(date.Year >= 2025);
     }
 
     [Fact]
-    public void PricingAgeDays_ReturnsNonNegative()
+    public void DataAgeDays_ReturnsNonNegative()
     {
-        var ageDays = ModelPricingData.PricingAgeDays;
+        var ageDays = ModelCatalog.DataAgeDays;
 
         Assert.True(ageDays >= 0);
     }
 
     [Fact]
-    public void IsPricingStale_VeryLargeThreshold_ReturnsFalse()
+    public void IsDataStale_VeryLargeThreshold_ReturnsFalse()
     {
-        // With a threshold of 10 years, pricing should not be stale
-        Assert.False(ModelPricingData.IsPricingStale(3650));
+        // With a threshold of 10 years, data should not be stale
+        Assert.False(ModelCatalog.IsDataStale(3650));
     }
 
     [Fact]
-    public void IsPricingStale_NegativeThreshold_ReturnsTrue()
+    public void IsDataStale_NegativeThreshold_ReturnsTrue()
     {
-        // With a negative threshold, pricing is always stale
-        Assert.True(ModelPricingData.IsPricingStale(-1));
+        // With a negative threshold, data is always stale
+        Assert.True(ModelCatalog.IsDataStale(-1));
     }
 
     #endregion
@@ -254,7 +260,7 @@ public class ModelPricingDataTests
     [Fact]
     public void ByProvider_AllProvidersHaveModels()
     {
-        foreach (var (provider, models) in ModelPricingData.ByProvider)
+        foreach (var (provider, models) in ModelCatalog.ByProvider)
         {
             Assert.True(models.Count > 0, $"Provider {provider} has no models");
         }

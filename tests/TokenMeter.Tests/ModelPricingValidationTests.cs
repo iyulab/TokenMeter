@@ -1,5 +1,6 @@
 namespace TokenMeter.Tests;
 
+// Migrated from ModelPricingData API → ModelCatalog + ModelInfo (Task 7 refactoring)
 public class ModelPricingValidationTests
 {
     #region All Models — Data Integrity
@@ -7,9 +8,9 @@ public class ModelPricingValidationTests
     [Fact]
     public void AllModels_HaveNonEmptyModelId()
     {
-        foreach (var (key, pricing) in ModelPricingData.All)
+        foreach (var (key, info) in ModelCatalog.All)
         {
-            Assert.False(string.IsNullOrWhiteSpace(pricing.ModelId),
+            Assert.False(string.IsNullOrWhiteSpace(info.ModelId),
                 $"Model with key '{key}' has null/empty ModelId");
         }
     }
@@ -17,21 +18,21 @@ public class ModelPricingValidationTests
     [Fact]
     public void AllModels_HaveNonNegativePrices()
     {
-        foreach (var (key, pricing) in ModelPricingData.All)
+        foreach (var (key, info) in ModelCatalog.All)
         {
-            Assert.True(pricing.InputPricePerMillion >= 0,
-                $"Model '{key}' has negative input price: {pricing.InputPricePerMillion}");
-            Assert.True(pricing.OutputPricePerMillion >= 0,
-                $"Model '{key}' has negative output price: {pricing.OutputPricePerMillion}");
+            Assert.True(info.InputPricePerMillion is null or >= 0,
+                $"Model '{key}' has negative input price: {info.InputPricePerMillion}");
+            Assert.True(info.OutputPricePerMillion is null or >= 0,
+                $"Model '{key}' has negative output price: {info.OutputPricePerMillion}");
         }
     }
 
     [Fact]
     public void AllModels_HaveProviderSet()
     {
-        foreach (var (key, pricing) in ModelPricingData.All)
+        foreach (var (key, info) in ModelCatalog.All)
         {
-            Assert.False(string.IsNullOrWhiteSpace(pricing.Provider),
+            Assert.False(string.IsNullOrWhiteSpace(info.Provider),
                 $"Model '{key}' has null/empty Provider");
         }
     }
@@ -39,9 +40,9 @@ public class ModelPricingValidationTests
     [Fact]
     public void AllModels_KeyMatchesModelId()
     {
-        foreach (var (key, pricing) in ModelPricingData.All)
+        foreach (var (key, info) in ModelCatalog.All)
         {
-            Assert.Equal(key, pricing.ModelId, StringComparer.OrdinalIgnoreCase);
+            Assert.Equal(key, info.ModelId, StringComparer.OrdinalIgnoreCase);
         }
     }
 
@@ -52,36 +53,36 @@ public class ModelPricingValidationTests
     [Fact]
     public void OpenAI_AllModelsHaveOpenAIProvider()
     {
-        foreach (var (_, pricing) in ModelPricingData.OpenAI)
+        foreach (var (_, info) in ModelCatalog.OpenAI)
         {
-            Assert.Equal("OpenAI", pricing.Provider);
+            Assert.Equal("OpenAI", info.Provider);
         }
     }
 
     [Fact]
     public void Anthropic_AllModelsHaveAnthropicProvider()
     {
-        foreach (var (_, pricing) in ModelPricingData.Anthropic)
+        foreach (var (_, info) in ModelCatalog.Anthropic)
         {
-            Assert.Equal("Anthropic", pricing.Provider);
+            Assert.Equal("Anthropic", info.Provider);
         }
     }
 
     [Fact]
     public void Google_AllModelsHaveGoogleProvider()
     {
-        foreach (var (_, pricing) in ModelPricingData.Google)
+        foreach (var (_, info) in ModelCatalog.Google)
         {
-            Assert.Equal("Google", pricing.Provider);
+            Assert.Equal("Google", info.Provider);
         }
     }
 
     [Fact]
     public void XAI_AllModelsHaveXAIProvider()
     {
-        foreach (var (_, pricing) in ModelPricingData.XAI)
+        foreach (var (_, info) in ModelCatalog.XAI)
         {
-            Assert.Equal("xAI", pricing.Provider);
+            Assert.Equal("xAI", info.Provider);
         }
     }
 
@@ -95,12 +96,12 @@ public class ModelPricingValidationTests
     [InlineData("Qwen")]
     public void ProviderModels_HaveMatchingProviderField(string providerName)
     {
-        var models = ModelPricingData.GetByProvider(providerName).ToList();
+        var models = ModelCatalog.GetByProvider(providerName).ToList();
         Assert.NotEmpty(models);
 
-        foreach (var pricing in models)
+        foreach (var info in models)
         {
-            Assert.Equal(providerName, pricing.Provider);
+            Assert.Equal(providerName, info.Provider);
         }
     }
 
@@ -111,8 +112,8 @@ public class ModelPricingValidationTests
     [Fact]
     public void ByProvider_MatchesGetProviderNames()
     {
-        var providerNames = ModelPricingData.GetProviderNames().OrderBy(n => n).ToList();
-        var byProviderKeys = ModelPricingData.ByProvider.Keys.OrderBy(k => k).ToList();
+        var providerNames = ModelCatalog.GetProviderNames().OrderBy(n => n).ToList();
+        var byProviderKeys = ModelCatalog.ByProvider.Keys.OrderBy(k => k).ToList();
 
         Assert.Equal(providerNames, byProviderKeys);
     }
@@ -120,11 +121,11 @@ public class ModelPricingValidationTests
     [Fact]
     public void ByProvider_AllModelsAreInAll()
     {
-        foreach (var (provider, models) in ModelPricingData.ByProvider)
+        foreach (var (provider, models) in ModelCatalog.ByProvider)
         {
-            foreach (var (modelId, pricing) in models)
+            foreach (var (modelId, _) in models)
             {
-                Assert.True(ModelPricingData.All.ContainsKey(modelId),
+                Assert.True(ModelCatalog.All.ContainsKey(modelId),
                     $"Model '{modelId}' from provider '{provider}' not found in All");
             }
         }
@@ -133,9 +134,9 @@ public class ModelPricingValidationTests
     [Fact]
     public void All_TotalCountMatchesSumOfProviders()
     {
-        var sumFromProviders = ModelPricingData.ByProvider.Values.Sum(p => p.Count);
+        var sumFromProviders = ModelCatalog.ByProvider.Values.Sum(p => p.Count);
 
-        Assert.Equal(sumFromProviders, ModelPricingData.All.Count);
+        Assert.Equal(sumFromProviders, ModelCatalog.All.Count);
     }
 
     #endregion
@@ -146,36 +147,36 @@ public class ModelPricingValidationTests
     public void All_CaseInsensitiveLookup()
     {
         // All dictionary should be case-insensitive
-        var pricing = ModelPricingData.All;
+        var all = ModelCatalog.All;
 
-        if (pricing.ContainsKey("gpt-4o"))
+        if (all.ContainsKey("gpt-4o"))
         {
-            Assert.True(pricing.ContainsKey("GPT-4O"));
-            Assert.True(pricing.ContainsKey("Gpt-4o"));
-            Assert.Equal(pricing["gpt-4o"], pricing["GPT-4O"]);
+            Assert.True(all.ContainsKey("GPT-4O"));
+            Assert.True(all.ContainsKey("Gpt-4o"));
+            Assert.Equal(all["gpt-4o"], all["GPT-4O"]);
         }
     }
 
     #endregion
 
-    #region FindPricing — Edge Cases
+    #region FindModel — Edge Cases
 
     [Fact]
-    public void FindPricing_EmptyString_ReturnsNull()
+    public void FindModel_EmptyString_ReturnsNull()
     {
-        var pricing = ModelPricingData.FindPricing("");
+        var model = ModelCatalog.FindModel("");
 
-        Assert.Null(pricing);
+        Assert.Null(model);
     }
 
     [Fact]
-    public void FindPricing_ExactMatch_TakesPriorityOverAlias()
+    public void FindModel_ExactMatch_TakesPriorityOverAlias()
     {
         // If "gpt-4o" is an exact match, it should return before any alias check
-        var pricing = ModelPricingData.FindPricing("gpt-4o");
+        var model = ModelCatalog.FindModel("gpt-4o");
 
-        Assert.NotNull(pricing);
-        Assert.Equal("gpt-4o", pricing.ModelId);
+        Assert.NotNull(model);
+        Assert.Equal("gpt-4o", model.ModelId);
     }
 
     #endregion
@@ -187,13 +188,13 @@ public class ModelPricingValidationTests
     {
         var calculator = CostCalculator.CustomOnly();
 
-        calculator.RegisterPricing(new ModelPricing
+        calculator.RegisterModel(new ModelInfo
         {
             ModelId = "custom-a",
             InputPricePerMillion = 1.0m,
             OutputPricePerMillion = 2.0m
         });
-        calculator.RegisterPricing(new ModelPricing
+        calculator.RegisterModel(new ModelInfo
         {
             ModelId = "custom-b",
             InputPricePerMillion = 3.0m,
@@ -205,8 +206,8 @@ public class ModelPricingValidationTests
         Assert.Contains("custom-a", models);
         Assert.Contains("custom-b", models);
 
-        Assert.NotNull(calculator.GetPricing("custom-a"));
-        Assert.NotNull(calculator.GetPricing("custom-b"));
+        Assert.NotNull(calculator.GetModel("custom-a"));
+        Assert.NotNull(calculator.GetModel("custom-b"));
     }
 
     [Fact]
@@ -215,7 +216,7 @@ public class ModelPricingValidationTests
         var calculator = CostCalculator.Default();
 
         // Override gpt-4o with custom pricing
-        calculator.RegisterPricing(new ModelPricing
+        calculator.RegisterModel(new ModelInfo
         {
             ModelId = "gpt-4o",
             InputPricePerMillion = 999.0m,
@@ -223,18 +224,18 @@ public class ModelPricingValidationTests
             Provider = "Custom"
         });
 
-        var pricing = calculator.GetPricing("gpt-4o");
-        Assert.NotNull(pricing);
-        Assert.Equal(999.0m, pricing.InputPricePerMillion);
-        Assert.Equal("Custom", pricing.Provider);
+        var model = calculator.GetModel("gpt-4o");
+        Assert.NotNull(model);
+        Assert.Equal(999.0m, model.InputPricePerMillion);
+        Assert.Equal("Custom", model.Provider);
     }
 
     [Fact]
     public void CostCalculator_CalculateCost_LargeTokenCount_NoOverflow()
     {
         var calculator = CostCalculator.Default();
-        var pricing = calculator.GetPricing("gpt-4o");
-        Assert.NotNull(pricing);
+        var model = calculator.GetModel("gpt-4o");
+        Assert.NotNull(model);
 
         // Large but realistic token counts
         var cost = calculator.CalculateCost("gpt-4o", 10_000_000, 5_000_000);
@@ -244,9 +245,9 @@ public class ModelPricingValidationTests
     }
 
     [Fact]
-    public void ModelPricing_CalculateCost_VerySmallTokens_PrecisionMaintained()
+    public void ModelInfo_CalculateCost_VerySmallTokens_PrecisionMaintained()
     {
-        var pricing = new ModelPricing
+        var info = new ModelInfo
         {
             ModelId = "test",
             InputPricePerMillion = 2.50m,
@@ -254,10 +255,11 @@ public class ModelPricingValidationTests
         };
 
         // 1 token: 1/1M * $2.50 = $0.0000025
-        var cost = pricing.CalculateCost(1, 1);
+        var cost = info.CalculateCost(1, 1);
 
+        Assert.NotNull(cost);
         Assert.True(cost > 0);
-        Assert.Equal(0.0000025m + 0.0000100m, cost);
+        Assert.Equal(0.0000025m + 0.0000100m, cost.Value);
     }
 
     #endregion
