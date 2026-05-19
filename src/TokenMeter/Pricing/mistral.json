@@ -3,80 +3,152 @@
   "models": [
     {
       "modelId": "mistral-large-latest",
+      "displayName": "Mistral Large 3",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 262144,
       "inputPricePerMillion": 0.50,
       "outputPricePerMillion": 1.50,
-      "displayName": "Mistral Large 3",
-      "contextWindow": 262144,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "mistral-large", "type": "prefix" }
       ]
     },
     {
       "modelId": "mistral-medium-latest",
+      "displayName": "Mistral Medium 3",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 128000,
       "inputPricePerMillion": 0.40,
       "outputPricePerMillion": 2.00,
-      "displayName": "Mistral Medium 3",
-      "contextWindow": 128000,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "mistral-medium", "type": "prefix" }
       ]
     },
     {
       "modelId": "mistral-small-latest",
+      "displayName": "Mistral Small 3.2",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 131072,
       "inputPricePerMillion": 0.06,
       "outputPricePerMillion": 0.18,
-      "displayName": "Mistral Small 3.2",
-      "contextWindow": 131072,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "mistral-small", "type": "prefix" }
       ]
     },
     {
       "modelId": "codestral-latest",
+      "displayName": "Codestral",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 256000,
       "inputPricePerMillion": 0.30,
       "outputPricePerMillion": 0.90,
-      "displayName": "Codestral",
-      "contextWindow": 256000,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "codestral", "type": "prefix" }
       ]
     },
     {
       "modelId": "devstral-small-latest",
+      "displayName": "Devstral Small",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 128000,
       "inputPricePerMillion": 0.10,
       "outputPricePerMillion": 0.30,
-      "displayName": "Devstral Small",
-      "contextWindow": 128000,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "devstral", "type": "prefix" }
       ]
     },
     {
       "modelId": "pixtral-large-latest",
+      "displayName": "Pixtral Large",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 128000,
       "inputPricePerMillion": 2.00,
       "outputPricePerMillion": 6.00,
-      "displayName": "Pixtral Large",
-      "contextWindow": 128000,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "pixtral", "type": "prefix" }
       ]
     },
     {
       "modelId": "magistral-medium-latest",
+      "displayName": "Magistral Medium",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 40000,
       "inputPricePerMillion": 2.00,
       "outputPricePerMillion": 5.00,
-      "displayName": "Magistral Medium",
-      "contextWindow": 40000,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "magistral-medium", "type": "prefix" }
       ]
     },
     {
       "modelId": "magistral-small-latest",
+      "displayName": "Magistral Small",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 40000,
       "inputPricePerMillion": 0.50,
       "outputPricePerMillion": 1.50,
-      "displayName": "Magistral Small",
-      "contextWindow": 40000,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "magistral-small", "type": "prefix" },
         { "pattern": "magistral", "type": "prefix" }
@@ -84,10 +156,19 @@
     },
     {
       "modelId": "devstral-medium-latest",
+      "displayName": "Devstral Medium",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 128000,
       "inputPricePerMillion": 0.40,
       "outputPricePerMillion": 2.00,
-      "displayName": "Devstral Medium",
-      "contextWindow": 128000,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "devstral-medium", "type": "prefix" }
       ]

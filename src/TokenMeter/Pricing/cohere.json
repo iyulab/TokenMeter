@@ -3,20 +3,32 @@
   "models": [
     {
       "modelId": "command-a",
+      "displayName": "Command A",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 256000,
       "inputPricePerMillion": 2.50,
       "outputPricePerMillion": 10.00,
-      "displayName": "Command A",
-      "contextWindow": 256000,
+      "supportsToolCalling": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "command-a", "type": "prefix" }
       ]
     },
     {
       "modelId": "command-r-plus",
+      "displayName": "Command R+",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 128000,
       "inputPricePerMillion": 2.50,
       "outputPricePerMillion": 10.00,
-      "displayName": "Command R+",
-      "contextWindow": 128000,
+      "supportsToolCalling": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "command-r-plus", "type": "prefix" },
         { "pattern": "command-r+", "type": "prefix" }
@@ -24,30 +36,48 @@
     },
     {
       "modelId": "command-r",
+      "displayName": "Command R",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 128000,
       "inputPricePerMillion": 0.15,
       "outputPricePerMillion": 0.60,
-      "displayName": "Command R",
-      "contextWindow": 128000,
+      "supportsToolCalling": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "command-r", "type": "prefix" }
       ]
     },
     {
       "modelId": "command-r7b",
+      "displayName": "Command R7B",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 128000,
       "inputPricePerMillion": 0.0375,
       "outputPricePerMillion": 0.15,
-      "displayName": "Command R7B",
-      "contextWindow": 128000,
+      "supportsToolCalling": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "command-r7b", "type": "prefix" }
       ]
     },
     {
       "modelId": "command-light",
+      "displayName": "Command Light",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 4096,
       "inputPricePerMillion": 0.30,
       "outputPricePerMillion": 0.60,
-      "displayName": "Command Light",
-      "contextWindow": 4096,
+      "supportsToolCalling": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "command-light", "type": "prefix" }
       ]

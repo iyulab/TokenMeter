@@ -3,50 +3,82 @@
   "models": [
     {
       "modelId": "amazon-nova-premier",
+      "displayName": "Amazon Nova Premier",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1000000,
       "inputPricePerMillion": 2.50,
       "outputPricePerMillion": 12.50,
-      "displayName": "Amazon Nova Premier",
-      "contextWindow": 1000000,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "nova-premier", "type": "contains" }
       ]
     },
     {
       "modelId": "amazon-nova-pro",
+      "displayName": "Amazon Nova Pro",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 300000,
       "inputPricePerMillion": 0.80,
       "outputPricePerMillion": 3.20,
-      "displayName": "Amazon Nova Pro",
-      "contextWindow": 300000,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "nova-pro", "type": "contains" }
       ]
     },
     {
       "modelId": "amazon-nova-lite",
+      "displayName": "Amazon Nova Lite",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 300000,
       "inputPricePerMillion": 0.06,
       "outputPricePerMillion": 0.24,
-      "displayName": "Amazon Nova Lite",
-      "contextWindow": 300000,
+      "supportsToolCalling": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "nova-lite", "type": "contains" }
       ]
     },
     {
       "modelId": "amazon-nova-micro",
+      "displayName": "Amazon Nova Micro",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 128000,
       "inputPricePerMillion": 0.035,
       "outputPricePerMillion": 0.14,
-      "displayName": "Amazon Nova Micro",
-      "contextWindow": 128000,
+      "supportsToolCalling": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "nova-micro", "type": "contains" }
       ]
     },
     {
       "modelId": "amazon-nova-2-lite",
+      "displayName": "Amazon Nova 2 Lite",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1000000,
       "inputPricePerMillion": 0.30,
       "outputPricePerMillion": 2.50,
-      "displayName": "Amazon Nova 2 Lite",
-      "contextWindow": 1000000,
+      "supportsToolCalling": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "nova-2-lite", "type": "contains" }
       ]

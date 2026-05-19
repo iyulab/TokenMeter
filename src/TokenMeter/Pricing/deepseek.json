@@ -3,10 +3,19 @@
   "models": [
     {
       "modelId": "deepseek-chat",
+      "displayName": "DeepSeek V3",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 128000,
       "inputPricePerMillion": 0.28,
       "outputPricePerMillion": 0.42,
-      "displayName": "DeepSeek V3",
-      "contextWindow": 128000,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "deepseek-chat", "type": "prefix" },
         { "pattern": "deepseek-v3", "type": "prefix" }
@@ -14,10 +23,19 @@
     },
     {
       "modelId": "deepseek-reasoner",
+      "displayName": "DeepSeek R1",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 128000,
       "inputPricePerMillion": 0.28,
       "outputPricePerMillion": 0.42,
-      "displayName": "DeepSeek R1",
-      "contextWindow": 128000,
+      "supportsToolCalling": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "reasoningMode": "Always",
+      "thinkingFormat": "InlineTag",
+      "thinkingTagPattern": "<think>...</think>",
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "deepseek-reasoner", "type": "prefix" },
         { "pattern": "deepseek-r1", "type": "prefix" }
@@ -25,10 +43,19 @@
     },
     {
       "modelId": "deepseek-coder",
+      "displayName": "DeepSeek Coder",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 128000,
       "inputPricePerMillion": 0.14,
       "outputPricePerMillion": 0.28,
-      "displayName": "DeepSeek Coder",
-      "contextWindow": 128000,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "deepseek-coder", "type": "prefix" }
       ]

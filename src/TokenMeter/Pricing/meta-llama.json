@@ -3,10 +3,16 @@
   "models": [
     {
       "modelId": "llama-4-maverick",
+      "displayName": "Llama 4 Maverick",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1000000,
       "inputPricePerMillion": 0.22,
       "outputPricePerMillion": 0.85,
-      "displayName": "Llama 4 Maverick",
-      "contextWindow": 1000000,
+      "supportsToolCalling": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "llama-4-maverick", "type": "prefix" },
         { "pattern": "llama-4maverick", "type": "prefix" }
@@ -14,10 +20,16 @@
     },
     {
       "modelId": "llama-4-scout",
+      "displayName": "Llama 4 Scout",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 10000000,
       "inputPricePerMillion": 0.15,
       "outputPricePerMillion": 0.50,
-      "displayName": "Llama 4 Scout",
-      "contextWindow": 10000000,
+      "supportsToolCalling": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "llama-4-scout", "type": "prefix" },
         { "pattern": "llama-4scout", "type": "prefix" },

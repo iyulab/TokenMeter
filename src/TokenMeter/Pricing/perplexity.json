@@ -3,50 +3,78 @@
   "models": [
     {
       "modelId": "sonar-pro",
+      "displayName": "Sonar Pro",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 200000,
       "inputPricePerMillion": 3.00,
       "outputPricePerMillion": 15.00,
-      "displayName": "Sonar Pro",
-      "contextWindow": 200000,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "sonar-pro", "type": "prefix" }
       ]
     },
     {
       "modelId": "sonar-deep-research",
+      "displayName": "Sonar Deep Research",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 200000,
       "inputPricePerMillion": 2.00,
       "outputPricePerMillion": 8.00,
-      "displayName": "Sonar Deep Research",
-      "contextWindow": 200000,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "reasoningMode": "Always",
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "sonar-deep", "type": "prefix" }
       ]
     },
     {
       "modelId": "sonar-reasoning-pro",
+      "displayName": "Sonar Reasoning Pro",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 128000,
       "inputPricePerMillion": 2.00,
       "outputPricePerMillion": 8.00,
-      "displayName": "Sonar Reasoning Pro",
-      "contextWindow": 128000,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "reasoningMode": "Always",
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "sonar-reasoning-pro", "type": "prefix" }
       ]
     },
     {
       "modelId": "sonar-reasoning",
+      "displayName": "Sonar Reasoning",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 128000,
       "inputPricePerMillion": 1.00,
       "outputPricePerMillion": 5.00,
-      "displayName": "Sonar Reasoning",
-      "contextWindow": 128000,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "reasoningMode": "Always",
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "sonar-reasoning", "type": "prefix" }
       ]
     },
     {
       "modelId": "sonar",
+      "displayName": "Sonar",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 128000,
       "inputPricePerMillion": 1.00,
       "outputPricePerMillion": 1.00,
-      "displayName": "Sonar",
-      "contextWindow": 128000,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "sonar", "type": "prefix" }
       ]
