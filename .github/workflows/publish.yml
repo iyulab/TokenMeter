@@ -38,7 +38,6 @@ jobs:
 
       - name: Pack
         run: |
-          dotnet pack src/TokenMeter.Abstractions/TokenMeter.Abstractions.csproj --configuration Release --no-build --output ./nupkg
           dotnet pack src/TokenMeter/TokenMeter.csproj --configuration Release --no-build --output ./nupkg
 
       - name: Push to NuGet

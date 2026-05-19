@@ -80,7 +80,7 @@ public class ModelInfoTests
     {
         var info = new ModelInfo
         {
-            ModelId = "claude-opus-4-7",
+            ModelId = "claude-opus-4-6",
             InputPricePerMillion = 5.00m,
             OutputPricePerMillion = 25.00m,
             CacheReadPricePerMillion = 0.50m,

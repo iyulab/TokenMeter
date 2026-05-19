@@ -10,7 +10,7 @@ public record ModelInfo
 {
     // ── Identification ────────────────────────────────────────────────────────
 
-    /// <summary>Canonical model identifier used in API calls (e.g., "gpt-4o", "claude-opus-4-7").</summary>
+    /// <summary>Canonical model identifier used in API calls (e.g., "gpt-4o", "claude-opus-4-6").</summary>
     public required string ModelId { get; init; }
 
     /// <summary>Provider name (e.g., "OpenAI", "Anthropic", "Google").</summary>

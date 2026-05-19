@@ -22,8 +22,10 @@ internal static class ModelInfoLoader
             using var stream = assembly.GetManifestResourceStream(resourceName);
             if (stream is null) continue;
 
-            var provider = JsonSerializer.Deserialize<ProviderDataJson>(stream, s_options);
-            if (provider is null) continue;
+            var provider = JsonSerializer.Deserialize<ProviderDataJson>(stream, s_options)
+                ?? throw new InvalidOperationException(
+                    $"Failed to deserialize model data from embedded resource '{resourceName}'. " +
+                    "The JSON may be malformed or empty.");
 
             results.Add(ToProviderData(provider));
         }
