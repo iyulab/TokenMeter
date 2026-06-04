@@ -38,3 +38,6 @@ Thumbs.db
 # Logs
 *.log
 logs/
+
+# IDE language server cache
+*.lscache
