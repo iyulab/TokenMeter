@@ -10,6 +10,16 @@ public class CostCalculatorTests
     }
 
     [Fact]
+    public void CalculateCost_NegativeTokens_ThrowsEvenForUnknownModel()
+    {
+        // Argument validation runs before model lookup, so a negative token
+        // count is rejected regardless of whether the model resolves.
+        var calc = CostCalculator.Default();
+        Assert.Throws<ArgumentOutOfRangeException>(() => calc.CalculateCost("nonexistent-model-xyz", -1, 500));
+        Assert.Throws<ArgumentOutOfRangeException>(() => calc.CalculateCost("gpt-4o", 100, 100, -1, 0));
+    }
+
+    [Fact]
     public void GetModel_UnknownId_ReturnsNull()
     {
         var calc = CostCalculator.Default();

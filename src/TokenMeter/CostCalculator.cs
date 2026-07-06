@@ -25,14 +25,26 @@ public sealed class CostCalculator : ICostCalculator
 
     /// <inheritdoc/>
     public decimal? CalculateCost(string modelId, int inputTokens, int outputTokens)
-        => GetModel(modelId)?.CalculateCost(inputTokens, outputTokens);
+    {
+        // Validate arguments before model lookup so a negative token count is
+        // rejected consistently, whether or not the model resolves.
+        ArgumentOutOfRangeException.ThrowIfNegative(inputTokens);
+        ArgumentOutOfRangeException.ThrowIfNegative(outputTokens);
+        return GetModel(modelId)?.CalculateCost(inputTokens, outputTokens);
+    }
 
     /// <inheritdoc/>
     public decimal? CalculateCost(
         string modelId,
         int inputTokens, int outputTokens,
         int cacheReadTokens, int cacheWriteTokens)
-        => GetModel(modelId)?.CalculateCost(inputTokens, outputTokens, cacheReadTokens, cacheWriteTokens);
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(inputTokens);
+        ArgumentOutOfRangeException.ThrowIfNegative(outputTokens);
+        ArgumentOutOfRangeException.ThrowIfNegative(cacheReadTokens);
+        ArgumentOutOfRangeException.ThrowIfNegative(cacheWriteTokens);
+        return GetModel(modelId)?.CalculateCost(inputTokens, outputTokens, cacheReadTokens, cacheWriteTokens);
+    }
 
     /// <inheritdoc/>
     public ModelInfo? GetModel(string modelId)

@@ -174,6 +174,8 @@ public record ModelInfo
     /// </summary>
     public decimal? CalculateCost(int inputTokens, int outputTokens)
     {
+        ArgumentOutOfRangeException.ThrowIfNegative(inputTokens);
+        ArgumentOutOfRangeException.ThrowIfNegative(outputTokens);
         if (InputPricePerMillion is null || OutputPricePerMillion is null) return null;
         return (inputTokens / 1_000_000m) * InputPricePerMillion.Value
              + (outputTokens / 1_000_000m) * OutputPricePerMillion.Value;
@@ -188,6 +190,10 @@ public record ModelInfo
         int inputTokens, int outputTokens,
         int cacheReadTokens, int cacheWriteTokens)
     {
+        ArgumentOutOfRangeException.ThrowIfNegative(inputTokens);
+        ArgumentOutOfRangeException.ThrowIfNegative(outputTokens);
+        ArgumentOutOfRangeException.ThrowIfNegative(cacheReadTokens);
+        ArgumentOutOfRangeException.ThrowIfNegative(cacheWriteTokens);
         if (InputPricePerMillion is null || OutputPricePerMillion is null) return null;
 
         var inputCost = (inputTokens / 1_000_000m) * InputPricePerMillion.Value;

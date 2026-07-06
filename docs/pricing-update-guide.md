@@ -146,7 +146,7 @@ Sources:
 
 | Date | Version | Changes |
 |------|---------|---------|
-| 2026-07-06 | 0.4.1 | Bi-weekly refresh: +Anthropic Fable 5 / Opus 4.8 / Opus 4.7 / Sonnet 5, +xAI Grok 4.3 / 4.20 (all price+context source-verified). Doc class-name fixes (ModelCatalog/ModelInfoLoader). Deferred (price captured, context window unverified → next cycle): OpenAI GPT-5.5 ($5/$30), Google Gemini 3.5 Flash ($1.50/$9). Flag: OpenAI GPT-5.4 family cache-read may be 0.1x not 0.5x (verify on source). Sources: platform.claude.com, developers.openai.com, ai.google.dev, docs.x.ai |
+| 2026-07-06 | 0.4.1 | Bi-weekly refresh: +Anthropic Fable 5 / Opus 4.8 / Opus 4.7 / Sonnet 5, +xAI Grok 4.3 / 4.20 (all price+context source-verified). Doc class-name fixes (ModelCatalog/ModelInfoLoader). Quality-review hardening: `CalculateCost` (ModelInfo + CostCalculator) now rejects negative token counts (`ArgumentOutOfRangeException`); capability-field regression guard tests. Deferred (price captured, context window unverified → next cycle): OpenAI GPT-5.5 ($5/$30), Google Gemini 3.5 Flash ($1.50/$9). Flag: OpenAI GPT-5.4 family cache-read may be 0.1x not 0.5x (verify on source). Sources: platform.claude.com, developers.openai.com, ai.google.dev, docs.x.ai |
 | 2026-03-09 | 0.4.0 | Longest-match alias algorithm, ModelInfoLoader validation, improved gpt-4 alias accuracy |
 | 2026-02-10 | 0.3.0 | Refactored to JSON-based pricing system, 12 providers supported |
 | 2026-01-28 | 0.1.0 | Initial pricing data (OpenAI, Anthropic, Google, xAI, Azure) |

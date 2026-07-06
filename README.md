@@ -61,9 +61,8 @@ var price = calc.CalculateCost("gpt-4o", inputTokens: 1_000, outputTokens: 500);
 foreach (var m in ModelCatalog.Anthropic.Values)
     Console.WriteLine($"{m.ModelId}: ctx={m.ContextWindow}, ${m.InputPricePerMillion}/M");
 
-// By model type
-var embeddingModels = ModelCatalog.GetByType(ModelType.Embedding);
-var chatModels      = ModelCatalog.GetByType(ModelType.Chat);
+// By model type (the built-in catalog currently contains Chat models only)
+var chatModels = ModelCatalog.GetByType(ModelType.Chat);
 
 // All providers
 var providers = ModelCatalog.GetProviderNames();

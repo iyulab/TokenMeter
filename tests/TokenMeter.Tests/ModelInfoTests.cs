@@ -95,6 +95,28 @@ public class ModelInfoTests
     }
 
     [Fact]
+    public void CalculateCost_WithNegativeInputTokens_Throws()
+    {
+        var info = new ModelInfo { ModelId = "test", InputPricePerMillion = 3.00m, OutputPricePerMillion = 15.00m };
+        Assert.Throws<ArgumentOutOfRangeException>(() => info.CalculateCost(-1, 100));
+    }
+
+    [Fact]
+    public void CalculateCost_WithNegativeOutputTokens_Throws()
+    {
+        var info = new ModelInfo { ModelId = "test", InputPricePerMillion = 3.00m, OutputPricePerMillion = 15.00m };
+        Assert.Throws<ArgumentOutOfRangeException>(() => info.CalculateCost(100, -1));
+    }
+
+    [Fact]
+    public void CalculateCost_WithNegativeCacheTokens_Throws()
+    {
+        var info = new ModelInfo { ModelId = "test", InputPricePerMillion = 3.00m, OutputPricePerMillion = 15.00m };
+        Assert.Throws<ArgumentOutOfRangeException>(() => info.CalculateCost(100, 100, -1, 0));
+        Assert.Throws<ArgumentOutOfRangeException>(() => info.CalculateCost(100, 100, 0, -1));
+    }
+
+    [Fact]
     public void CalculateCost_WithCache_MissingCachePrice_FallsBackToInputPrice()
     {
         var info = new ModelInfo
