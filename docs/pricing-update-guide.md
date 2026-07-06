@@ -97,10 +97,14 @@ New JSON files are automatically included as embedded resources via the `Pricing
 
 **Validation**: `ModelInfoLoader` throws `InvalidOperationException` only when an embedded JSON resource fails to deserialize (malformed or empty file). It does **not** enforce non-empty provider names or non-empty model lists at load time — those data-integrity checks live in the test suite (`ModelPricingValidationTests`, `PricingBugFixTests`). Always run tests after adding a new JSON file.
 
-To expose a convenience property, add the following to `ModelCatalog.cs`:
+Provider models are always reachable at runtime via `ModelCatalog.GetProvider("NewProvider")`
+(string-keyed, returns an empty dictionary for unknown names) — no per-provider code is required.
+
+Optionally, to expose a **typed convenience property** for a frequently used provider, add the
+following to `ModelCatalog.cs` (it simply delegates to `GetProvider`):
 
 ```csharp
-public static IReadOnlyDictionary<string, ModelInfo> NewProvider => GetProviderDict("NewProvider");
+public static IReadOnlyDictionary<string, ModelInfo> NewProvider => GetProvider("NewProvider");
 ```
 
 ### 4. Update LastUpdated Date

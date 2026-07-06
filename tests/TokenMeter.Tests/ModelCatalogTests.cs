@@ -48,6 +48,34 @@ public class ModelCatalogTests
     }
 
     [Fact]
+    public void GetProvider_KnownProvider_ReturnsNonEmptyDict()
+    {
+        var openai = ModelCatalog.GetProvider("OpenAI");
+        Assert.NotEmpty(openai);
+        Assert.All(openai.Values, m => Assert.Equal("OpenAI", m.Provider));
+    }
+
+    [Fact]
+    public void GetProvider_UnknownProvider_ReturnsEmptyDict()
+    {
+        Assert.Empty(ModelCatalog.GetProvider("NoSuchProvider"));
+    }
+
+    [Fact]
+    public void GetProvider_CaseInsensitive()
+    {
+        Assert.NotEmpty(ModelCatalog.GetProvider("openai"));
+    }
+
+    [Fact]
+    public void GetProvider_MatchesConvenienceProperty()
+    {
+        // The typed convenience properties delegate to GetProvider(string).
+        Assert.Same(ModelCatalog.OpenAI, ModelCatalog.GetProvider("OpenAI"));
+        Assert.Same(ModelCatalog.Anthropic, ModelCatalog.GetProvider("Anthropic"));
+    }
+
+    [Fact]
     public void GetByType_Chat_ReturnsOnlyChatModels()
     {
         var chatModels = ModelCatalog.GetByType(ModelType.Chat).ToList();

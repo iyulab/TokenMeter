@@ -55,40 +55,40 @@ public static class ModelCatalog
     // ── Provider convenience properties ───────────────────────────────────────
 
     /// <summary>OpenAI models.</summary>
-    public static IReadOnlyDictionary<string, ModelInfo> OpenAI => GetProviderDict("OpenAI");
+    public static IReadOnlyDictionary<string, ModelInfo> OpenAI => GetProvider("OpenAI");
 
     /// <summary>Anthropic Claude models.</summary>
-    public static IReadOnlyDictionary<string, ModelInfo> Anthropic => GetProviderDict("Anthropic");
+    public static IReadOnlyDictionary<string, ModelInfo> Anthropic => GetProvider("Anthropic");
 
     /// <summary>Google Gemini models.</summary>
-    public static IReadOnlyDictionary<string, ModelInfo> Google => GetProviderDict("Google");
+    public static IReadOnlyDictionary<string, ModelInfo> Google => GetProvider("Google");
 
     /// <summary>xAI Grok models.</summary>
-    public static IReadOnlyDictionary<string, ModelInfo> XAI => GetProviderDict("xAI");
+    public static IReadOnlyDictionary<string, ModelInfo> XAI => GetProvider("xAI");
 
     /// <summary>Azure OpenAI models.</summary>
-    public static IReadOnlyDictionary<string, ModelInfo> Azure => GetProviderDict("Azure");
+    public static IReadOnlyDictionary<string, ModelInfo> Azure => GetProvider("Azure");
 
     /// <summary>Mistral models.</summary>
-    public static IReadOnlyDictionary<string, ModelInfo> Mistral => GetProviderDict("Mistral");
+    public static IReadOnlyDictionary<string, ModelInfo> Mistral => GetProvider("Mistral");
 
     /// <summary>DeepSeek models.</summary>
-    public static IReadOnlyDictionary<string, ModelInfo> DeepSeek => GetProviderDict("DeepSeek");
+    public static IReadOnlyDictionary<string, ModelInfo> DeepSeek => GetProvider("DeepSeek");
 
     /// <summary>Amazon Nova models.</summary>
-    public static IReadOnlyDictionary<string, ModelInfo> AmazonNova => GetProviderDict("Amazon Nova");
+    public static IReadOnlyDictionary<string, ModelInfo> AmazonNova => GetProvider("Amazon Nova");
 
     /// <summary>Cohere models.</summary>
-    public static IReadOnlyDictionary<string, ModelInfo> Cohere => GetProviderDict("Cohere");
+    public static IReadOnlyDictionary<string, ModelInfo> Cohere => GetProvider("Cohere");
 
     /// <summary>Meta Llama models.</summary>
-    public static IReadOnlyDictionary<string, ModelInfo> MetaLlama => GetProviderDict("Meta Llama");
+    public static IReadOnlyDictionary<string, ModelInfo> MetaLlama => GetProvider("Meta Llama");
 
     /// <summary>Perplexity models.</summary>
-    public static IReadOnlyDictionary<string, ModelInfo> Perplexity => GetProviderDict("Perplexity");
+    public static IReadOnlyDictionary<string, ModelInfo> Perplexity => GetProvider("Perplexity");
 
     /// <summary>Qwen models.</summary>
-    public static IReadOnlyDictionary<string, ModelInfo> Qwen => GetProviderDict("Qwen");
+    public static IReadOnlyDictionary<string, ModelInfo> Qwen => GetProvider("Qwen");
 
     // ── Lookup ────────────────────────────────────────────────────────────────
 
@@ -147,6 +147,12 @@ public static class ModelCatalog
     /// <summary>All provider names in the catalog.</summary>
     public static IEnumerable<string> GetProviderNames() => s_byProvider.Keys;
 
-    private static IReadOnlyDictionary<string, ModelInfo> GetProviderDict(string name) =>
+    /// <summary>
+    /// Returns the models for the given provider as a lookup dictionary (case-insensitive keys),
+    /// or an empty dictionary if the provider is not in the catalog.
+    /// The string-keyed counterpart to the typed convenience properties (e.g. <see cref="OpenAI"/>);
+    /// prefer this when the provider name is only known at runtime.
+    /// </summary>
+    public static IReadOnlyDictionary<string, ModelInfo> GetProvider(string name) =>
         s_byProvider.TryGetValue(name, out var dict) ? dict : s_empty;
 }

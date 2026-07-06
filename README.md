@@ -57,9 +57,12 @@ var price = calc.CalculateCost("gpt-4o", inputTokens: 1_000, outputTokens: 500);
 ### Browsing the Catalog
 
 ```csharp
-// By provider
+// By provider — typed convenience property
 foreach (var m in ModelCatalog.Anthropic.Values)
     Console.WriteLine($"{m.ModelId}: ctx={m.ContextWindow}, ${m.InputPricePerMillion}/M");
+
+// By provider — string-keyed (when the name is only known at runtime)
+var openai = ModelCatalog.GetProvider("OpenAI");   // dict, empty if unknown
 
 // By model type (the built-in catalog currently contains Chat models only)
 var chatModels = ModelCatalog.GetByType(ModelType.Chat);
