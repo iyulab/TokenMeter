@@ -159,7 +159,7 @@ var cost = calc.CalculateCost("my-fine-tuned-model", 10_000, 5_000);
 | Provider | Models |
 |----------|--------|
 | OpenAI | GPT-5.x, GPT-4.1, GPT-4o, o1, o3, o4-mini series |
-| Anthropic | Claude 4.x, 3.x families (Opus, Sonnet, Haiku) |
+| Anthropic | Claude 5, 4.x, 3.x families (Fable, Opus, Sonnet, Haiku) |
 | Google | Gemini 3.x, 2.5, 2.0, 1.5 families |
 | xAI | Grok 4.x, 3.x series |
 | Azure | Azure OpenAI equivalents |
@@ -174,7 +174,7 @@ var cost = calc.CalculateCost("my-fine-tuned-model", 10_000, 5_000);
 ## Data Freshness
 
 ```csharp
-Console.WriteLine(ModelCatalog.LastUpdated);        // 2026-05-19
+Console.WriteLine(ModelCatalog.LastUpdated);        // 2026-07-06
 Console.WriteLine(ModelCatalog.DataAgeDays);        // days since last update
 Console.WriteLine(ModelCatalog.IsDataStale());      // true if > 90 days old
 ```

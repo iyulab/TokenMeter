@@ -95,17 +95,17 @@ Create a new JSON file in `src/TokenMeter/Pricing/`:
 
 New JSON files are automatically included as embedded resources via the `Pricing\*.json` wildcard in `TokenMeter.csproj`.
 
-**Validation**: `PricingLoader` checks at load time that the provider name is not empty and models are present. It throws `InvalidOperationException` on invalid data. Always run tests after adding a new JSON file.
+**Validation**: `ModelInfoLoader` checks at load time that the provider name is not empty and models are present. It throws `InvalidOperationException` on invalid data. Always run tests after adding a new JSON file.
 
-To expose a convenience property, add the following to `ModelPricing.cs`:
+To expose a convenience property, add the following to `ModelCatalog.cs`:
 
 ```csharp
-public static IReadOnlyDictionary<string, ModelPricing> NewProvider => GetProviderDict("NewProvider");
+public static IReadOnlyDictionary<string, ModelInfo> NewProvider => GetProviderDict("NewProvider");
 ```
 
 ### 4. Update LastUpdated Date
 
-Update the `LastUpdated` date in `ModelPricing.cs` to reflect the current date.
+Update the `LastUpdated` date in `ModelCatalog.cs` to reflect the current date.
 
 ### 5. Update README.md
 
@@ -146,10 +146,11 @@ Sources:
 
 | Date | Version | Changes |
 |------|---------|---------|
-| 2026-03-09 | 0.4.0 | Longest-match alias algorithm, PricingLoader validation, improved gpt-4 alias accuracy |
+| 2026-07-06 | 0.4.1 | Bi-weekly refresh: +Anthropic Fable 5 / Opus 4.8 / Opus 4.7 / Sonnet 5, +xAI Grok 4.3 / 4.20 (all price+context source-verified). Doc class-name fixes (ModelCatalog/ModelInfoLoader). Deferred (price captured, context window unverified → next cycle): OpenAI GPT-5.5 ($5/$30), Google Gemini 3.5 Flash ($1.50/$9). Flag: OpenAI GPT-5.4 family cache-read may be 0.1x not 0.5x (verify on source). Sources: platform.claude.com, developers.openai.com, ai.google.dev, docs.x.ai |
+| 2026-03-09 | 0.4.0 | Longest-match alias algorithm, ModelInfoLoader validation, improved gpt-4 alias accuracy |
 | 2026-02-10 | 0.3.0 | Refactored to JSON-based pricing system, 12 providers supported |
 | 2026-01-28 | 0.1.0 | Initial pricing data (OpenAI, Anthropic, Google, xAI, Azure) |
 
 ---
 
-Last Updated: 2026-03-09
+Last Updated: 2026-07-06

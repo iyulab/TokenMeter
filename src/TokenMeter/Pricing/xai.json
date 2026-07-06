@@ -2,6 +2,50 @@
   "provider": "xAI",
   "models": [
     {
+      "modelId": "grok-4.3",
+      "displayName": "Grok 4.3",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1000000,
+      "inputPricePerMillion": 1.25,
+      "outputPricePerMillion": 2.50,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "grok-4.3", "type": "prefix" },
+        { "pattern": "grok-4-3", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "grok-4.20",
+      "displayName": "Grok 4.20",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1000000,
+      "inputPricePerMillion": 1.25,
+      "outputPricePerMillion": 2.50,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "reasoningMode": "Optional",
+      "thinkingFormat": "Block",
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "grok-4.20", "type": "prefix" },
+        { "pattern": "grok-4-20", "type": "prefix" }
+      ]
+    },
+    {
       "modelId": "grok-4.1-fast-thinking",
       "displayName": "Grok 4.1 Fast Thinking",
       "modelType": "Chat",
