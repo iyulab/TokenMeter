@@ -95,7 +95,7 @@ Create a new JSON file in `src/TokenMeter/Pricing/`:
 
 New JSON files are automatically included as embedded resources via the `Pricing\*.json` wildcard in `TokenMeter.csproj`.
 
-**Validation**: `ModelInfoLoader` checks at load time that the provider name is not empty and models are present. It throws `InvalidOperationException` on invalid data. Always run tests after adding a new JSON file.
+**Validation**: `ModelInfoLoader` throws `InvalidOperationException` only when an embedded JSON resource fails to deserialize (malformed or empty file). It does **not** enforce non-empty provider names or non-empty model lists at load time — those data-integrity checks live in the test suite (`ModelPricingValidationTests`, `PricingBugFixTests`). Always run tests after adding a new JSON file.
 
 To expose a convenience property, add the following to `ModelCatalog.cs`:
 

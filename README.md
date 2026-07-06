@@ -29,7 +29,6 @@ dotnet add package TokenMeter
 var model = ModelCatalog.FindModel("claude-sonnet-4-6");
 
 Console.WriteLine(model?.ContextWindow);          // 1000000
-Console.WriteLine(model?.SupportsReasoning);       // True (via ReasoningMode)
 Console.WriteLine(model?.ReasoningMode);           // Optional
 Console.WriteLine(model?.ThinkingFormat);          // Block
 Console.WriteLine(model?.PromptCachingMode);       // Explicit
