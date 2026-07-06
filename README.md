@@ -114,7 +114,6 @@ var cost = calc.CalculateCost("my-fine-tuned-model", 10_000, 5_000);
 | `CacheWritePricePerMillion` | Prompt cache population price |
 | `ImageInputPrice` | Per-image input cost |
 | `AudioInputPricePerSecond` | Audio input cost per second |
-| `AudioOutputPricePerSecond` | Audio output cost per second |
 
 ### Input Modalities
 | Property | Description |

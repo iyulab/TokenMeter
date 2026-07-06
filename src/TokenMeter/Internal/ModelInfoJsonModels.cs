@@ -53,9 +53,6 @@ internal sealed class ModelInfoJson
     [JsonPropertyName("audioInputPricePerSecond")]
     public decimal? AudioInputPricePerSecond { get; set; }
 
-    [JsonPropertyName("audioOutputPricePerSecond")]
-    public decimal? AudioOutputPricePerSecond { get; set; }
-
     // Input modalities
     [JsonPropertyName("supportsImageInput")]
     public bool SupportsImageInput { get; set; }
@@ -68,13 +65,6 @@ internal sealed class ModelInfoJson
 
     [JsonPropertyName("supportsDocumentInput")]
     public bool SupportsDocumentInput { get; set; }
-
-    // Output modalities
-    [JsonPropertyName("supportsImageOutput")]
-    public bool SupportsImageOutput { get; set; }
-
-    [JsonPropertyName("supportsAudioOutput")]
-    public bool SupportsAudioOutput { get; set; }
 
     // API capabilities
     [JsonPropertyName("supportsToolCalling")]

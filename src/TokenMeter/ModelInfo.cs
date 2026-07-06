@@ -63,9 +63,6 @@ public record ModelInfo
     /// <summary>Cost per second of audio input. <c>null</c> if not applicable or unknown.</summary>
     public decimal? AudioInputPricePerSecond { get; init; }
 
-    /// <summary>Cost per second of audio output. <c>null</c> if not applicable or unknown.</summary>
-    public decimal? AudioOutputPricePerSecond { get; init; }
-
     // ── Input Modalities ──────────────────────────────────────────────────────
 
     /// <summary>Model accepts image data in requests.</summary>
@@ -79,14 +76,6 @@ public record ModelInfo
 
     /// <summary>Model accepts document files (PDF, DOCX, etc.) natively in requests.</summary>
     public bool SupportsDocumentInput { get; init; }
-
-    // ── Output Modalities ─────────────────────────────────────────────────────
-
-    /// <summary>Model can generate image output (e.g., DALL-E, Imagen).</summary>
-    public bool SupportsImageOutput { get; init; }
-
-    /// <summary>Model can generate audio output (TTS).</summary>
-    public bool SupportsAudioOutput { get; init; }
 
     // ── API Capabilities ──────────────────────────────────────────────────────
 

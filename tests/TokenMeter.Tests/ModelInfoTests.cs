@@ -30,7 +30,6 @@ public class ModelInfoTests
         Assert.Null(info.CacheWritePricePerMillion);
         Assert.Null(info.ImageInputPrice);
         Assert.Null(info.AudioInputPricePerSecond);
-        Assert.Null(info.AudioOutputPricePerSecond);
         Assert.Null(info.ThinkingTagPattern);
         Assert.Null(info.ThinkingFieldName);
         Assert.Null(info.MaxThinkingTokens);
@@ -40,8 +39,6 @@ public class ModelInfoTests
         Assert.False(info.SupportsAudioInput);
         Assert.False(info.SupportsVideoInput);
         Assert.False(info.SupportsDocumentInput);
-        Assert.False(info.SupportsImageOutput);
-        Assert.False(info.SupportsAudioOutput);
         Assert.False(info.SupportsToolCalling);
         Assert.False(info.SupportsParallelToolCalling);
         Assert.False(info.SupportsStructuredOutput);
