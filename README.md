@@ -36,6 +36,13 @@ Console.WriteLine(model?.ToolCallingFormat);       // Anthropic
 Console.WriteLine(model?.SupportsMcpToolUse);      // True
 ```
 
+> **Note — fuzzy matching**: `FindModel` resolves aliases in 4 passes (exact → alias exact →
+> prefix → contains) to absorb cloud-specific ID variants (Bedrock/Vertex prefixes, date
+> suffixes). Local/self-hosted deployment names that embed a public model name (e.g.
+> `deepseek-r1-distill-qwen-7b`) can therefore match a catalog entry whose context window and
+> pricing do not describe your deployment. For self-hosted models, take the effective context
+> length from your deployment configuration (e.g. llama.cpp `n_ctx`), not from the catalog.
+
 ### Cost Calculation
 
 ```csharp

@@ -94,7 +94,17 @@ public static class ModelCatalog
 
     /// <summary>
     /// Finds a model by ID or alias.
-    /// Uses 3-pass matching: exact lookup → alias exact → alias prefix (longest) → alias contains (longest).
+    /// Uses 4-pass matching: exact lookup → alias exact → alias prefix (longest) → alias contains (longest).
+    /// <para>
+    /// The prefix/contains passes are deliberately fuzzy: they absorb cloud-specific ID variants
+    /// (e.g. Bedrock <c>us.anthropic.claude-...</c>, date-suffixed IDs). The trade-off is that
+    /// local/self-hosted deployment names that reuse or embed a public model name
+    /// (e.g. <c>deepseek-r1-distill-qwen-7b</c>, community fine-tunes) can match a catalog entry
+    /// whose <see cref="ModelInfo.ContextWindow"/> and pricing do not describe the deployment.
+    /// For self-hosted models, do not derive token budgets from the catalog — the effective
+    /// context length is a per-deployment setting (e.g. llama.cpp <c>n_ctx</c>) the catalog
+    /// cannot know; use your deployment configuration instead.
+    /// </para>
     /// </summary>
     public static ModelInfo? FindModel(string? modelId)
     {
