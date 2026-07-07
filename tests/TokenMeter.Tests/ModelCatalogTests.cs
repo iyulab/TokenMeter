@@ -114,4 +114,78 @@ public class ModelCatalogTests
         Assert.NotNull(upper);
         Assert.Equal(lower!.ModelId, upper!.ModelId);
     }
+
+    // ── Strict / bounded-fuzziness lookup (vault-ai self-hosted mismatch feedback) ──
+
+    [Fact]
+    public void FindModel_ExactStrictness_DoesNotMatchSelfHostedDerivativeName()
+    {
+        // A self-hosted distill name embeds the public "deepseek-r1" prefix alias.
+        // Full fuzzy matching resolves it (documented trade-off) …
+        Assert.NotNull(ModelCatalog.FindModel("deepseek-r1-distill-qwen-7b"));
+
+        // … but a strict lookup must not: the catalog entry's context window and
+        // pricing do not describe the local deployment.
+        Assert.Null(ModelCatalog.FindModel("deepseek-r1-distill-qwen-7b", AliasMatchType.Exact));
+    }
+
+    [Fact]
+    public void FindModel_ExactStrictness_StillMatchesCatalogIdAndExactAlias()
+    {
+        // Catalog model ID.
+        Assert.NotNull(ModelCatalog.FindModel("claude-sonnet-4-6", AliasMatchType.Exact));
+
+        // Exact-type alias ("claude-sonnet-4-0" → claude-sonnet-4 family entry).
+        Assert.NotNull(ModelCatalog.FindModel("claude-sonnet-4-0", AliasMatchType.Exact));
+    }
+
+    [Fact]
+    public void FindModel_PrefixStrictness_AllowsPrefixButNotContains()
+    {
+        // Prefix alias is within bounds.
+        Assert.NotNull(ModelCatalog.FindModel("deepseek-r1-distill-qwen-7b", AliasMatchType.Prefix));
+
+        // Bedrock-style ID only resolvable by a contains alias stays out of bounds …
+        Assert.Null(ModelCatalog.FindModel("us.anthropic.claude-sonnet-4.6-v1", AliasMatchType.Prefix));
+
+        // … and resolves again under full fuzziness.
+        Assert.NotNull(ModelCatalog.FindModel("us.anthropic.claude-sonnet-4.6-v1", AliasMatchType.Contains));
+    }
+
+    [Fact]
+    public void FindModel_ContainsStrictness_EqualsDefaultOverload()
+    {
+        var byDefault = ModelCatalog.FindModel("claude-sonnet-4.6");
+        var byBound = ModelCatalog.FindModel("claude-sonnet-4.6", AliasMatchType.Contains);
+        Assert.NotNull(byDefault);
+        Assert.Same(byDefault, byBound);
+    }
+
+    [Fact]
+    public void FindModelMatch_ReportsMatchKind()
+    {
+        // Catalog ID → Exact.
+        var exact = ModelCatalog.FindModelMatch("claude-sonnet-4-6");
+        Assert.NotNull(exact);
+        Assert.Equal(AliasMatchType.Exact, exact!.MatchKind);
+
+        // Prefix alias → Prefix.
+        var prefix = ModelCatalog.FindModelMatch("deepseek-r1-distill-qwen-7b");
+        Assert.NotNull(prefix);
+        Assert.Equal(AliasMatchType.Prefix, prefix!.MatchKind);
+
+        // Contains alias → Contains.
+        var contains = ModelCatalog.FindModelMatch("us.anthropic.claude-sonnet-4.6-v1");
+        Assert.NotNull(contains);
+        Assert.Equal(AliasMatchType.Contains, contains!.MatchKind);
+        Assert.Equal("claude-sonnet-4-6", contains.Model.ModelId);
+    }
+
+    [Fact]
+    public void FindModelMatch_NullOrUnknown_ReturnsNull()
+    {
+        Assert.Null(ModelCatalog.FindModelMatch(null));
+        Assert.Null(ModelCatalog.FindModelMatch("   "));
+        Assert.Null(ModelCatalog.FindModelMatch("this-model-does-not-exist-xyz"));
+    }
 }

@@ -93,23 +93,46 @@ public static class ModelCatalog
     // ── Lookup ────────────────────────────────────────────────────────────────
 
     /// <summary>
-    /// Finds a model by ID or alias.
-    /// Uses 4-pass matching: exact lookup → alias exact → alias prefix (longest) → alias contains (longest).
+    /// Finds a model by ID or alias using full fuzzy matching
+    /// (4-pass: exact lookup → alias exact → alias prefix (longest) → alias contains (longest)).
     /// <para>
     /// The prefix/contains passes are deliberately fuzzy: they absorb cloud-specific ID variants
     /// (e.g. Bedrock <c>us.anthropic.claude-...</c>, date-suffixed IDs). The trade-off is that
     /// local/self-hosted deployment names that reuse or embed a public model name
     /// (e.g. <c>deepseek-r1-distill-qwen-7b</c>, community fine-tunes) can match a catalog entry
     /// whose <see cref="ModelInfo.ContextWindow"/> and pricing do not describe the deployment.
+    /// When correctness matters more than recall, bound the fuzziness with
+    /// <see cref="FindModel(string?, AliasMatchType)"/> or inspect the match pass via
+    /// <see cref="FindModelMatch(string?, AliasMatchType)"/>.
     /// For self-hosted models, do not derive token budgets from the catalog — the effective
     /// context length is a per-deployment setting (e.g. llama.cpp <c>n_ctx</c>) the catalog
     /// cannot know; use your deployment configuration instead.
     /// </para>
     /// </summary>
-    public static ModelInfo? FindModel(string? modelId)
+    public static ModelInfo? FindModel(string? modelId) =>
+        FindModelMatch(modelId, AliasMatchType.Contains)?.Model;
+
+    /// <summary>
+    /// Finds a model by ID or alias, bounding how fuzzy the match may be.
+    /// <paramref name="maxFuzziness"/> is the loosest pass allowed:
+    /// <see cref="AliasMatchType.Exact"/> = catalog ID / exact alias only,
+    /// <see cref="AliasMatchType.Prefix"/> = also allow prefix aliases,
+    /// <see cref="AliasMatchType.Contains"/> = full fuzzy matching (same as
+    /// <see cref="FindModel(string?)"/>).
+    /// </summary>
+    public static ModelInfo? FindModel(string? modelId, AliasMatchType maxFuzziness) =>
+        FindModelMatch(modelId, maxFuzziness)?.Model;
+
+    /// <summary>
+    /// Finds a model by ID or alias and reports which pass produced the match
+    /// (<see cref="ModelMatch.MatchKind"/>), so consumers can apply confidence-based
+    /// handling — e.g. trust <see cref="AliasMatchType.Exact"/>, fall back to manual
+    /// configuration when the result came from a <see cref="AliasMatchType.Contains"/> inference.
+    /// </summary>
+    public static ModelMatch? FindModelMatch(string? modelId, AliasMatchType maxFuzziness = AliasMatchType.Contains)
     {
         if (string.IsNullOrWhiteSpace(modelId)) return null;
-        if (s_all.TryGetValue(modelId, out var exact)) return exact;
+        if (s_all.TryGetValue(modelId, out var exact)) return new ModelMatch(exact, AliasMatchType.Exact);
 
         var normalized = modelId.ToLowerInvariant();
 
@@ -118,8 +141,10 @@ public static class ModelCatalog
         {
             if (rule.MatchType == AliasMatchType.Exact &&
                 normalized.Equals(rule.Pattern, StringComparison.Ordinal))
-                return rule.Target;
+                return new ModelMatch(rule.Target, AliasMatchType.Exact);
         }
+
+        if (maxFuzziness < AliasMatchType.Prefix) return null;
 
         // Pass 2: Prefix alias — longest wins
         AliasRule? bestPrefix = null;
@@ -130,7 +155,9 @@ public static class ModelCatalog
                 (bestPrefix is null || rule.Pattern.Length > bestPrefix.Pattern.Length))
                 bestPrefix = rule;
         }
-        if (bestPrefix is not null) return bestPrefix.Target;
+        if (bestPrefix is not null) return new ModelMatch(bestPrefix.Target, AliasMatchType.Prefix);
+
+        if (maxFuzziness < AliasMatchType.Contains) return null;
 
         // Pass 3: Contains alias — longest wins
         AliasRule? bestContains = null;
@@ -141,7 +168,7 @@ public static class ModelCatalog
                 (bestContains is null || rule.Pattern.Length > bestContains.Pattern.Length))
                 bestContains = rule;
         }
-        return bestContains?.Target;
+        return bestContains is not null ? new ModelMatch(bestContains.Target, AliasMatchType.Contains) : null;
     }
 
     // ── Filtering ─────────────────────────────────────────────────────────────

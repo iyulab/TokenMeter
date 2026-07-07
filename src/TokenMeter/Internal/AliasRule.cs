@@ -1,7 +1,5 @@
 namespace TokenMeter.Internal;
 
-internal enum AliasMatchType { Exact, Prefix, Contains }
-
 internal sealed class AliasRule
 {
     public AliasMatchType MatchType { get; init; }

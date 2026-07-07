@@ -43,6 +43,17 @@ Console.WriteLine(model?.SupportsMcpToolUse);      // True
 > pricing do not describe your deployment. For self-hosted models, take the effective context
 > length from your deployment configuration (e.g. llama.cpp `n_ctx`), not from the catalog.
 
+```csharp
+// When correctness matters more than recall, bound the fuzziness:
+ModelCatalog.FindModel("deepseek-r1-distill-qwen-7b", AliasMatchType.Exact);   // null — no false positive
+ModelCatalog.FindModel("us.anthropic.claude-sonnet-4.6-v1");                   // matched via contains alias
+
+// Or inspect which pass produced the match and apply confidence-based fallback:
+var match = ModelCatalog.FindModelMatch("deepseek-r1-distill-qwen-7b");
+Console.WriteLine(match?.MatchKind);   // Prefix — a fuzzy inference, not an exact hit
+Console.WriteLine(match?.Model.ModelId);
+```
+
 ### Cost Calculation
 
 ```csharp
