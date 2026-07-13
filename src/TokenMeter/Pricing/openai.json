@@ -188,7 +188,7 @@
       "contextWindow": 400000,
       "inputPricePerMillion": 0.25,
       "outputPricePerMillion": 2.00,
-      "cacheReadPricePerMillion": 0.125,
+      "cacheReadPricePerMillion": 0.025,
       "supportsImageInput": true,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
