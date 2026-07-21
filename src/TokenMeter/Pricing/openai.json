@@ -2,6 +2,134 @@
   "provider": "OpenAI",
   "models": [
     {
+      "modelId": "gpt-5.6-sol",
+      "displayName": "GPT-5.6 Sol",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "inputPricePerMillion": 5.00,
+      "outputPricePerMillion": 30.00,
+      "cacheReadPricePerMillion": 0.50,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "gpt-5.6-sol", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-5.6-terra",
+      "displayName": "GPT-5.6 Terra",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "inputPricePerMillion": 2.50,
+      "outputPricePerMillion": 15.00,
+      "cacheReadPricePerMillion": 0.25,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "gpt-5.6-terra", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-5.6-luna",
+      "displayName": "GPT-5.6 Luna",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "inputPricePerMillion": 1.00,
+      "outputPricePerMillion": 6.00,
+      "cacheReadPricePerMillion": 0.10,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "gpt-5.6-luna", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-5.5-pro",
+      "displayName": "GPT-5.5 Pro",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "inputPricePerMillion": 30.00,
+      "outputPricePerMillion": 180.00,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": false,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "gpt-5.5-pro", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-5.5",
+      "displayName": "GPT-5.5",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "inputPricePerMillion": 5.00,
+      "outputPricePerMillion": 30.00,
+      "cacheReadPricePerMillion": 0.50,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "gpt-5.5", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-5.4-pro",
+      "displayName": "GPT-5.4 Pro",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "inputPricePerMillion": 30.00,
+      "outputPricePerMillion": 180.00,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "gpt-5.4-pro", "type": "prefix" }
+      ]
+    },
+    {
       "modelId": "gpt-5.4",
       "displayName": "GPT-5.4",
       "modelType": "Chat",

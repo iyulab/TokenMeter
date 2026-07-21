@@ -34,7 +34,7 @@ public static class ModelCatalog
     }
 
     /// <summary>Date when the embedded catalog data was last updated.</summary>
-    public static DateOnly LastUpdated { get; } = new(2026, 7, 6);
+    public static DateOnly LastUpdated { get; } = new(2026, 7, 21);
 
     /// <summary>Days elapsed since <see cref="LastUpdated"/>.</summary>
     public static int DataAgeDays =>

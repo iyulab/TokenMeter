@@ -2,6 +2,28 @@
   "provider": "xAI",
   "models": [
     {
+      "modelId": "grok-4.5",
+      "displayName": "Grok 4.5",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 500000,
+      "inputPricePerMillion": 2.00,
+      "outputPricePerMillion": 6.00,
+      "cacheReadPricePerMillion": 0.30,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "grok-4.5", "type": "prefix" },
+        { "pattern": "grok-4-5", "type": "prefix" }
+      ]
+    },
+    {
       "modelId": "grok-4.3",
       "displayName": "Grok 4.3",
       "modelType": "Chat",
@@ -9,6 +31,7 @@
       "contextWindow": 1000000,
       "inputPricePerMillion": 1.25,
       "outputPricePerMillion": 2.50,
+      "cacheReadPricePerMillion": 0.20,
       "supportsImageInput": true,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
@@ -30,6 +53,7 @@
       "contextWindow": 1000000,
       "inputPricePerMillion": 1.25,
       "outputPricePerMillion": 2.50,
+      "cacheReadPricePerMillion": 0.20,
       "supportsImageInput": true,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,

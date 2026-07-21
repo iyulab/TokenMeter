@@ -2,6 +2,34 @@
   "provider": "Google",
   "models": [
     {
+      "modelId": "gemini-3.5-flash",
+      "displayName": "Gemini 3.5 Flash",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1048576,
+      "inputPricePerMillion": 1.50,
+      "outputPricePerMillion": 9.00,
+      "cacheReadPricePerMillion": 0.15,
+      "supportsImageInput": true,
+      "supportsVideoInput": true,
+      "supportsDocumentInput": true,
+      "supportsAudioInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "reasoningMode": "Optional",
+      "thinkingFormat": "Block",
+      "toolCallingFormat": "Gemini",
+      "aliases": [
+        { "pattern": "gemini-3.5-flash", "type": "contains" },
+        { "pattern": "gemini-3-5-flash", "type": "contains" }
+      ]
+    },
+    {
       "modelId": "gemini-3-pro-preview",
       "displayName": "Gemini 3 Pro Preview",
       "modelType": "Chat",
