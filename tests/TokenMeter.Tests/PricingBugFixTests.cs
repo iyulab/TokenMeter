@@ -260,4 +260,68 @@ public class PricingBugFixTests
     }
 
     #endregion
+
+    #region Issue 7 — flagship models absent from the catalogue
+
+    // Auditing every provider against its published rate card showed the prices that were
+    // present were largely right — what had gone stale was the model list. Current flagship
+    // models were missing entirely, so looking them up returned nothing (or, worse, fuzzy-
+    // matched an older sibling whose limits and rates do not describe them).
+
+    [Theory]
+    [InlineData("claude-opus-5", 5.00, 25.00)]
+    [InlineData("claude-mythos-5", 10.00, 50.00)]
+    [InlineData("gemini-3.6-flash", 1.50, 7.50)]
+    [InlineData("gemini-3.5-flash-lite", 0.30, 2.50)]
+    [InlineData("deepseek-v4-flash", 0.14, 0.28)]
+    [InlineData("deepseek-v4-pro", 0.435, 0.87)]
+    public void CurrentFlagshipModels_ResolveExactly_AndCarryPublishedRates(
+        string modelId, decimal input, decimal output)
+    {
+        var match = ModelCatalog.FindModelMatch(modelId);
+
+        Assert.NotNull(match);
+        Assert.Equal(modelId, match.Model.ModelId);
+        Assert.Equal(input, match.Model.InputPricePerMillion);
+        Assert.Equal(output, match.Model.OutputPricePerMillion);
+
+        // Every one of these carries a context window; a catalogue entry that cannot state
+        // the limit is only half an answer for the caller sizing a request.
+        Assert.NotNull(match.Model.ContextWindow);
+    }
+
+    [Fact]
+    public void ModelIdThatIsAPrefixOfAnother_DoesNotSwallowTheLongerOne()
+    {
+        // "gemini-3.5-flash" is a proper prefix of "gemini-3.5-flash-lite", and the two are
+        // priced an order of magnitude apart. Longest-match has to pick the specific one.
+        var lite = ModelCatalog.FindModel("gemini-3.5-flash-lite");
+        var flash = ModelCatalog.FindModel("gemini-3.5-flash");
+
+        Assert.NotNull(lite);
+        Assert.NotNull(flash);
+        Assert.Equal("gemini-3.5-flash-lite", lite.ModelId);
+        Assert.Equal("gemini-3.5-flash", flash.ModelId);
+        Assert.True(lite.InputPricePerMillion < flash.InputPricePerMillion);
+    }
+
+    // An id ending in "-latest" is a moving pointer, not a pinned release. When the provider
+    // advances it to a new version, the rate has to move with it — otherwise the entry keeps
+    // quoting a superseded version's price under a name that no longer refers to it. Two of
+    // these were understating cost by more than three times.
+    [Theory]
+    [InlineData("mistral-large-latest", 0.50, 1.50)]
+    [InlineData("mistral-medium-latest", 1.50, 7.50)]
+    [InlineData("mistral-small-latest", 0.15, 0.60)]
+    public void EvergreenModelIds_QuoteTheVersionTheyCurrentlyResolveTo(
+        string modelId, decimal input, decimal output)
+    {
+        var model = ModelCatalog.FindModel(modelId);
+
+        Assert.NotNull(model);
+        Assert.Equal(input, model.InputPricePerMillion);
+        Assert.Equal(output, model.OutputPricePerMillion);
+    }
+
+    #endregion
 }

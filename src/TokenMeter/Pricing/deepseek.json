@@ -1,7 +1,55 @@
 {
   "provider": "DeepSeek",
-  "lastUpdated": "2026-05-19",
+  "lastUpdated": "2026-08-01",
   "models": [
+    {
+      "modelId": "deepseek-v4-pro",
+      "displayName": "DeepSeek V4 Pro",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 384000,
+      "inputPricePerMillion": 0.435,
+      "outputPricePerMillion": 0.87,
+      "cacheReadPricePerMillion": 0.003625,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "reasoningMode": "Optional",
+      "thinkingFormat": "SeparateField",
+      "thinkingFieldName": "reasoning_content",
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "deepseek-v4-pro", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "deepseek-v4-flash",
+      "displayName": "DeepSeek V4 Flash",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 384000,
+      "inputPricePerMillion": 0.14,
+      "outputPricePerMillion": 0.28,
+      "cacheReadPricePerMillion": 0.0028,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "reasoningMode": "Optional",
+      "thinkingFormat": "SeparateField",
+      "thinkingFieldName": "reasoning_content",
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "deepseek-v4-flash", "type": "prefix" }
+      ]
+    },
     {
       "modelId": "deepseek-chat",
       "displayName": "DeepSeek V3",

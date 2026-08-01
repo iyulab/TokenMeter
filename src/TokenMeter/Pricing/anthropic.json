@@ -1,6 +1,6 @@
 {
   "provider": "Anthropic",
-  "lastUpdated": "2026-07-06",
+  "lastUpdated": "2026-08-01",
   "models": [
     {
       "modelId": "claude-fable-5",
@@ -26,6 +26,62 @@
       "toolCallingFormat": "Anthropic",
       "aliases": [
         { "pattern": "claude-fable-5", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "claude-mythos-5",
+      "displayName": "Claude Mythos 5",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 10.00,
+      "outputPricePerMillion": 50.00,
+      "cacheReadPricePerMillion": 1.00,
+      "cacheWritePricePerMillion": 12.50,
+      "supportsImageInput": true,
+      "supportsDocumentInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Explicit",
+      "supportsStopSequences": true,
+      "supportsMcpToolUse": true,
+      "reasoningMode": "Always",
+      "thinkingFormat": "Block",
+      "toolCallingFormat": "Anthropic",
+      "aliases": [
+        { "pattern": "claude-mythos-5", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "claude-opus-5",
+      "displayName": "Claude Opus 5",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 5.00,
+      "outputPricePerMillion": 25.00,
+      "cacheReadPricePerMillion": 0.50,
+      "cacheWritePricePerMillion": 6.25,
+      "supportsImageInput": true,
+      "supportsDocumentInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Explicit",
+      "supportsStopSequences": true,
+      "supportsMcpToolUse": true,
+      "reasoningMode": "Optional",
+      "thinkingFormat": "Block",
+      "toolCallingFormat": "Anthropic",
+      "aliases": [
+        { "pattern": "claude-opus-5", "type": "contains" }
       ]
     },
     {

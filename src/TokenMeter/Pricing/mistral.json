@@ -1,6 +1,6 @@
 {
   "provider": "Mistral",
-  "lastUpdated": "2026-05-19",
+  "lastUpdated": "2026-08-01",
   "models": [
     {
       "modelId": "mistral-large-latest",
@@ -23,12 +23,12 @@
     },
     {
       "modelId": "mistral-medium-latest",
-      "displayName": "Mistral Medium 3",
+      "displayName": "Mistral Medium 3.5",
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 128000,
-      "inputPricePerMillion": 0.40,
-      "outputPricePerMillion": 2.00,
+      "inputPricePerMillion": 1.50,
+      "outputPricePerMillion": 7.50,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
       "supportsStructuredOutput": true,
@@ -42,12 +42,12 @@
     },
     {
       "modelId": "mistral-small-latest",
-      "displayName": "Mistral Small 3.2",
+      "displayName": "Mistral Small 4",
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 131072,
-      "inputPricePerMillion": 0.06,
-      "outputPricePerMillion": 0.18,
+      "inputPricePerMillion": 0.15,
+      "outputPricePerMillion": 0.60,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
       "supportsStructuredOutput": true,

@@ -183,12 +183,12 @@ var cost = calc.CalculateCost("my-fine-tuned-model", 10_000, 5_000);
 | Provider | Models |
 |----------|--------|
 | OpenAI | GPT-5.x, GPT-4.1, GPT-4o, o1, o3, o4-mini series |
-| Anthropic | Claude 5, 4.x, 3.x families (Fable, Opus, Sonnet, Haiku) |
+| Anthropic | Claude 5, 4.x, 3.x families (Fable, Mythos, Opus, Sonnet, Haiku) |
 | Google | Gemini 3.x, 2.5, 2.0, 1.5 families |
 | xAI | Grok 4.x, 3.x series |
 | Azure | Azure OpenAI equivalents |
 | Mistral | Large, Medium, Small, Magistral, Pixtral |
-| DeepSeek | R1 (reasoning), V3, Coder |
+| DeepSeek | V4 (Flash, Pro), R1 (reasoning), V3, Coder |
 | Amazon Nova | Premier, Pro, Lite, Micro |
 | Cohere | Command A, R+, R, R7B |
 | Meta Llama | Maverick, Scout |
