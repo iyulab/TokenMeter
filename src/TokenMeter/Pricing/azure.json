@@ -1,5 +1,6 @@
 {
   "provider": "Azure",
+  "lastUpdated": "2026-05-19",
   "models": [
     {
       "modelId": "azure-gpt-5",

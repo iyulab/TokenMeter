@@ -14,10 +14,12 @@
     <PackageTags>llm;models;metadata;cost;ai;pricing</PackageTags>
     <RepositoryUrl>https://github.com/iyulab/TokenMeter</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Pricing\*.json" LogicalName="TokenMeter.Pricing.%(Filename)%(Extension)" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" Visible="false" />
   </ItemGroup>
 
 </Project>

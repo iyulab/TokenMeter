@@ -14,6 +14,7 @@ public static class ModelCatalog
     private static readonly Dictionary<string, ModelInfo> s_all;
     private static readonly Dictionary<string, IReadOnlyDictionary<string, ModelInfo>> s_byProvider;
     private static readonly List<AliasRule> s_aliasRules;
+    private static readonly DateOnly s_lastUpdated;
 
     static ModelCatalog()
     {
@@ -30,11 +31,20 @@ public static class ModelCatalog
 
             s_byProvider[provider.ProviderName] = provider.Models;
             s_aliasRules.AddRange(provider.AliasRules);
+
+            if (provider.LastUpdated is { } date && date > s_lastUpdated)
+                s_lastUpdated = date;
         }
     }
 
-    /// <summary>Date when the embedded catalog data was last updated.</summary>
-    public static DateOnly LastUpdated { get; } = new(2026, 7, 21);
+    /// <summary>
+    /// Date when the embedded catalog data was last updated — the most recent
+    /// <c>lastUpdated</c> declared by any bundled provider file. Individual providers may be
+    /// older than this; the value reports when the catalog as a whole last saw a refresh.
+    /// Defaults to <see cref="DateOnly.MinValue"/> when no provider declares a date, so an
+    /// undated catalog reports as stale rather than fresh.
+    /// </summary>
+    public static DateOnly LastUpdated => s_lastUpdated;
 
     /// <summary>Days elapsed since <see cref="LastUpdated"/>.</summary>
     public static int DataAgeDays =>

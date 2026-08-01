@@ -136,6 +136,12 @@ var cost = calc.CalculateCost("my-fine-tuned-model", 10_000, 5_000);
 | `ImageInputPrice` | Per-image input cost |
 | `AudioInputPricePerSecond` | Audio input cost per second |
 
+> **Note — one rate per model**: these fields hold a provider's standard rate for a model. Where a
+> provider charges more above a prompt-length threshold (several now publish a second, higher tier
+> for long-context requests), the catalog carries the base tier only, so cost for a request past
+> that threshold is understated. Cache-write cost falls back to the input rate when a provider does
+> not price it separately, which matches how automatic prompt caching is normally billed.
+
 ### Input Modalities
 | Property | Description |
 |----------|-------------|
@@ -192,10 +198,20 @@ var cost = calc.CalculateCost("my-fine-tuned-model", 10_000, 5_000);
 ## Data Freshness
 
 ```csharp
-Console.WriteLine(ModelCatalog.LastUpdated);        // 2026-07-06
+Console.WriteLine(ModelCatalog.LastUpdated);        // 2026-08-01
 Console.WriteLine(ModelCatalog.DataAgeDays);        // days since last update
 Console.WriteLine(ModelCatalog.IsDataStale());      // true if > 90 days old
 ```
+
+`LastUpdated` is derived from the `lastUpdated` field each bundled provider file declares, and
+reports the **most recent** of them. Providers are refreshed independently, so an individual
+provider's data can be considerably older than this value.
+
+> **Note — what the signal does and does not tell you**: it reports when this catalog was last
+> refreshed, not whether a provider has changed its prices since. A vendor can cut a rate the day
+> after a refresh, and `IsDataStale()` will still answer `false` while the bundled figure is wrong.
+> Treat catalog pricing as a good default for estimation and budgeting, and read authoritative
+> figures from your provider's billing data when they have to be exact.
 
 ## Migration from 0.3.x
 

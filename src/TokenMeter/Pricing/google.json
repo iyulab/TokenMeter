@@ -1,5 +1,6 @@
 {
   "provider": "Google",
+  "lastUpdated": "2026-07-21",
   "models": [
     {
       "modelId": "gemini-3.5-flash",

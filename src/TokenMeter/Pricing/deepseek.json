@@ -1,5 +1,6 @@
 {
   "provider": "DeepSeek",
+  "lastUpdated": "2026-05-19",
   "models": [
     {
       "modelId": "deepseek-chat",

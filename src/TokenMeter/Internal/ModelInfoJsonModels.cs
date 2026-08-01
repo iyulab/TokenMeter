@@ -7,6 +7,14 @@ internal sealed class ProviderDataJson
     [JsonPropertyName("provider")]
     public string Provider { get; set; } = "";
 
+    /// <summary>
+    /// ISO-8601 date (yyyy-MM-dd) on which this provider's data was last verified against
+    /// the vendor's published rates. Lives beside the data it describes so that a refresh
+    /// cannot update one without seeing the other.
+    /// </summary>
+    [JsonPropertyName("lastUpdated")]
+    public string? LastUpdated { get; set; }
+
     [JsonPropertyName("models")]
     public List<ModelInfoJson> Models { get; set; } = [];
 }

@@ -1,5 +1,6 @@
 {
   "provider": "Amazon Nova",
+  "lastUpdated": "2026-05-19",
   "models": [
     {
       "modelId": "amazon-nova-premier",

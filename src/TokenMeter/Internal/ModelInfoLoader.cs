@@ -59,7 +59,15 @@ internal static class ModelInfoLoader
             }
         }
 
-        return new ProviderData(json.Provider, models, aliasRules);
+        // A missing or malformed date leaves the provider undated rather than throwing:
+        // the loader only fails on unreadable JSON, and an undated provider is reported as
+        // stale by the catalog. Completeness is enforced by the test suite.
+        DateOnly? lastUpdated =
+            DateOnly.TryParse(json.LastUpdated, System.Globalization.CultureInfo.InvariantCulture, out var parsed)
+                ? parsed
+                : null;
+
+        return new ProviderData(json.Provider, models, aliasRules, lastUpdated);
     }
 
     private static ModelInfo ToModelInfo(ModelInfoJson j, string provider) => new()
@@ -105,4 +113,5 @@ internal static class ModelInfoLoader
 internal sealed record ProviderData(
     string ProviderName,
     IReadOnlyDictionary<string, ModelInfo> Models,
-    IReadOnlyList<AliasRule> AliasRules);
+    IReadOnlyList<AliasRule> AliasRules,
+    DateOnly? LastUpdated);

@@ -137,4 +137,127 @@ public class PricingBugFixTests
     }
 
     #endregion
+
+    #region Issue 5 — GPT-5.6 mid-generation price reduction
+
+    // The GPT-5.6 tiers were repriced after their launch rates were first catalogued:
+    // the small tier dropped by 80% and the mid tier by 20%, while the large tier was
+    // left unchanged. A flat catalogue has no way to signal that its numbers went stale,
+    // so cost estimates stayed silently high until the data was corrected. These cases
+    // pin the corrected rates and, just as importantly, pin the tier that did NOT move —
+    // a bulk edit that "fixes the family" is the likeliest way to reintroduce the error.
+
+    [Theory]
+    [InlineData("gpt-5.6-luna", 0.20, 1.20, 0.02)]
+    [InlineData("gpt-5.6-terra", 2.00, 12.00, 0.20)]
+    [InlineData("gpt-5.6-sol", 5.00, 30.00, 0.50)]
+    public void Gpt56_Tiers_CarryCurrentPublishedRates(
+        string modelId, decimal input, decimal output, decimal cacheRead)
+    {
+        var model = ModelCatalog.FindModel(modelId);
+
+        Assert.NotNull(model);
+        Assert.Equal(input, model.InputPricePerMillion);
+        Assert.Equal(output, model.OutputPricePerMillion);
+        Assert.Equal(cacheRead, model.CacheReadPricePerMillion);
+    }
+
+    [Fact]
+    public void Gpt56_SmallTier_CostReflectsReducedRates()
+    {
+        var model = ModelCatalog.FindModel("gpt-5.6-luna");
+
+        Assert.NotNull(model);
+
+        // One million input + one million output tokens. At the pre-reduction rates this
+        // returned 7.00 — a five-fold overstatement reported by a downstream consumer.
+        Assert.Equal(1.40m, model.CalculateCost(1_000_000, 1_000_000));
+    }
+
+    [Fact]
+    public void Gpt56_TierOrdering_SmallCheaperThanMidCheaperThanLarge()
+    {
+        // Structural guard: the tiers are priced as a ladder. Any future refresh that
+        // inverts the ordering has almost certainly transcribed a row into the wrong model.
+        var small = ModelCatalog.FindModel("gpt-5.6-luna");
+        var mid = ModelCatalog.FindModel("gpt-5.6-terra");
+        var large = ModelCatalog.FindModel("gpt-5.6-sol");
+
+        Assert.NotNull(small);
+        Assert.NotNull(mid);
+        Assert.NotNull(large);
+
+        Assert.True(small.InputPricePerMillion < mid.InputPricePerMillion);
+        Assert.True(mid.InputPricePerMillion < large.InputPricePerMillion);
+        Assert.True(small.OutputPricePerMillion < mid.OutputPricePerMillion);
+        Assert.True(mid.OutputPricePerMillion < large.OutputPricePerMillion);
+    }
+
+    #endregion
+
+    #region Issue 6 — cached-token pricing coverage
+
+    // Two gaps found while auditing the catalogue against the published rate card.
+    //
+    // (a) Cache writes. Automatic prompt caching historically billed the first pass at the
+    //     normal input rate, so leaving the cache-write price unset — and letting
+    //     CalculateCost fall back to the input rate — produced the right number. The GPT-5.6
+    //     tiers broke that assumption by charging a premium over input for cache writes, at
+    //     which point the fallback silently understated the cache-write component.
+    //
+    // (b) Cached reads on the reasoning series. Those models were catalogued as having no
+    //     prompt caching at all, so cache-read tokens fell back to the full input rate —
+    //     an overstatement of up to four times on the cached portion of a request.
+
+    [Theory]
+    [InlineData("gpt-5.6-sol", 6.25)]
+    [InlineData("gpt-5.6-terra", 2.50)]
+    [InlineData("gpt-5.6-luna", 0.25)]
+    public void CacheWrite_PricedAboveInput_IsNotLeftToTheInputFallback(string modelId, decimal cacheWrite)
+    {
+        var model = ModelCatalog.FindModel(modelId);
+
+        Assert.NotNull(model);
+        Assert.Equal(cacheWrite, model.CacheWritePricePerMillion);
+
+        // A premium over input is exactly the case the fallback cannot express.
+        Assert.True(model.CacheWritePricePerMillion > model.InputPricePerMillion);
+
+        // One million cache-write tokens, nothing else: the vendor rate, not the input rate.
+        Assert.Equal(cacheWrite, model.CalculateCost(0, 0, 0, 1_000_000));
+    }
+
+    [Theory]
+    [InlineData("o1", 7.50)]
+    [InlineData("o3", 0.50)]
+    [InlineData("o3-mini", 0.55)]
+    [InlineData("o4-mini", 0.275)]
+    public void ReasoningSeries_CachedReads_ArePricedAndAdvertised(string modelId, decimal cacheRead)
+    {
+        var model = ModelCatalog.FindModel(modelId);
+
+        Assert.NotNull(model);
+        Assert.Equal(cacheRead, model.CacheReadPricePerMillion);
+
+        // Price and capability flag have to agree — a discounted rate with caching reported
+        // as unsupported is how the gap stayed invisible.
+        Assert.Equal(PromptCachingMode.Automatic, model.PromptCachingMode);
+        Assert.True(model.CacheReadPricePerMillion < model.InputPricePerMillion);
+    }
+
+    [Fact]
+    public void PricedCacheRead_ImpliesCachingIsAdvertised_Structural()
+    {
+        // Structural guard across every provider: a model that carries a cache-read price
+        // must not simultaneously claim it has no prompt caching.
+        foreach (var (modelId, model) in ModelCatalog.All)
+        {
+            if (model.CacheReadPricePerMillion is null) continue;
+
+            Assert.True(model.PromptCachingMode != PromptCachingMode.None,
+                $"\"{modelId}\" has a cache-read price but reports PromptCachingMode.None");
+        }
+    }
+
+    #endregion
 }

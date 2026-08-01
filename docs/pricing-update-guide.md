@@ -11,7 +11,7 @@ This document describes how to keep TokenMeter's model pricing data current.
 
 | Provider | URL |
 |----------|-----|
-| OpenAI | https://openai.com/api/pricing/ |
+| OpenAI | https://developers.openai.com/api/docs/pricing |
 | Anthropic | https://docs.anthropic.com/en/docs/about-claude/pricing |
 | Google | https://ai.google.dev/gemini-api/docs/pricing |
 | xAI | https://docs.x.ai/docs/models |
@@ -78,6 +78,7 @@ Create a new JSON file in `src/TokenMeter/Pricing/`:
 ```json
 {
   "provider": "NewProvider",
+  "lastUpdated": "2026-08-01",
   "models": [
     {
       "modelId": "model-id",
@@ -107,13 +108,29 @@ following to `ModelCatalog.cs` (it simply delegates to `GetProvider`):
 public static IReadOnlyDictionary<string, ModelInfo> NewProvider => GetProvider("NewProvider");
 ```
 
-### 4. Update LastUpdated Date
+### 4. Bump `lastUpdated` in Every File You Touched
 
-Update the `LastUpdated` date in `ModelCatalog.cs` to reflect the current date.
+Each provider JSON carries its own date at the top:
+
+```json
+{
+  "provider": "NewProvider",
+  "lastUpdated": "2026-08-01",
+  "models": [ ... ]
+}
+```
+
+Set it to the date you verified that provider against its vendor rate card. There is no date to
+maintain in code — `ModelCatalog.LastUpdated` is derived from these values (the most recent one
+wins), and a provider left undated makes the catalog report itself as stale rather than fresh.
+The test suite fails if any provider file is missing the field or the date does not parse.
 
 ### 5. Update README.md
 
-Update the pricing tables in `README.md` to reflect the latest data.
+`README.md` documents the schema rather than per-model rates, so a routine refresh usually leaves
+it untouched. Update it when the refresh changes something a reader would see: the `LastUpdated`
+value shown in the Data Freshness example, the provider list, or any example that names a model
+whose figures moved.
 
 ### 6. Run Tests
 
@@ -150,11 +167,16 @@ Sources:
 
 | Date | Version | Changes |
 |------|---------|---------|
-| 2026-07-06 | 0.4.1 | Bi-weekly refresh: +Anthropic Fable 5 / Opus 4.8 / Opus 4.7 / Sonnet 5, +xAI Grok 4.3 / 4.20 (all price+context source-verified). Doc class-name fixes (ModelCatalog/ModelInfoLoader). Quality-review hardening: `CalculateCost` (ModelInfo + CostCalculator) now rejects negative token counts (`ArgumentOutOfRangeException`); capability-field regression guard tests. Deferred (price captured, context window unverified → next cycle): OpenAI GPT-5.5 ($5/$30), Google Gemini 3.5 Flash ($1.50/$9). Flag: OpenAI GPT-5.4 family cache-read may be 0.1x not 0.5x (verify on source). Sources: platform.claude.com, developers.openai.com, ai.google.dev, docs.x.ai |
+| 2026-08-01 | 0.6.3 | Reported: GPT-5.6 Luna and Terra repriced downward (Luna −80%, Terra −20%); Sol unchanged. Found while re-verifying the family: GPT-5.6 now charges a separate cache-write rate, and the reasoning series (o1, o3, o3-mini, o4-mini) plus Grok 4.x carried cached-read prices with prompt caching reported as unsupported. Freshness moved into the data — each provider file declares `lastUpdated` and `ModelCatalog.LastUpdated` is derived from it, replacing the hand-maintained constant. Sources: developers.openai.com/api/docs/pricing, docs.x.ai |
+| 2026-07-21 | 0.6.2 | Bi-weekly refresh: +GPT-5.6 Sol / Terra / Luna, GPT-5.5 (+Pro), GPT-5.4 Pro, Gemini 3.5 Flash, Grok 4.5. |
+| 2026-07-15 | 0.6.1 | Corrected OpenAI cached-input prices for the gpt-5 and gpt-4.1 families. Resolves the cache-read ratio flag raised in 0.4.1 — the reasoning tiers are 0.1x of input, re-verified against the vendor rate card on 2026-08-01. |
+| 2026-07-07 | 0.6.0 | Strict opt-in model lookup — bounded fuzziness plus match diagnostics. |
+| 2026-07-07 | 0.5.0 | Removed dead output-modality schema fields (breaking). |
+| 2026-07-06 | 0.4.1 | Bi-weekly refresh: +Anthropic Fable 5 / Opus 4.8 / Opus 4.7 / Sonnet 5, +xAI Grok 4.3 / 4.20 (all price+context source-verified). Doc class-name fixes (ModelCatalog/ModelInfoLoader). Quality-review hardening: `CalculateCost` (ModelInfo + CostCalculator) now rejects negative token counts (`ArgumentOutOfRangeException`); capability-field regression guard tests. Deferred (price captured, context window unverified → next cycle): OpenAI GPT-5.5 ($5/$30), Google Gemini 3.5 Flash ($1.50/$9). Flag (resolved in 0.6.1): OpenAI GPT-5.4 family cache-read is 0.1x, not 0.5x. Sources: platform.claude.com, developers.openai.com, ai.google.dev, docs.x.ai |
 | 2026-03-09 | 0.4.0 | Longest-match alias algorithm, ModelInfoLoader validation, improved gpt-4 alias accuracy |
 | 2026-02-10 | 0.3.0 | Refactored to JSON-based pricing system, 12 providers supported |
 | 2026-01-28 | 0.1.0 | Initial pricing data (OpenAI, Anthropic, Google, xAI, Azure) |
 
 ---
 
-Last Updated: 2026-07-06
+Last Updated: 2026-08-01

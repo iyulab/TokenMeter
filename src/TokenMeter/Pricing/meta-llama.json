@@ -1,5 +1,6 @@
 {
   "provider": "Meta Llama",
+  "lastUpdated": "2026-05-19",
   "models": [
     {
       "modelId": "llama-4-maverick",
