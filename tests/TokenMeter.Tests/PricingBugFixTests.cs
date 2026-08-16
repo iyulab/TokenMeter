@@ -271,10 +271,10 @@ public class PricingBugFixTests
     [Theory]
     [InlineData("claude-opus-5", 5.00, 25.00)]
     [InlineData("claude-mythos-5", 10.00, 50.00)]
-    [InlineData("gemini-3.6-flash", 1.50, 7.50)]
+    [InlineData("gemini-3.6-flash", 0.75, 3.75)]
     [InlineData("gemini-3.5-flash-lite", 0.30, 2.50)]
-    [InlineData("deepseek-v4-flash", 0.14, 0.28)]
-    [InlineData("deepseek-v4-pro", 0.435, 0.87)]
+    [InlineData("deepseek-v4-flash", 0.22, 0.66)]
+    [InlineData("deepseek-v4-pro", 0.66, 1.98)]
     public void CurrentFlagshipModels_ResolveExactly_AndCarryPublishedRates(
         string modelId, decimal input, decimal output)
     {

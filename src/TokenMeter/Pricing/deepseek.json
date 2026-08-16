@@ -1,6 +1,6 @@
 {
   "provider": "DeepSeek",
-  "lastUpdated": "2026-08-01",
+  "lastUpdated": "2026-08-16",
   "models": [
     {
       "modelId": "deepseek-v4-pro",
@@ -9,9 +9,9 @@
       "isInstructTuned": true,
       "contextWindow": 1000000,
       "maxOutputTokens": 384000,
-      "inputPricePerMillion": 0.435,
-      "outputPricePerMillion": 0.87,
-      "cacheReadPricePerMillion": 0.003625,
+      "inputPricePerMillion": 0.66,
+      "outputPricePerMillion": 1.98,
+      "cacheReadPricePerMillion": 0.022,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
       "supportsJsonMode": true,
@@ -33,9 +33,9 @@
       "isInstructTuned": true,
       "contextWindow": 1000000,
       "maxOutputTokens": 384000,
-      "inputPricePerMillion": 0.14,
-      "outputPricePerMillion": 0.28,
-      "cacheReadPricePerMillion": 0.0028,
+      "inputPricePerMillion": 0.22,
+      "outputPricePerMillion": 0.66,
+      "cacheReadPricePerMillion": 0.007,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
       "supportsJsonMode": true,

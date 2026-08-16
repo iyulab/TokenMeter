@@ -1,6 +1,6 @@
 {
   "provider": "Anthropic",
-  "lastUpdated": "2026-08-01",
+  "lastUpdated": "2026-08-16",
   "models": [
     {
       "modelId": "claude-fable-5",

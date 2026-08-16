@@ -1,7 +1,53 @@
 {
   "provider": "xAI",
-  "lastUpdated": "2026-08-01",
+  "lastUpdated": "2026-08-16",
   "models": [
+    {
+      "modelId": "grok-4.6",
+      "displayName": "Grok 4.6",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 500000,
+      "inputPricePerMillion": 2.00,
+      "outputPricePerMillion": 6.00,
+      "cacheReadPricePerMillion": 0.50,
+      "promptCachingMode": "Automatic",
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "grok-4.6", "type": "prefix" },
+        { "pattern": "grok-4-6", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "grok-build-0.1",
+      "displayName": "Grok Build 0.1",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 256000,
+      "inputPricePerMillion": 1.00,
+      "outputPricePerMillion": 2.00,
+      "cacheReadPricePerMillion": 0.20,
+      "promptCachingMode": "Automatic",
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "grok-build-0.1", "type": "prefix" },
+        { "pattern": "grok-build-0-1", "type": "prefix" }
+      ]
+    },
     {
       "modelId": "grok-4.5",
       "displayName": "Grok 4.5",
