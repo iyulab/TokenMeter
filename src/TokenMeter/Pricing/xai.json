@@ -1,6 +1,6 @@
 {
   "provider": "xAI",
-  "lastUpdated": "2026-08-16",
+  "lastUpdated": "2026-08-17",
   "models": [
     {
       "modelId": "grok-4.6",
@@ -11,6 +11,14 @@
       "inputPricePerMillion": 2.00,
       "outputPricePerMillion": 6.00,
       "cacheReadPricePerMillion": 0.50,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 200000,
+          "inputPricePerMillion": 4.00,
+          "outputPricePerMillion": 12.00
+        }
+      ],
       "promptCachingMode": "Automatic",
       "supportsImageInput": true,
       "supportsToolCalling": true,
@@ -34,6 +42,14 @@
       "inputPricePerMillion": 1.00,
       "outputPricePerMillion": 2.00,
       "cacheReadPricePerMillion": 0.20,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 200000,
+          "inputPricePerMillion": 2.00,
+          "outputPricePerMillion": 4.00
+        }
+      ],
       "promptCachingMode": "Automatic",
       "supportsImageInput": true,
       "supportsToolCalling": true,
@@ -57,6 +73,14 @@
       "inputPricePerMillion": 2.00,
       "outputPricePerMillion": 6.00,
       "cacheReadPricePerMillion": 0.30,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 200000,
+          "inputPricePerMillion": 4.00,
+          "outputPricePerMillion": 12.00
+        }
+      ],
       "promptCachingMode": "Automatic",
       "supportsImageInput": true,
       "supportsToolCalling": true,
@@ -80,6 +104,14 @@
       "inputPricePerMillion": 1.25,
       "outputPricePerMillion": 2.50,
       "cacheReadPricePerMillion": 0.20,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 200000,
+          "inputPricePerMillion": 2.50,
+          "outputPricePerMillion": 5.00
+        }
+      ],
       "promptCachingMode": "Automatic",
       "supportsImageInput": true,
       "supportsToolCalling": true,
@@ -103,6 +135,14 @@
       "inputPricePerMillion": 1.25,
       "outputPricePerMillion": 2.50,
       "cacheReadPricePerMillion": 0.20,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 200000,
+          "inputPricePerMillion": 2.50,
+          "outputPricePerMillion": 5.00
+        }
+      ],
       "promptCachingMode": "Automatic",
       "supportsImageInput": true,
       "supportsToolCalling": true,

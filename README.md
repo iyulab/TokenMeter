@@ -67,9 +67,32 @@ var costWithCache = model?.CalculateCost(
     cacheReadTokens: 400_000,
     cacheWriteTokens: 50_000);
 
-// Via CostCalculator (DI-friendly)
+// Via CostCalculator (DI-friendly) — same overloads, plus a tiered one (see Tiered Pricing below)
 ICostCalculator calc = CostCalculator.Default();
 var price = calc.CalculateCost("gpt-4o", inputTokens: 1_000, outputTokens: 500);
+```
+
+### Tiered Pricing
+
+Some providers charge more than the representative rate under a specific condition — a
+long-context surcharge past a prompt-length threshold (xAI), or a peak-hour surcharge during
+specific UTC windows (DeepSeek). `ModelInfo.PricingTiers` carries those bands; passing a
+`PricingTierContext` picks the right one automatically. Omitting the context, or a model with no
+tiers, reproduces the representative-rate calculation exactly — existing callers are unaffected.
+
+```csharp
+var model = ModelCatalog.FindModel("grok-4.6");
+
+// Below the tier's threshold — representative rate ($2.00 / $6.00 per 1M)
+var normal = model?.CalculateCost(50_000, 10_000, new PricingTierContext { ContextLengthTokens = 50_000 });
+
+// At/above 200K context — the long-context tier applies ($4.00 / $12.00 per 1M)
+var longContext = model?.CalculateCost(50_000, 10_000, new PricingTierContext { ContextLengthTokens = 250_000 });
+
+// DeepSeek: peak-hour tier, keyed off wall-clock UTC time instead of context length
+var deepseek = ModelCatalog.FindModel("deepseek-v4-pro");
+var peakCost = deepseek?.CalculateCost(50_000, 10_000,
+    new PricingTierContext { CallTimeUtc = TimeOnly.FromDateTime(DateTime.UtcNow) });
 ```
 
 ### Browsing the Catalog
@@ -135,12 +158,12 @@ var cost = calc.CalculateCost("my-fine-tuned-model", 10_000, 5_000);
 | `CacheWritePricePerMillion` | Prompt cache population price |
 | `ImageInputPrice` | Per-image input cost |
 | `AudioInputPricePerSecond` | Audio input cost per second |
+| `PricingTiers` | Non-representative price bands (context-length or time-of-day) — see [Tiered Pricing](#tiered-pricing) |
 
-> **Note — one rate per model**: these fields hold a provider's standard rate for a model. Where a
-> provider charges more above a prompt-length threshold (several now publish a second, higher tier
-> for long-context requests), the catalog carries the base tier only, so cost for a request past
-> that threshold is understated. Cache-write cost falls back to the input rate when a provider does
-> not price it separately, which matches how automatic prompt caching is normally billed.
+> **Note — these fields hold the representative rate**: the price outside of any
+> [pricing tier](#tiered-pricing) a model carries. Cache-write cost falls back to the input rate
+> when a provider does not price it separately, which matches how automatic prompt caching is
+> normally billed.
 
 ### Input Modalities
 | Property | Description |

@@ -47,6 +47,14 @@ public sealed class CostCalculator : ICostCalculator
     }
 
     /// <inheritdoc/>
+    public decimal? CalculateCost(string modelId, int inputTokens, int outputTokens, PricingTierContext context)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(inputTokens);
+        ArgumentOutOfRangeException.ThrowIfNegative(outputTokens);
+        return GetModel(modelId)?.CalculateCost(inputTokens, outputTokens, context);
+    }
+
+    /// <inheritdoc/>
     public ModelInfo? GetModel(string modelId)
     {
         if (string.IsNullOrWhiteSpace(modelId)) return null;

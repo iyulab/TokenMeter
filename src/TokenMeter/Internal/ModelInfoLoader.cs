@@ -85,6 +85,7 @@ internal static class ModelInfoLoader
         CacheWritePricePerMillion = j.CacheWritePricePerMillion,
         ImageInputPrice = j.ImageInputPrice,
         AudioInputPricePerSecond = j.AudioInputPricePerSecond,
+        PricingTiers = j.PricingTiers?.Select(ToPricingTier).ToList(),
         SupportsImageInput = j.SupportsImageInput,
         SupportsAudioInput = j.SupportsAudioInput,
         SupportsVideoInput = j.SupportsVideoInput,
@@ -108,6 +109,22 @@ internal static class ModelInfoLoader
 
     private static T ParseEnum<T>(string value, T fallback) where T : struct, Enum
         => Enum.TryParse<T>(value, ignoreCase: true, out var result) ? result : fallback;
+
+    private static PricingTier ToPricingTier(PricingTierJson j) => new()
+    {
+        Axis = ParseEnum(j.Axis, PricingTierAxis.ContextLength),
+        MinContextLengthTokens = j.MinContextLengthTokens,
+        WindowStartUtc = ParseTimeOfDay(j.WindowStartUtc),
+        WindowEndUtc = ParseTimeOfDay(j.WindowEndUtc),
+        InputPricePerMillion = j.InputPricePerMillion,
+        OutputPricePerMillion = j.OutputPricePerMillion,
+        CacheReadPricePerMillion = j.CacheReadPricePerMillion,
+    };
+
+    private static TimeOnly? ParseTimeOfDay(string? value) =>
+        TimeOnly.TryParse(value, System.Globalization.CultureInfo.InvariantCulture, out var parsed)
+            ? parsed
+            : null;
 }
 
 internal sealed record ProviderData(

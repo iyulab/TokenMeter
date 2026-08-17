@@ -63,6 +63,13 @@ public record ModelInfo
     /// <summary>Cost per second of audio input. <c>null</c> if not applicable or unknown.</summary>
     public decimal? AudioInputPricePerSecond { get; init; }
 
+    /// <summary>
+    /// Non-representative price bands (context-length or time-of-day) layered on top of the
+    /// fields above. <c>null</c> or empty means the provider bills a single flat rate.
+    /// See <see cref="CalculateCost(int, int, PricingTierContext)"/> to apply them.
+    /// </summary>
+    public IReadOnlyList<PricingTier>? PricingTiers { get; init; }
+
     // ── Input Modalities ──────────────────────────────────────────────────────
 
     /// <summary>Model accepts image data in requests.</summary>
@@ -193,5 +200,75 @@ public record ModelInfo
             * (CacheWritePricePerMillion ?? InputPricePerMillion.Value);
 
         return inputCost + outputCost + cacheReadCost + cacheWriteCost;
+    }
+
+    /// <summary>
+    /// Calculates cost for input/output token usage, applying a matching <see cref="PricingTiers"/>
+    /// entry (if any) instead of the representative rate. Supplying a <paramref name="context"/>
+    /// with both fields <c>null</c> — or a model with no <see cref="PricingTiers"/> — reproduces
+    /// <see cref="CalculateCost(int, int)"/> exactly.
+    /// </summary>
+    public decimal? CalculateCost(int inputTokens, int outputTokens, PricingTierContext context)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(inputTokens);
+        ArgumentOutOfRangeException.ThrowIfNegative(outputTokens);
+        if (InputPricePerMillion is null || OutputPricePerMillion is null) return null;
+
+        var tier = FindApplicableTier(context);
+        var inputPrice = tier?.InputPricePerMillion ?? InputPricePerMillion.Value;
+        var outputPrice = tier?.OutputPricePerMillion ?? OutputPricePerMillion.Value;
+
+        return (inputTokens / 1_000_000m) * inputPrice
+             + (outputTokens / 1_000_000m) * outputPrice;
+    }
+
+    /// <summary>
+    /// Selects the <see cref="PricingTiers"/> entry that applies to <paramref name="context"/>, if
+    /// any. A <see cref="PricingTierAxis.ContextLength"/> match picks the highest qualifying
+    /// threshold; a <see cref="PricingTierAxis.TimeOfDay"/> match picks the first window containing
+    /// <see cref="PricingTierContext.CallTimeUtc"/>. Returns <c>null</c> when no tier applies —
+    /// callers fall back to the representative rate.
+    /// </summary>
+    private PricingTier? FindApplicableTier(PricingTierContext context)
+    {
+        if (PricingTiers is null or []) return null;
+
+        PricingTier? bestByContext = null;
+        PricingTier? bestByTime = null;
+
+        foreach (var tier in PricingTiers)
+        {
+            switch (tier.Axis)
+            {
+                case PricingTierAxis.ContextLength:
+                    if (context.ContextLengthTokens is int len
+                        && tier.MinContextLengthTokens is int min
+                        && len >= min
+                        && (bestByContext?.MinContextLengthTokens is not int bestMin || min > bestMin))
+                    {
+                        bestByContext = tier;
+                    }
+                    break;
+
+                case PricingTierAxis.TimeOfDay:
+                    if (context.CallTimeUtc is TimeOnly time
+                        && tier.WindowStartUtc is TimeOnly start
+                        && tier.WindowEndUtc is TimeOnly end
+                        && time >= start && time < end)
+                    {
+                        bestByTime = tier;
+                    }
+                    break;
+            }
+        }
+
+        // A model billed on two independent axes at once (not seen in the catalog today): the
+        // higher rate is the conservative, never-understate choice.
+        if (bestByContext is not null && bestByTime is not null)
+        {
+            return bestByContext.InputPricePerMillion >= bestByTime.InputPricePerMillion
+                ? bestByContext : bestByTime;
+        }
+        return bestByContext ?? bestByTime;
     }
 }

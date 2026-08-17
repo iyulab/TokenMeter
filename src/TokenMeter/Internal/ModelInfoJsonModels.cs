@@ -61,6 +61,9 @@ internal sealed class ModelInfoJson
     [JsonPropertyName("audioInputPricePerSecond")]
     public decimal? AudioInputPricePerSecond { get; set; }
 
+    [JsonPropertyName("pricingTiers")]
+    public List<PricingTierJson>? PricingTiers { get; set; }
+
     // Input modalities
     [JsonPropertyName("supportsImageInput")]
     public bool SupportsImageInput { get; set; }
@@ -134,4 +137,31 @@ internal sealed class AliasJson
 
     [JsonPropertyName("type")]
     public string Type { get; set; } = "exact";
+}
+
+internal sealed class PricingTierJson
+{
+    /// <summary>"ContextLength" or "TimeOfDay" (see <see cref="TokenMeter.PricingTierAxis"/>).</summary>
+    [JsonPropertyName("axis")]
+    public string Axis { get; set; } = "";
+
+    [JsonPropertyName("minContextLengthTokens")]
+    public int? MinContextLengthTokens { get; set; }
+
+    /// <summary>"HH:mm" in UTC, e.g. "06:00".</summary>
+    [JsonPropertyName("windowStartUtc")]
+    public string? WindowStartUtc { get; set; }
+
+    /// <summary>"HH:mm" in UTC, exclusive.</summary>
+    [JsonPropertyName("windowEndUtc")]
+    public string? WindowEndUtc { get; set; }
+
+    [JsonPropertyName("inputPricePerMillion")]
+    public decimal InputPricePerMillion { get; set; }
+
+    [JsonPropertyName("outputPricePerMillion")]
+    public decimal? OutputPricePerMillion { get; set; }
+
+    [JsonPropertyName("cacheReadPricePerMillion")]
+    public decimal? CacheReadPricePerMillion { get; set; }
 }

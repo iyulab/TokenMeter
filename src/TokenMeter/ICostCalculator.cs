@@ -23,6 +23,14 @@ public interface ICostCalculator
         int cacheReadTokens, int cacheWriteTokens);
 
     /// <summary>
+    /// Calculates cost, applying a matching <see cref="ModelInfo.PricingTiers"/> entry (if any)
+    /// instead of the model's representative rate. A default <see cref="PricingTierContext"/>
+    /// reproduces <see cref="CalculateCost(string, int, int)"/> exactly.
+    /// Returns <c>null</c> if pricing is unavailable for the model.
+    /// </summary>
+    decimal? CalculateCost(string modelId, int inputTokens, int outputTokens, PricingTierContext context);
+
+    /// <summary>
     /// Retrieves the model metadata used for cost calculation.
     /// Applies alias matching. Returns <c>null</c> if not found.
     /// </summary>

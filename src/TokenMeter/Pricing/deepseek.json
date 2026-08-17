@@ -1,6 +1,6 @@
 {
   "provider": "DeepSeek",
-  "lastUpdated": "2026-08-16",
+  "lastUpdated": "2026-08-17",
   "models": [
     {
       "modelId": "deepseek-v4-pro",
@@ -12,6 +12,24 @@
       "inputPricePerMillion": 0.66,
       "outputPricePerMillion": 1.98,
       "cacheReadPricePerMillion": 0.022,
+      "pricingTiers": [
+        {
+          "axis": "TimeOfDay",
+          "windowStartUtc": "01:00",
+          "windowEndUtc": "04:00",
+          "inputPricePerMillion": 1.32,
+          "outputPricePerMillion": 3.96,
+          "cacheReadPricePerMillion": 0.044
+        },
+        {
+          "axis": "TimeOfDay",
+          "windowStartUtc": "06:00",
+          "windowEndUtc": "10:00",
+          "inputPricePerMillion": 1.32,
+          "outputPricePerMillion": 3.96,
+          "cacheReadPricePerMillion": 0.044
+        }
+      ],
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
       "supportsJsonMode": true,
@@ -36,6 +54,24 @@
       "inputPricePerMillion": 0.22,
       "outputPricePerMillion": 0.66,
       "cacheReadPricePerMillion": 0.007,
+      "pricingTiers": [
+        {
+          "axis": "TimeOfDay",
+          "windowStartUtc": "01:00",
+          "windowEndUtc": "04:00",
+          "inputPricePerMillion": 0.44,
+          "outputPricePerMillion": 1.32,
+          "cacheReadPricePerMillion": 0.014
+        },
+        {
+          "axis": "TimeOfDay",
+          "windowStartUtc": "06:00",
+          "windowEndUtc": "10:00",
+          "inputPricePerMillion": 0.44,
+          "outputPricePerMillion": 1.32,
+          "cacheReadPricePerMillion": 0.014
+        }
+      ],
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
       "supportsJsonMode": true,
