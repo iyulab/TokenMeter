@@ -108,6 +108,41 @@ following to `ModelCatalog.cs` (it simply delegates to `GetProvider`):
 public static IReadOnlyDictionary<string, ModelInfo> NewProvider => GetProvider("NewProvider");
 ```
 
+### 3.5. Recording a Tiered Rate (since v0.7.0)
+
+Some providers charge more than their representative rate under a specific condition — a
+long-context surcharge past a prompt-length threshold, or a peak-hour surcharge during specific
+UTC windows. If you find one during a refresh, don't just overwrite the representative fields —
+add a `pricingTiers` entry alongside them so both rates stay visible:
+
+```json
+{
+  "modelId": "example-model",
+  "inputPricePerMillion": 2.00,
+  "outputPricePerMillion": 6.00,
+  "pricingTiers": [
+    {
+      "axis": "ContextLength",
+      "minContextLengthTokens": 200000,
+      "inputPricePerMillion": 4.00,
+      "outputPricePerMillion": 12.00
+    }
+  ]
+}
+```
+
+- `axis` is `"ContextLength"` (gate on `minContextLengthTokens`) or `"TimeOfDay"` (gate on
+  `windowStartUtc`/`windowEndUtc`, `"HH:mm"` UTC). A provider with more than one time window (e.g.
+  two disjoint peak periods) gets one tier entry per window, all at the same price — not a single
+  entry with a list of windows.
+- The top-level `inputPricePerMillion`/etc. stay the **representative** (usually lowest/off-peak)
+  rate; `CalculateCost(inputTokens, outputTokens)` with no context keeps using them unchanged.
+  `CalculateCost(inputTokens, outputTokens, PricingTierContext)` applies a tier when the caller
+  supplies the matching context (`ContextLengthTokens`/`CallTimeUtc`).
+- A test enforces that no tier is priced below the representative rate
+  (`ModelsWithPricingTiers_TierRatesAreNeverCheaperThanRepresentative`) — verify your tier's price
+  against the vendor page before adding it, not just against the representative rate.
+
 ### 4. Bump `lastUpdated` in Every File You Touched
 
 Each provider JSON carries its own date at the top:
@@ -167,6 +202,8 @@ Sources:
 
 | Date | Version | Changes |
 |------|---------|---------|
+| 2026-08-17 | 0.7.0 | Added `PricingTiers` — non-representative price bands for context-length and time-of-day surcharges (see §3.5 above). xAI grok-4.6/4.5/4.3/4.20/build-0.1 get a ≥200K context-length tier; DeepSeek V4 Pro/Flash get two peak-hour time-of-day tiers (01:00–04:00 and 06:00–10:00 UTC). Both verified against official documentation, not estimated. `CalculateCost` gained a `PricingTierContext`-aware overload on both `ModelInfo` and `ICostCalculator`; the no-context path is unchanged. Sources: api-docs.deepseek.com/quick_start/pricing, docs.x.ai/docs/models |
+| 2026-08-16 | 0.6.5 | Bi-weekly refresh: DeepSeek's peak/off-peak split reflected (off-peak used as the single representative price at the time — superseded by the 0.7.0 tiers above), +xAI grok-4.6/grok-build-0.1, +Google gemini-3.7-flash, corrected gemini-3.6-flash (was carrying a post-introductory rate ahead of its effective date). Anthropic/Mistral/OpenAI/Perplexity re-verified, no changes needed. |
 | 2026-08-01 | 0.6.4 | Provider audit against published rate cards. What had gone stale was mostly the model list, not the prices: added Claude Opus 5 and Claude Mythos 5, Gemini 3.6 Flash and Gemini 3.5 Flash-Lite, DeepSeek V4 Flash and V4 Pro. Corrected two evergreen Mistral ids that had kept a superseded version's rate (`mistral-medium-latest` → Medium 3.5, `mistral-small-latest` → Small 4). Only the providers re-verified in this pass had their `lastUpdated` advanced; the rest keep their older date on purpose. Sources: platform.claude.com, ai.google.dev, api-docs.deepseek.com, mistral.ai/pricing/api |
 | 2026-08-01 | 0.6.3 | Reported: GPT-5.6 Luna and Terra repriced downward (Luna −80%, Terra −20%); Sol unchanged. Found while re-verifying the family: GPT-5.6 now charges a separate cache-write rate, and the reasoning series (o1, o3, o3-mini, o4-mini) plus Grok 4.x carried cached-read prices with prompt caching reported as unsupported. Freshness moved into the data — each provider file declares `lastUpdated` and `ModelCatalog.LastUpdated` is derived from it, replacing the hand-maintained constant. Sources: developers.openai.com/api/docs/pricing, docs.x.ai |
 | 2026-07-21 | 0.6.2 | Bi-weekly refresh: +GPT-5.6 Sol / Terra / Luna, GPT-5.5 (+Pro), GPT-5.4 Pro, Gemini 3.5 Flash, Grok 4.5. |
@@ -180,4 +217,4 @@ Sources:
 
 ---
 
-Last Updated: 2026-08-01
+Last Updated: 2026-08-17
