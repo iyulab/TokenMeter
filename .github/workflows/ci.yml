@@ -30,4 +30,4 @@ jobs:
       run: dotnet build TokenMeter.slnx --no-restore --configuration Release
 
     - name: Test
-      run: dotnet test TokenMeter.slnx --no-build --configuration Release --verbosity normal
+      run: dotnet test TokenMeter.slnx --no-build --configuration Release --verbosity normal --blame-hang --blame-hang-timeout 5m
