@@ -39,7 +39,8 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test --configuration Release --no-build --verbosity normal --blame-hang --blame-hang-timeout 5m
+        # --hangdump/--hangdump-timeout is MTP's equivalent of VSTest's --blame-hang.
+        run: dotnet test --configuration Release --no-build --verbosity normal --hangdump --hangdump-timeout 5m
 
       - name: Pack
         run: |
