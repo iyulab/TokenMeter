@@ -1,6 +1,6 @@
 {
   "provider": "Cohere",
-  "lastUpdated": "2026-05-19",
+  "lastUpdated": "2026-08-30",
   "models": [
     {
       "modelId": "command-a",
@@ -41,8 +41,8 @@
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 128000,
-      "inputPricePerMillion": 0.15,
-      "outputPricePerMillion": 0.60,
+      "inputPricePerMillion": 0.50,
+      "outputPricePerMillion": 1.50,
       "supportsToolCalling": true,
       "supportsStreaming": true,
       "supportsStopSequences": true,
