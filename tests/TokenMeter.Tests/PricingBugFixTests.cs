@@ -324,4 +324,75 @@ public class PricingBugFixTests
     }
 
     #endregion
+
+    #region Issue 8 — capability metadata audit (non-price fields)
+
+    // HD-40(f): auditing capability flags (not prices) on the 4 providers just re-verified for
+    // pricing (0.7.2) turned up gaps unrelated to price — modalities and context windows that
+    // were never filled in, or were carrying a stale/incorrect figure. Cross-referenced against
+    // each vendor's own published FAQ/spec via a third-party host page (same PriceSource.ThirdParty
+    // sourcing as the price fields on these models).
+
+    [Theory]
+    [InlineData("amazon-nova-lite", true, true, false)]   // image + video; no document input
+    [InlineData("amazon-nova-2-lite", true, true, true)]  // image + video + document (PDF)
+    public void AmazonNova_MultimodalFlags_MatchVendorFaq(
+        string modelId, bool image, bool video, bool document)
+    {
+        var model = ModelCatalog.FindModel(modelId);
+
+        Assert.NotNull(model);
+        Assert.Equal(image, model.SupportsImageInput);
+        Assert.Equal(video, model.SupportsVideoInput);
+        Assert.Equal(document, model.SupportsDocumentInput);
+    }
+
+    [Fact]
+    public void AzureO4Mini_CachingMirrorsOpenAIsO4Mini()
+    {
+        // azure-o4-mini carried no promptCachingMode/cacheReadPricePerMillion at all, unlike every
+        // other reasoning-tier Azure model — an omission, not a documented Azure limitation (Azure
+        // mirrors OpenAI's o4-mini, which does support automatic caching at a discounted rate).
+        var azure = ModelCatalog.FindModel("azure-o4-mini");
+        var openai = ModelCatalog.FindModel("o4-mini");
+
+        Assert.NotNull(azure);
+        Assert.NotNull(openai);
+        Assert.Equal(openai.PromptCachingMode, azure.PromptCachingMode);
+        Assert.Equal(openai.CacheReadPricePerMillion, azure.CacheReadPricePerMillion);
+    }
+
+    [Theory]
+    [InlineData("llama-4-maverick")]
+    [InlineData("llama-4-scout")]
+    public void MetaLlama4Family_SupportsImageInputAndStructuredOutput(string modelId)
+    {
+        // Both models accept text+image input and support response_format JSON-schema structured
+        // output per their vendor page — neither flag was set in the catalogue.
+        var model = ModelCatalog.FindModel(modelId);
+
+        Assert.NotNull(model);
+        Assert.True(model.SupportsImageInput);
+        Assert.True(model.SupportsStructuredOutput);
+    }
+
+    [Theory]
+    [InlineData("qwen-max", 262144, 65536)]
+    [InlineData("qwen-plus", 1000000, 32768)]
+    public void Qwen_ContextWindow_MatchesVendorSpec_NotAnOlderGenerationsLimit(
+        string modelId, int contextWindow, int maxOutputTokens)
+    {
+        // Both entries carried a flat 128K context window — Qwen3 Max's real window is 262,144 and
+        // Qwen Plus's is 1,000,000; the stale figure understated both by a wide margin (roughly
+        // 2x and 8x respectively). Structured output was also unset despite both models supporting
+        // response_format JSON-schema output.
+        var model = ModelCatalog.FindModel(modelId);
+
+        Assert.NotNull(model);
+        Assert.Equal(contextWindow, model.ContextWindow);
+        Assert.Equal(maxOutputTokens, model.MaxOutputTokens);
+        Assert.True(model.SupportsStructuredOutput);
+    }
+
+    #endregion
 }
