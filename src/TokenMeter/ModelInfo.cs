@@ -70,6 +70,11 @@ public record ModelInfo
     /// </summary>
     public IReadOnlyList<PricingTier>? PricingTiers { get; init; }
 
+    /// <summary>
+    /// How the price fields above were obtained. Defaults to <see cref="TokenMeter.PriceSource.Official"/>.
+    /// </summary>
+    public PriceSource PriceSource { get; init; }
+
     // ── Input Modalities ──────────────────────────────────────────────────────
 
     /// <summary>Model accepts image data in requests.</summary>

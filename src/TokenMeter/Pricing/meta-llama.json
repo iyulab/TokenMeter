@@ -1,6 +1,6 @@
 {
   "provider": "Meta Llama",
-  "lastUpdated": "2026-05-19",
+  "lastUpdated": "2026-08-31",
   "models": [
     {
       "modelId": "llama-4-maverick",
@@ -8,12 +8,13 @@
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 1000000,
-      "inputPricePerMillion": 0.22,
-      "outputPricePerMillion": 0.85,
+      "inputPricePerMillion": 0.20,
+      "outputPricePerMillion": 0.696,
       "supportsToolCalling": true,
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "llama-4-maverick", "type": "prefix" },
         { "pattern": "llama-4maverick", "type": "prefix" }
@@ -25,12 +26,13 @@
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 10000000,
-      "inputPricePerMillion": 0.15,
-      "outputPricePerMillion": 0.50,
+      "inputPricePerMillion": 0.10,
+      "outputPricePerMillion": 0.30,
       "supportsToolCalling": true,
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "llama-4-scout", "type": "prefix" },
         { "pattern": "llama-4scout", "type": "prefix" },

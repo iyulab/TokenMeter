@@ -1,6 +1,6 @@
 {
   "provider": "Azure",
-  "lastUpdated": "2026-05-19",
+  "lastUpdated": "2026-08-31",
   "models": [
     {
       "modelId": "azure-gpt-5",
@@ -10,7 +10,7 @@
       "contextWindow": 400000,
       "inputPricePerMillion": 1.25,
       "outputPricePerMillion": 10.00,
-      "cacheReadPricePerMillion": 0.625,
+      "cacheReadPricePerMillion": 0.125,
       "supportsImageInput": true,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
@@ -20,6 +20,7 @@
       "promptCachingMode": "Automatic",
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "azure-gpt-5-", "type": "prefix" },
         { "pattern": "azure-gpt-5", "type": "prefix" }
@@ -43,6 +44,7 @@
       "promptCachingMode": "Automatic",
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "azure-gpt-4o-mini", "type": "prefix" }
       ]
@@ -65,6 +67,7 @@
       "promptCachingMode": "Automatic",
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "azure-gpt-4o", "type": "prefix" }
       ]
@@ -85,6 +88,7 @@
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "azure-gpt-4-turbo", "type": "prefix" }
       ]
@@ -97,7 +101,7 @@
       "contextWindow": 1000000,
       "inputPricePerMillion": 0.10,
       "outputPricePerMillion": 0.40,
-      "cacheReadPricePerMillion": 0.05,
+      "cacheReadPricePerMillion": 0.025,
       "supportsImageInput": true,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
@@ -107,6 +111,7 @@
       "promptCachingMode": "Automatic",
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "azure-gpt-4.1-nano", "type": "prefix" }
       ]
@@ -119,7 +124,7 @@
       "contextWindow": 1000000,
       "inputPricePerMillion": 0.40,
       "outputPricePerMillion": 1.60,
-      "cacheReadPricePerMillion": 0.20,
+      "cacheReadPricePerMillion": 0.10,
       "supportsImageInput": true,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
@@ -129,6 +134,7 @@
       "promptCachingMode": "Automatic",
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "azure-gpt-4.1-mini", "type": "prefix" }
       ]
@@ -141,7 +147,7 @@
       "contextWindow": 1000000,
       "inputPricePerMillion": 2.00,
       "outputPricePerMillion": 8.00,
-      "cacheReadPricePerMillion": 1.00,
+      "cacheReadPricePerMillion": 0.50,
       "supportsImageInput": true,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
@@ -151,6 +157,7 @@
       "promptCachingMode": "Automatic",
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "azure-gpt-4.1", "type": "prefix" }
       ]
@@ -169,6 +176,7 @@
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "azure-gpt-4", "type": "prefix" }
       ]
@@ -187,6 +195,7 @@
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "azure-gpt-35", "type": "prefix" },
         { "pattern": "azure-gpt-3.5", "type": "prefix" }
@@ -210,6 +219,7 @@
       "thinkingFormat": "SeparateField",
       "thinkingFieldName": "reasoning_content",
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "azure-o3-pro", "type": "prefix" }
       ]
@@ -232,6 +242,7 @@
       "thinkingFormat": "SeparateField",
       "thinkingFieldName": "reasoning_content",
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "azure-o4-mini", "type": "prefix" }
       ]

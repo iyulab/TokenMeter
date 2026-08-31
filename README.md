@@ -236,6 +236,23 @@ provider's data can be considerably older than this value.
 > Treat catalog pricing as a good default for estimation and budgeting, and read authoritative
 > figures from your provider's billing data when they have to be exact.
 
+## Price Source
+
+```csharp
+var model = ModelCatalog.FindModel("qwen-max")!;
+Console.WriteLine(model.PriceSource); // ThirdParty
+```
+
+`ModelInfo.PriceSource` reports how a model's price fields were obtained:
+
+- `Official` (default) — verified directly against the vendor's own published rate card.
+- `ThirdParty` — the vendor's own rate card could not be read directly (a client-side-rendered
+  pricing page, a docs-only landing page, or no direct per-token price published at all), so the
+  figure was cross-referenced from a third-party aggregator or another vendor's official rate card
+  instead. Currently applies to **Amazon Nova**, **Azure**, **Meta Llama**, and **Qwen** — see
+  `docs/pricing-update-guide.md` Version History for the source used per provider. Treat these as
+  estimates for cost-sensitive accounting.
+
 ## Migration from 0.3.x
 
 The following APIs were removed in 0.4.0:

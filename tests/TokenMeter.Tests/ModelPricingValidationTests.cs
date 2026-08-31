@@ -107,6 +107,39 @@ public class ModelPricingValidationTests
 
     #endregion
 
+    #region Price Source — Official vs Third-Party
+
+    // These 4 providers' own pricing pages could not be fetched directly (client-side rendering,
+    // a docs landing page, or no official per-token price at all) — see docs/pricing-update-guide.md
+    // Version History 0.7.1/0.7.2. Their figures are cross-referenced from a third-party aggregator
+    // or another vendor's official rate card instead, so every model must carry the ThirdParty flag.
+    [Theory]
+    [InlineData("Amazon Nova")]
+    [InlineData("Azure")]
+    [InlineData("Meta Llama")]
+    [InlineData("Qwen")]
+    public void ThirdPartySourcedProviders_AllModelsFlagged(string providerName)
+    {
+        var models = ModelCatalog.GetByProvider(providerName).ToList();
+        Assert.NotEmpty(models);
+
+        Assert.All(models, m => Assert.Equal(PriceSource.ThirdParty, m.PriceSource));
+    }
+
+    [Theory]
+    [InlineData("OpenAI")]
+    [InlineData("Anthropic")]
+    [InlineData("Google")]
+    public void OfficiallySourcedProviders_AllModelsDefaultToOfficial(string providerName)
+    {
+        var models = ModelCatalog.GetByProvider(providerName).ToList();
+        Assert.NotEmpty(models);
+
+        Assert.All(models, m => Assert.Equal(PriceSource.Official, m.PriceSource));
+    }
+
+    #endregion
+
     #region ByProvider — Consistency
 
     [Fact]

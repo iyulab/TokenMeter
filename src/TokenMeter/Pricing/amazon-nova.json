@@ -1,6 +1,6 @@
 {
   "provider": "Amazon Nova",
-  "lastUpdated": "2026-05-19",
+  "lastUpdated": "2026-08-31",
   "models": [
     {
       "modelId": "amazon-nova-premier",
@@ -15,6 +15,7 @@
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "nova-premier", "type": "contains" }
       ]
@@ -32,6 +33,7 @@
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "nova-pro", "type": "contains" }
       ]
@@ -48,6 +50,7 @@
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "nova-lite", "type": "contains" }
       ]
@@ -64,6 +67,7 @@
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "nova-micro", "type": "contains" }
       ]
@@ -80,6 +84,7 @@
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "nova-2-lite", "type": "contains" }
       ]

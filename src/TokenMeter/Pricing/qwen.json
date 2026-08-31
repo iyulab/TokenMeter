@@ -1,6 +1,6 @@
 {
   "provider": "Qwen",
-  "lastUpdated": "2026-05-19",
+  "lastUpdated": "2026-08-31",
   "models": [
     {
       "modelId": "qwen-max",
@@ -8,14 +8,15 @@
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 128000,
-      "inputPricePerMillion": 1.20,
-      "outputPricePerMillion": 6.00,
+      "inputPricePerMillion": 0.78,
+      "outputPricePerMillion": 3.90,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
       "supportsJsonMode": true,
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "qwen-max", "type": "prefix" },
         { "pattern": "qwen3-max", "type": "prefix" }
@@ -27,14 +28,15 @@
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 128000,
-      "inputPricePerMillion": 0.20,
-      "outputPricePerMillion": 1.00,
+      "inputPricePerMillion": 0.26,
+      "outputPricePerMillion": 0.78,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
       "supportsJsonMode": true,
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "qwen-plus", "type": "prefix" },
         { "pattern": "qwen3-plus", "type": "prefix" }

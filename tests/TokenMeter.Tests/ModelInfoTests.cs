@@ -19,6 +19,7 @@ public class ModelInfoTests
         Assert.Equal(ThinkingFormat.None, info.ThinkingFormat);
         Assert.Equal(ToolCallingFormat.OpenAI, info.ToolCallingFormat);
         Assert.Equal(PromptCachingMode.None, info.PromptCachingMode);
+        Assert.Equal(PriceSource.Official, info.PriceSource);
 
         Assert.Null(info.Provider);
         Assert.Null(info.DisplayName);

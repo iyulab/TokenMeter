@@ -86,6 +86,7 @@ internal static class ModelInfoLoader
         ImageInputPrice = j.ImageInputPrice,
         AudioInputPricePerSecond = j.AudioInputPricePerSecond,
         PricingTiers = j.PricingTiers?.Select(ToPricingTier).ToList(),
+        PriceSource = ParseEnum<PriceSource>(j.PriceSource, PriceSource.Official),
         SupportsImageInput = j.SupportsImageInput,
         SupportsAudioInput = j.SupportsAudioInput,
         SupportsVideoInput = j.SupportsVideoInput,

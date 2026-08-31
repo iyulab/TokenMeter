@@ -64,6 +64,9 @@ internal sealed class ModelInfoJson
     [JsonPropertyName("pricingTiers")]
     public List<PricingTierJson>? PricingTiers { get; set; }
 
+    [JsonPropertyName("priceSource")]
+    public string PriceSource { get; set; } = "Official";
+
     // Input modalities
     [JsonPropertyName("supportsImageInput")]
     public bool SupportsImageInput { get; set; }

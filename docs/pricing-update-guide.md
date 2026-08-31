@@ -143,6 +143,32 @@ add a `pricingTiers` entry alongside them so both rates stay visible:
   (`ModelsWithPricingTiers_TierRatesAreNeverCheaperThanRepresentative`) — verify your tier's price
   against the vendor page before adding it, not just against the representative rate.
 
+### 3.6. Recording a Third-Party-Sourced Price (since v0.7.2)
+
+Some providers' own pricing pages cannot be read directly — client-side rendering, a docs-only
+landing page with no rate table, or no direct per-token price published at all (a model only
+reachable through third-party hosts). When that happens, don't leave the entry stale indefinitely
+waiting on a page that may never become fetchable: cross-reference the figure from a reputable
+third-party aggregator (or, when the model is a rebrand of another vendor's own model under a
+documented price-parity policy, from that vendor's own official file) and mark it explicitly:
+
+```json
+{
+  "modelId": "example-model",
+  "inputPricePerMillion": 0.78,
+  "outputPricePerMillion": 3.90,
+  "priceSource": "ThirdParty"
+}
+```
+
+- Omit `priceSource` (or set it to `"Official"`, the default) once you've verified a price directly
+  against the vendor's own page — flip it back the moment that becomes possible again.
+  `ModelInfo.PriceSource` surfaces this to consumers (see README.md "Price Source").
+- Record which aggregator/vendor page you cross-referenced in the commit message and the Version
+  History entry below, the same as any other source.
+- A test (`ModelPricingValidationTests.ThirdPartySourcedProviders_AllModelsFlagged`) pins which
+  providers currently carry this flag — update it if you add or remove a provider from the list.
+
 ### 4. Bump `lastUpdated` in Every File You Touched
 
 Each provider JSON carries its own date at the top:
@@ -202,6 +228,7 @@ Sources:
 
 | Date | Version | Changes |
 |------|---------|---------|
+| 2026-08-31 | 0.7.2 | Owner-approved resolution of the 4 providers 0.7.1 left stale (Amazon Nova, Azure, Meta Llama, Qwen — official pages unfetchable): added `ModelInfo.PriceSource` (`Official`/`ThirdParty`) and flagged all 4 providers' models `ThirdParty`. Cross-referenced via OpenRouter (a third-party aggregator) for Amazon Nova (`amazon/nova-*-v1` — confirmed all 5 models' input/output rates unchanged from the prior entry, so no price correction needed there) and for Qwen/Meta Llama (found real drift: `qwen-max`→`qwen3-max` $1.20/$6.00 → $0.78/$3.90, `qwen-plus`→`qwen3-plus` $0.20/$1.00 → $0.26/$0.78, `llama-4-maverick` $0.22/$0.85 → $0.20/$0.696, `llama-4-scout` $0.15/$0.50 → $0.10/$0.30). Azure's input/output rates were cross-checked against this repo's own OpenAI file instead (Azure OpenAI mirrors OpenAI's list price under Microsoft's documented price-parity policy) and found correct — but its `cacheReadPricePerMillion` values turned out to be a uniform "50% of input" guess rather than each model's actual published discount tier (OpenAI's real ratios range 10%–50% by generation), overstating the cached-read cost 2x–5x on `azure-gpt-5`/`azure-gpt-4.1`/`azure-gpt-4.1-mini`/`azure-gpt-4.1-nano` — corrected to match OpenAI's real per-model rates (same defect class as the 0.6.1 cache-ratio fix, this time in Azure's file rather than OpenAI's). Sources: openrouter.ai/amazon/nova-{premier,pro,lite,micro,2-lite}-v1, openrouter.ai/qwen/qwen3-max, openrouter.ai/qwen/qwen-plus, openrouter.ai/meta-llama/llama-4-{maverick,scout}, this repo's openai.json (`lastUpdated: 2026-08-16`) |
 | 2026-08-30 | 0.7.1 | Waiver-driven refresh attempt on the 5 providers stale since 2026-05-19 (Amazon Nova, Azure, Cohere, Meta Llama, Qwen — flagged by `check-catalog-staleness.ps1`, waiver expires 2026-10-01). Only Cohere's official pricing page was directly fetchable: `command-r` was $0.15/$0.60, official page now shows $0.50/$1.50 (3x re-fetched, consistent) — corrected. `command-a`/`command-r7b` no longer appear on the page at all (not confirmed deprecated — TokenMeter has no schema field for that yet, tracked as item (e) in the umbrella's TokenMeter backlog) — left unchanged rather than guessed at removal. Amazon Nova (aws.amazon.com/bedrock/pricing, aws.amazon.com/nova/pricing) and Azure (azure.microsoft.com/.../openai-service) render their tables client-side — fetched content is placeholder dashes only. Meta Llama's official page (llama.meta.com) does not publish direct API token pricing at all (Meta doesn't host it; our catalog's numbers must originate from a specific inference host, unidentified). Qwen's page (help.aliyun.com/zh/model-studio) is a docs landing page, not the pricing table. These 4 remain stale pending either a different data source or manual verification. Sources: cohere.com/pricing |
 | 2026-08-17 | 0.7.0 | Added `PricingTiers` — non-representative price bands for context-length and time-of-day surcharges (see §3.5 above). xAI grok-4.6/4.5/4.3/4.20/build-0.1 get a ≥200K context-length tier; DeepSeek V4 Pro/Flash get two peak-hour time-of-day tiers (01:00–04:00 and 06:00–10:00 UTC). Both verified against official documentation, not estimated. `CalculateCost` gained a `PricingTierContext`-aware overload on both `ModelInfo` and `ICostCalculator`; the no-context path is unchanged. Sources: api-docs.deepseek.com/quick_start/pricing, docs.x.ai/docs/models |
 | 2026-08-16 | 0.6.5 | Bi-weekly refresh: DeepSeek's peak/off-peak split reflected (off-peak used as the single representative price at the time — superseded by the 0.7.0 tiers above), +xAI grok-4.6/grok-build-0.1, +Google gemini-3.7-flash, corrected gemini-3.6-flash (was carrying a post-introductory rate ahead of its effective date). Anthropic/Mistral/OpenAI/Perplexity re-verified, no changes needed. |
@@ -218,4 +245,4 @@ Sources:
 
 ---
 
-Last Updated: 2026-08-17
+Last Updated: 2026-08-31
