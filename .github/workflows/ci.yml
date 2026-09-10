@@ -31,4 +31,4 @@ jobs:
 
     - name: Test
       # --hangdump/--hangdump-timeout is MTP's equivalent of VSTest's --blame-hang.
-      run: dotnet test TokenMeter.slnx --no-build --configuration Release --verbosity normal --hangdump --hangdump-timeout 5m
+      run: dotnet test --solution TokenMeter.slnx --no-build --configuration Release --verbosity normal --hangdump --hangdump-timeout 5m
