@@ -1,7 +1,65 @@
 {
   "provider": "Anthropic",
-  "lastUpdated": "2026-08-16",
+  "lastUpdated": "2026-09-15",
   "models": [
+    {
+      "modelId": "claude-fable-5-1",
+      "displayName": "Claude Fable 5.1",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 10.0,
+      "outputPricePerMillion": 50.0,
+      "cacheReadPricePerMillion": 0.25,
+      "cacheWritePricePerMillion": 12.5,
+      "supportsImageInput": true,
+      "supportsDocumentInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Explicit",
+      "supportsStopSequences": true,
+      "supportsMcpToolUse": true,
+      "toolCallingFormat": "Anthropic",
+      "aliases": [
+        {
+          "pattern": "claude-fable-5-1",
+          "type": "contains"
+        }
+      ]
+    },
+    {
+      "modelId": "claude-mythos-5-1",
+      "displayName": "Claude Mythos 5.1",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 10.0,
+      "outputPricePerMillion": 50.0,
+      "cacheReadPricePerMillion": 0.25,
+      "cacheWritePricePerMillion": 12.5,
+      "supportsImageInput": true,
+      "supportsDocumentInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Explicit",
+      "supportsStopSequences": true,
+      "supportsMcpToolUse": true,
+      "toolCallingFormat": "Anthropic",
+      "aliases": [
+        {
+          "pattern": "claude-mythos-5-1",
+          "type": "contains"
+        }
+      ]
+    },
     {
       "modelId": "claude-fable-5",
       "displayName": "Claude Fable 5",

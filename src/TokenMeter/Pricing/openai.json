@@ -1,16 +1,51 @@
 {
   "provider": "OpenAI",
-  "lastUpdated": "2026-08-16",
+  "lastUpdated": "2026-09-15",
   "models": [
+    {
+      "modelId": "gpt-6-astra",
+      "displayName": "GPT-6 Astra",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 10.00,
+      "outputPricePerMillion": 50.00,
+      "cacheReadPricePerMillion": 1.00,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 20.00,
+          "outputPricePerMillion": 75.00,
+          "cacheReadPricePerMillion": 2.00
+        }
+      ],
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        {
+          "pattern": "gpt-6-astra",
+          "type": "prefix"
+        }
+      ]
+    },
     {
       "modelId": "gpt-5.6-sol",
       "displayName": "GPT-5.6 Sol",
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 1050000,
-      "inputPricePerMillion": 5.00,
-      "outputPricePerMillion": 30.00,
-      "cacheReadPricePerMillion": 0.50,
+      "inputPricePerMillion": 4.00,
+      "outputPricePerMillion": 20.00,
+      "cacheReadPricePerMillion": 0.40,
       "cacheWritePricePerMillion": 6.25,
       "supportsImageInput": true,
       "supportsToolCalling": true,

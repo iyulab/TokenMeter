@@ -150,7 +150,7 @@ public class PricingBugFixTests
     [Theory]
     [InlineData("gpt-5.6-luna", 0.20, 1.20, 0.02)]
     [InlineData("gpt-5.6-terra", 2.00, 12.00, 0.20)]
-    [InlineData("gpt-5.6-sol", 5.00, 30.00, 0.50)]
+    [InlineData("gpt-5.6-sol", 4.00, 20.00, 0.40)]
     public void Gpt56_Tiers_CarryCurrentPublishedRates(
         string modelId, decimal input, decimal output, decimal cacheRead)
     {
@@ -191,6 +191,68 @@ public class PricingBugFixTests
         Assert.True(mid.InputPricePerMillion < large.InputPricePerMillion);
         Assert.True(small.OutputPricePerMillion < mid.OutputPricePerMillion);
         Assert.True(mid.OutputPricePerMillion < large.OutputPricePerMillion);
+    }
+
+    #endregion
+
+    #region Issue 7 — 2026-09 generations (catalogued 2026-09-15 from the vendor rate cards)
+
+    // Three vendors shipped a new generation in the first week of September 2026 while every
+    // provider file was inside the 30-day freshness window, so the scheduled staleness job stayed
+    // green: an age check cannot see an absent model. These cases pin the new rows and the one
+    // repricing found on the same read (GPT-5.6 Sol, promotional through at least 2026-11-21).
+    // Claude 5.1's cache read is 0.025x base input (the 4.x/5.0 rule is 0.1x) — pinned so a
+    // "fix the family" edit does not quietly restore the old multiplier.
+
+    [Theory]
+    [InlineData("claude-fable-5-1", 10.00, 50.00, 0.25)]
+    [InlineData("claude-mythos-5-1", 10.00, 50.00, 0.25)]
+    [InlineData("gemini-3.8-flash", 0.75, 3.75, 0.075)]
+    [InlineData("gpt-6-astra", 10.00, 50.00, 1.00)]
+    public void September2026_Generations_CarryPublishedRates(
+        string modelId, decimal input, decimal output, decimal cacheRead)
+    {
+        var model = ModelCatalog.FindModel(modelId);
+
+        Assert.NotNull(model);
+        Assert.Equal(modelId, model.ModelId);
+        Assert.Equal(input, model.InputPricePerMillion);
+        Assert.Equal(output, model.OutputPricePerMillion);
+        Assert.Equal(cacheRead, model.CacheReadPricePerMillion);
+    }
+
+    [Fact]
+    public void ClaudeFable51_DatedSnapshot_ResolvesToThe51Row_NotThe50Row()
+    {
+        // "claude-fable-5" is a contains-alias of the 5.0 row and also a substring of every 5.1 id;
+        // the longest contains-pattern wins, so a dated 5.1 snapshot must land on the 5.1 row.
+        var match = ModelCatalog.FindModelMatch("claude-fable-5-1-20260901");
+
+        Assert.NotNull(match);
+        Assert.Equal("claude-fable-5-1", match.Model.ModelId);
+    }
+
+    [Fact]
+    public void Gpt6Astra_LongContextTier_AppliesAbove272K()
+    {
+        // developers.openai.com model page: "Prompts with more than 272K input tokens are priced at
+        // 2x input and cache rates and 1.5x output for the full request."
+        var model = ModelCatalog.FindModel("gpt-6-astra");
+
+        Assert.NotNull(model);
+        Assert.Equal(60.00m, model.CalculateCost(1_000_000, 1_000_000, new PricingTierContext { ContextLengthTokens = 200_000 }));
+        Assert.Equal(95.00m, model.CalculateCost(1_000_000, 1_000_000, new PricingTierContext { ContextLengthTokens = 300_000 }));
+    }
+
+    [Fact]
+    public void Gemini38Flash_CostAtIntroductoryRate()
+    {
+        var model = ModelCatalog.FindModel("gemini-3.8-flash");
+
+        Assert.NotNull(model);
+        // The vendor states this rate doubles on 2027-01-01 — scripts/check-catalog-staleness.ps1
+        // ($announced) is what reminds the maintainer; this case pins today's row.
+        Assert.Equal(4.50m, model.CalculateCost(1_000_000, 1_000_000));
     }
 
     #endregion
