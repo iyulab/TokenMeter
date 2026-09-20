@@ -11,5 +11,6 @@
     <PackageVersion Include="xunit.v3" Version="4.0.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.0" />
     <PackageVersion Include="Microsoft.Testing.Extensions.HangDump" Version="2.3.3" />
+    <PackageVersion Include="Iyu.Conventions.Testing" Version="0.1.0" />
   </ItemGroup>
 </Project>
