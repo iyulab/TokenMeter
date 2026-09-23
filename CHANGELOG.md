@@ -21,11 +21,14 @@ breaking changes, and each one is marked **Breaking** with a migration note.
 
 ### Changed
 - **Ids a vendor now serves as another model resolve to that model and its price.** xAI answers
-  `grok-4`, `grok-4-0709`, `grok-3`, `grok-3-mini`, `grok-4-fast*` and `grok-4-1-fast*` as Grok 4.3
-  ($1.25 / $2.50; the old rows said $3 / $15 for `grok-4` and `grok-3`), and `grok-code-fast-1` as
-  Grok Build 0.1. DeepSeek bills `deepseek-v4-flash` as V4.1 Flash. Those rows are gone; looking the ids
-  up returns the serving model. `grok-4-fast-thinking` and `grok-4.1-fast-thinking` no longer exist and
-  were removed. Ids that can no longer be called at all keep their last row.
+  `grok-4`, `grok-4-0709`, `grok-4-latest`, every `grok-3*` id, `grok-4-fast` (`-reasoning` /
+  `-non-reasoning`) and `grok-4-1-fast*` as Grok 4.3 ($1.25 / $2.50; the old rows said $3 / $15 for
+  `grok-4` and `grok-3`), and `grok-code-fast-1` as Grok Build 0.1. DeepSeek bills `deepseek-v4-flash` as
+  V4.1 Flash. Those rows are gone; looking the ids up returns the serving model. Ids that can no longer
+  be called at all keep their last row (the catalog also prices past usage).
+- **The dotted `grok-4.1-fast*` rows and `grok-4-fast-thinking` are gone and do not resolve.** xAI answers
+  those names with not-found (its ids are hyphenated, `grok-4-1-fast-*`), so no model was ever priced
+  under them.
 - Context windows corrected to the vendor pages: Mistral Medium 3.5 and Small 4 (256K), Codestral (128K),
   Devstral (256K), Magistral (128K), Sonar Deep Research (128K). `devstral-latest` now resolves to Devstral 2.
 

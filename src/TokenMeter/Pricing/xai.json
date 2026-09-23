@@ -161,9 +161,11 @@
       "aliases": [
         { "pattern": "grok-4", "type": "exact" },
         { "pattern": "grok-4-0709", "type": "exact" },
-        { "pattern": "grok-3", "type": "exact" },
-        { "pattern": "grok-3-mini", "type": "exact" },
-        { "pattern": "grok-4-fast", "type": "prefix" },
+        { "pattern": "grok-4-latest", "type": "exact" },
+        { "pattern": "grok-3", "type": "prefix" },
+        { "pattern": "grok-4-fast", "type": "exact" },
+        { "pattern": "grok-4-fast-reasoning", "type": "exact" },
+        { "pattern": "grok-4-fast-non-reasoning", "type": "exact" },
         { "pattern": "grok-4-1-fast", "type": "prefix" },
         { "pattern": "grok-4.3", "type": "prefix" },
         { "pattern": "grok-4-3", "type": "prefix" }

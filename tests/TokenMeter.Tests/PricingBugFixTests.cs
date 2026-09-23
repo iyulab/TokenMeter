@@ -340,6 +340,9 @@ public class PricingBugFixTests
     [InlineData("grok-4-0709", "grok-4.3")]
     [InlineData("grok-3", "grok-4.3")]
     [InlineData("grok-3-mini", "grok-4.3")]
+    [InlineData("grok-3-mini-fast", "grok-4.3")]
+    [InlineData("grok-3-latest", "grok-4.3")]
+    [InlineData("grok-4-latest", "grok-4.3")]
     [InlineData("grok-4-fast-reasoning", "grok-4.3")]
     [InlineData("grok-4-1-fast-non-reasoning", "grok-4.3")]
     [InlineData("grok-code-fast-1", "grok-build-0.1")]
@@ -352,6 +355,16 @@ public class PricingBugFixTests
 
         Assert.NotNull(match);
         Assert.Equal(servedAs, match.Model.ModelId);
+    }
+
+    // xAI answers these with not-found (its ids are hyphenated: grok-4-1-fast-*), so there is no
+    // model behind them to price — they must not quietly borrow a neighbour's row.
+    [Theory]
+    [InlineData("grok-4-fast-thinking")]
+    [InlineData("grok-4.1-fast-thinking")]
+    public void XaiIdsThatDoNotExist_DoNotResolve(string requested)
+    {
+        Assert.Null(ModelCatalog.FindModelMatch(requested));
     }
 
     // "claude-opus-5" is a contains alias, so every id that embeds "claude-opus-5-5" (platform
