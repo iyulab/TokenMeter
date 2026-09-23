@@ -4,6 +4,28 @@ All notable changes to this project are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/); while the major version is 0, a minor release may contain
 breaking changes, and each one is marked **Breaking** with a migration note.
 
+## [0.7.7] - 2026-09-23
+
+### Changed
+- **Amazon Nova, Azure and Qwen prices now come from the vendors' own price lists**, and their rows are flagged
+  `PriceSource.Official` (they were `ThirdParty`). Sources: the AWS Price List API (Bedrock offer), the Azure Retail
+  Prices API (Foundry Models, Global Standard meters) and the Model Studio pricing page (International).
+- **Qwen corrected.** `qwen-max` (now the legacy Qwen Max) is $1.60 / $6.40 with a 128K context; it was $0.78 /
+  $3.90 and 262K. `qwen-plus` is $0.40 / $1.20 up to 256K prompt tokens and $1.20 / $3.60 above (it was $0.26 /
+  $0.78). `qwen3-max*` ids no longer fall under `qwen-max`: they have their own row.
+- **Meta Llama: Maverick output is $0.80** (was $0.696, from no traceable source). Meta hosts no token API; the rows
+  follow DeepInfra's list price and stay flagged `ThirdParty`.
+- **Cohere: Command A is flagged `ThirdParty`.** Cohere's pricing page no longer lists it.
+- Azure `gpt-35-turbo` is $0.55 / $1.65 (regional meter, it has no Global Standard price).
+
+### Added
+- Qwen3 Max (with its 32K and 128K prompt-length bands), Qwen3.8 Max, Qwen3.7 Plus (256K band), Qwen3.8 Flash,
+  Qwen Flash (256K band).
+- Azure GPT-5 mini, GPT-5 nano, GPT-5 pro, GPT-5.1, GPT-5.2.
+- Cohere `command-r-08-2024` ($0.15 / $0.60) and `command-r-plus-08-2024` ($2.50 / $10.00). The `command-r` and
+  `command-r-plus` ids, retired on 2025-09-15, keep their last rows for past usage.
+- Cache-read rates for every Amazon Nova model and for Azure GPT-4o, GPT-4.1 (all three sizes) and o4-mini.
+
 ## [0.7.6] - 2026-09-23
 
 ### Added

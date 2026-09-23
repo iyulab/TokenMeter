@@ -1,6 +1,6 @@
 {
   "provider": "Azure",
-  "lastUpdated": "2026-08-31",
+  "lastUpdated": "2026-09-23",
   "models": [
     {
       "modelId": "azure-gpt-5",
@@ -20,10 +20,123 @@
       "promptCachingMode": "Automatic",
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
-      "priceSource": "ThirdParty",
+      "priceSource": "Official",
       "aliases": [
         { "pattern": "azure-gpt-5-", "type": "prefix" },
         { "pattern": "azure-gpt-5", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "azure-gpt-5-mini",
+      "displayName": "Azure GPT-5 mini",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 400000,
+      "inputPricePerMillion": 0.25,
+      "outputPricePerMillion": 2.00,
+      "cacheReadPricePerMillion": 0.025,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "priceSource": "Official",
+      "aliases": [
+        { "pattern": "azure-gpt-5-mini", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "azure-gpt-5-nano",
+      "displayName": "Azure GPT-5 nano",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 400000,
+      "inputPricePerMillion": 0.05,
+      "outputPricePerMillion": 0.40,
+      "cacheReadPricePerMillion": 0.005,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "priceSource": "Official",
+      "aliases": [
+        { "pattern": "azure-gpt-5-nano", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "azure-gpt-5-pro",
+      "displayName": "Azure GPT-5 pro",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 400000,
+      "inputPricePerMillion": 15.00,
+      "outputPricePerMillion": 120.00,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "priceSource": "Official",
+      "aliases": [
+        { "pattern": "azure-gpt-5-pro", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "azure-gpt-5.1",
+      "displayName": "Azure GPT-5.1",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 400000,
+      "inputPricePerMillion": 1.25,
+      "outputPricePerMillion": 10.00,
+      "cacheReadPricePerMillion": 0.125,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "priceSource": "Official",
+      "aliases": [
+        { "pattern": "azure-gpt-5.1", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "azure-gpt-5.2",
+      "displayName": "Azure GPT-5.2",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 400000,
+      "inputPricePerMillion": 1.75,
+      "outputPricePerMillion": 14.00,
+      "cacheReadPricePerMillion": 0.175,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "priceSource": "Official",
+      "aliases": [
+        { "pattern": "azure-gpt-5.2", "type": "prefix" }
       ]
     },
     {
@@ -44,7 +157,7 @@
       "promptCachingMode": "Automatic",
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
-      "priceSource": "ThirdParty",
+      "priceSource": "Official",
       "aliases": [
         { "pattern": "azure-gpt-4o-mini", "type": "prefix" }
       ]
@@ -67,7 +180,7 @@
       "promptCachingMode": "Automatic",
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
-      "priceSource": "ThirdParty",
+      "priceSource": "Official",
       "aliases": [
         { "pattern": "azure-gpt-4o", "type": "prefix" }
       ]
@@ -88,7 +201,7 @@
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
-      "priceSource": "ThirdParty",
+      "priceSource": "Official",
       "aliases": [
         { "pattern": "azure-gpt-4-turbo", "type": "prefix" }
       ]
@@ -111,7 +224,7 @@
       "promptCachingMode": "Automatic",
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
-      "priceSource": "ThirdParty",
+      "priceSource": "Official",
       "aliases": [
         { "pattern": "azure-gpt-4.1-nano", "type": "prefix" }
       ]
@@ -134,7 +247,7 @@
       "promptCachingMode": "Automatic",
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
-      "priceSource": "ThirdParty",
+      "priceSource": "Official",
       "aliases": [
         { "pattern": "azure-gpt-4.1-mini", "type": "prefix" }
       ]
@@ -157,7 +270,7 @@
       "promptCachingMode": "Automatic",
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
-      "priceSource": "ThirdParty",
+      "priceSource": "Official",
       "aliases": [
         { "pattern": "azure-gpt-4.1", "type": "prefix" }
       ]
@@ -176,7 +289,7 @@
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
-      "priceSource": "ThirdParty",
+      "priceSource": "Official",
       "aliases": [
         { "pattern": "azure-gpt-4", "type": "prefix" }
       ]
@@ -187,15 +300,15 @@
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 16385,
-      "inputPricePerMillion": 0.50,
-      "outputPricePerMillion": 1.50,
+      "inputPricePerMillion": 0.55,
+      "outputPricePerMillion": 1.65,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
       "supportsJsonMode": true,
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
-      "priceSource": "ThirdParty",
+      "priceSource": "Official",
       "aliases": [
         { "pattern": "azure-gpt-35", "type": "prefix" },
         { "pattern": "azure-gpt-3.5", "type": "prefix" }
@@ -219,7 +332,7 @@
       "thinkingFormat": "SeparateField",
       "thinkingFieldName": "reasoning_content",
       "toolCallingFormat": "OpenAI",
-      "priceSource": "ThirdParty",
+      "priceSource": "Official",
       "aliases": [
         { "pattern": "azure-o3-pro", "type": "prefix" }
       ]
@@ -244,7 +357,7 @@
       "thinkingFormat": "SeparateField",
       "thinkingFieldName": "reasoning_content",
       "toolCallingFormat": "OpenAI",
-      "priceSource": "ThirdParty",
+      "priceSource": "Official",
       "aliases": [
         { "pattern": "azure-o4-mini", "type": "prefix" }
       ]

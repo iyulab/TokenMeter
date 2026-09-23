@@ -1,6 +1,6 @@
 {
   "provider": "Meta Llama",
-  "lastUpdated": "2026-08-31",
+  "lastUpdated": "2026-09-23",
   "models": [
     {
       "modelId": "llama-4-maverick",
@@ -9,7 +9,7 @@
       "isInstructTuned": true,
       "contextWindow": 1000000,
       "inputPricePerMillion": 0.20,
-      "outputPricePerMillion": 0.696,
+      "outputPricePerMillion": 0.80,
       "supportsImageInput": true,
       "supportsToolCalling": true,
       "supportsStructuredOutput": true,

@@ -1,6 +1,6 @@
 {
   "provider": "Cohere",
-  "lastUpdated": "2026-08-30",
+  "lastUpdated": "2026-09-23",
   "models": [
     {
       "modelId": "command-a",
@@ -14,6 +14,7 @@
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
+      "priceSource": "ThirdParty",
       "aliases": [
         { "pattern": "command-a", "type": "prefix" }
       ]
@@ -49,6 +50,38 @@
       "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "command-r", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "command-r-08-2024",
+      "displayName": "Command R (08-2024)",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 128000,
+      "inputPricePerMillion": 0.15,
+      "outputPricePerMillion": 0.60,
+      "supportsToolCalling": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "command-r-08-2024", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "command-r-plus-08-2024",
+      "displayName": "Command R+ (08-2024)",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 128000,
+      "inputPricePerMillion": 2.50,
+      "outputPricePerMillion": 10.00,
+      "supportsToolCalling": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "command-r-plus-08-2024", "type": "prefix" }
       ]
     },
     {

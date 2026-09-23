@@ -109,15 +109,12 @@ public class ModelPricingValidationTests
 
     #region Price Source — Official vs Third-Party
 
-    // These 4 providers' own pricing pages could not be fetched directly (client-side rendering,
-    // a docs landing page, or no official per-token price at all) — see docs/pricing-update-guide.md
-    // Version History 0.7.1/0.7.2. Their figures are cross-referenced from a third-party aggregator
-    // or another vendor's official rate card instead, so every model must carry the ThirdParty flag.
+    // Meta publishes no per-token price for Llama (it does not host it); the figures come from an
+    // inference host (DeepInfra, 0.7.7), so every model must carry the ThirdParty flag. Amazon Nova,
+    // Azure and Qwen were on this list until 0.7.7, when their official machine-readable price lists
+    // (AWS Price List API, Azure Retail Prices API, Model Studio pricing page) were read directly.
     [Theory]
-    [InlineData("Amazon Nova")]
-    [InlineData("Azure")]
     [InlineData("Meta Llama")]
-    [InlineData("Qwen")]
     public void ThirdPartySourcedProviders_AllModelsFlagged(string providerName)
     {
         var models = ModelCatalog.GetByProvider(providerName).ToList();

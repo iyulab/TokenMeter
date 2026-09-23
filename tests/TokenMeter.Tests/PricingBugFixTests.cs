@@ -495,11 +495,12 @@ public class PricingBugFixTests
     }
 
     [Theory]
-    [InlineData("qwen-max", 262144, 65536)]
+    [InlineData("qwen-max", 128000, 65536)]
     [InlineData("qwen-plus", 1000000, 32768)]
     public void Qwen_ContextWindow_MatchesVendorSpec_NotAnOlderGenerationsLimit(
         string modelId, int contextWindow, int maxOutputTokens)
     {
+        // (0.7.7: qwen-max is now the legacy Qwen Max, 128K per Model Studio; Qwen3 Max has its own row.)
         // Both entries carried a flat 128K context window — Qwen3 Max's real window is 262,144 and
         // Qwen Plus's is 1,000,000; the stale figure understated both by a wide margin (roughly
         // 2x and 8x respectively). Structured output was also unset despite both models supporting

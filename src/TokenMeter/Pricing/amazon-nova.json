@@ -1,6 +1,6 @@
 {
   "provider": "Amazon Nova",
-  "lastUpdated": "2026-08-31",
+  "lastUpdated": "2026-09-23",
   "models": [
     {
       "modelId": "amazon-nova-premier",
@@ -10,12 +10,14 @@
       "contextWindow": 1000000,
       "inputPricePerMillion": 2.50,
       "outputPricePerMillion": 12.50,
+      "cacheReadPricePerMillion": 0.625,
       "supportsImageInput": true,
       "supportsToolCalling": true,
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
-      "priceSource": "ThirdParty",
+      "priceSource": "Official",
+      "promptCachingMode": "Automatic",
       "aliases": [
         { "pattern": "nova-premier", "type": "contains" }
       ]
@@ -28,12 +30,14 @@
       "contextWindow": 300000,
       "inputPricePerMillion": 0.80,
       "outputPricePerMillion": 3.20,
+      "cacheReadPricePerMillion": 0.20,
       "supportsImageInput": true,
       "supportsToolCalling": true,
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
-      "priceSource": "ThirdParty",
+      "priceSource": "Official",
+      "promptCachingMode": "Automatic",
       "aliases": [
         { "pattern": "nova-pro", "type": "contains" }
       ]
@@ -46,13 +50,15 @@
       "contextWindow": 300000,
       "inputPricePerMillion": 0.06,
       "outputPricePerMillion": 0.24,
+      "cacheReadPricePerMillion": 0.015,
       "supportsImageInput": true,
       "supportsVideoInput": true,
       "supportsToolCalling": true,
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
-      "priceSource": "ThirdParty",
+      "priceSource": "Official",
+      "promptCachingMode": "Automatic",
       "aliases": [
         { "pattern": "nova-lite", "type": "contains" }
       ]
@@ -65,11 +71,13 @@
       "contextWindow": 128000,
       "inputPricePerMillion": 0.035,
       "outputPricePerMillion": 0.14,
+      "cacheReadPricePerMillion": 0.00875,
       "supportsToolCalling": true,
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
-      "priceSource": "ThirdParty",
+      "priceSource": "Official",
+      "promptCachingMode": "Automatic",
       "aliases": [
         { "pattern": "nova-micro", "type": "contains" }
       ]
@@ -82,6 +90,7 @@
       "contextWindow": 1000000,
       "inputPricePerMillion": 0.30,
       "outputPricePerMillion": 2.50,
+      "cacheReadPricePerMillion": 0.075,
       "supportsImageInput": true,
       "supportsVideoInput": true,
       "supportsDocumentInput": true,
@@ -89,7 +98,8 @@
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
-      "priceSource": "ThirdParty",
+      "priceSource": "Official",
+      "promptCachingMode": "Automatic",
       "aliases": [
         { "pattern": "nova-2-lite", "type": "contains" }
       ]

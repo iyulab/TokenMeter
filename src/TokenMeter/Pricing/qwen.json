@@ -1,16 +1,16 @@
 {
   "provider": "Qwen",
-  "lastUpdated": "2026-08-31",
+  "lastUpdated": "2026-09-23",
   "models": [
     {
       "modelId": "qwen-max",
       "displayName": "Qwen Max",
       "modelType": "Chat",
       "isInstructTuned": true,
-      "contextWindow": 262144,
+      "contextWindow": 128000,
       "maxOutputTokens": 65536,
-      "inputPricePerMillion": 0.78,
-      "outputPricePerMillion": 3.90,
+      "inputPricePerMillion": 1.60,
+      "outputPricePerMillion": 6.40,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
       "supportsStructuredOutput": true,
@@ -18,10 +18,9 @@
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
-      "priceSource": "ThirdParty",
+      "priceSource": "Official",
       "aliases": [
-        { "pattern": "qwen-max", "type": "prefix" },
-        { "pattern": "qwen3-max", "type": "prefix" }
+        { "pattern": "qwen-max", "type": "prefix" }
       ]
     },
     {
@@ -31,8 +30,16 @@
       "isInstructTuned": true,
       "contextWindow": 1000000,
       "maxOutputTokens": 32768,
-      "inputPricePerMillion": 0.26,
-      "outputPricePerMillion": 0.78,
+      "inputPricePerMillion": 0.40,
+      "outputPricePerMillion": 1.20,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 256000,
+          "inputPricePerMillion": 1.20,
+          "outputPricePerMillion": 3.60
+        }
+      ],
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
       "supportsStructuredOutput": true,
@@ -40,10 +47,140 @@
       "supportsStreaming": true,
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
-      "priceSource": "ThirdParty",
+      "priceSource": "Official",
       "aliases": [
         { "pattern": "qwen-plus", "type": "prefix" },
         { "pattern": "qwen3-plus", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "qwen3-max",
+      "displayName": "Qwen3 Max",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 262144,
+      "inputPricePerMillion": 1.20,
+      "outputPricePerMillion": 6.00,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 32000,
+          "inputPricePerMillion": 2.40,
+          "outputPricePerMillion": 12.00
+        },
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 128000,
+          "inputPricePerMillion": 3.00,
+          "outputPricePerMillion": 15.00
+        }
+      ],
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "priceSource": "Official",
+      "aliases": [
+        { "pattern": "qwen3-max", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "qwen3.8-max",
+      "displayName": "Qwen3.8 Max",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1000000,
+      "inputPricePerMillion": 2.00,
+      "outputPricePerMillion": 6.00,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "priceSource": "Official",
+      "aliases": [
+        { "pattern": "qwen3.8-max", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "qwen3.7-plus",
+      "displayName": "Qwen3.7 Plus",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1000000,
+      "inputPricePerMillion": 0.40,
+      "outputPricePerMillion": 1.60,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 256000,
+          "inputPricePerMillion": 1.20,
+          "outputPricePerMillion": 4.80
+        }
+      ],
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "priceSource": "Official",
+      "aliases": [
+        { "pattern": "qwen3.7-plus", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "qwen3.8-flash",
+      "displayName": "Qwen3.8 Flash",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1000000,
+      "inputPricePerMillion": 0.15,
+      "outputPricePerMillion": 0.47,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "priceSource": "Official",
+      "aliases": [
+        { "pattern": "qwen3.8-flash", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "qwen-flash",
+      "displayName": "Qwen Flash",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1000000,
+      "inputPricePerMillion": 0.05,
+      "outputPricePerMillion": 0.40,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 256000,
+          "inputPricePerMillion": 0.25,
+          "outputPricePerMillion": 2.00
+        }
+      ],
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "priceSource": "Official",
+      "aliases": [
+        { "pattern": "qwen-flash", "type": "prefix" }
       ]
     }
   ]
