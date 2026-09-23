@@ -1,6 +1,6 @@
 {
   "provider": "Mistral",
-  "lastUpdated": "2026-08-16",
+  "lastUpdated": "2026-09-23",
   "models": [
     {
       "modelId": "mistral-large-latest",
@@ -26,7 +26,7 @@
       "displayName": "Mistral Medium 3.5",
       "modelType": "Chat",
       "isInstructTuned": true,
-      "contextWindow": 128000,
+      "contextWindow": 262144,
       "inputPricePerMillion": 1.50,
       "outputPricePerMillion": 7.50,
       "supportsToolCalling": true,
@@ -45,7 +45,7 @@
       "displayName": "Mistral Small 4",
       "modelType": "Chat",
       "isInstructTuned": true,
-      "contextWindow": 131072,
+      "contextWindow": 262144,
       "inputPricePerMillion": 0.15,
       "outputPricePerMillion": 0.60,
       "supportsToolCalling": true,
@@ -60,11 +60,88 @@
       ]
     },
     {
+      "modelId": "ministral-14b-latest",
+      "displayName": "Ministral 3 14B",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 262144,
+      "inputPricePerMillion": 0.20,
+      "outputPricePerMillion": 0.20,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "ministral-14b", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "ministral-8b-latest",
+      "displayName": "Ministral 3 8B",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 262144,
+      "inputPricePerMillion": 0.15,
+      "outputPricePerMillion": 0.15,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "ministral-8b", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "ministral-3b-latest",
+      "displayName": "Ministral 3 3B",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 262144,
+      "inputPricePerMillion": 0.10,
+      "outputPricePerMillion": 0.10,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "ministral-3b", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "zai-glm-latest",
+      "displayName": "GLM-5.3 (Z.ai, hosted by Mistral)",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 1.40,
+      "outputPricePerMillion": 4.40,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "zai-glm", "type": "prefix" }
+      ]
+    },
+    {
       "modelId": "codestral-latest",
       "displayName": "Codestral",
       "modelType": "Chat",
       "isInstructTuned": true,
-      "contextWindow": 256000,
+      "contextWindow": 128000,
       "inputPricePerMillion": 0.30,
       "outputPricePerMillion": 0.90,
       "supportsToolCalling": true,
@@ -83,7 +160,7 @@
       "displayName": "Devstral Small",
       "modelType": "Chat",
       "isInstructTuned": true,
-      "contextWindow": 128000,
+      "contextWindow": 262144,
       "inputPricePerMillion": 0.10,
       "outputPricePerMillion": 0.30,
       "supportsToolCalling": true,
@@ -122,7 +199,7 @@
       "displayName": "Magistral Medium",
       "modelType": "Chat",
       "isInstructTuned": true,
-      "contextWindow": 40000,
+      "contextWindow": 128000,
       "inputPricePerMillion": 2.00,
       "outputPricePerMillion": 5.00,
       "supportsToolCalling": true,
@@ -143,7 +220,7 @@
       "displayName": "Magistral Small",
       "modelType": "Chat",
       "isInstructTuned": true,
-      "contextWindow": 40000,
+      "contextWindow": 128000,
       "inputPricePerMillion": 0.50,
       "outputPricePerMillion": 1.50,
       "supportsToolCalling": true,
@@ -165,7 +242,7 @@
       "displayName": "Devstral Medium",
       "modelType": "Chat",
       "isInstructTuned": true,
-      "contextWindow": 128000,
+      "contextWindow": 262144,
       "inputPricePerMillion": 0.40,
       "outputPricePerMillion": 2.00,
       "supportsToolCalling": true,
@@ -176,7 +253,8 @@
       "supportsStopSequences": true,
       "toolCallingFormat": "OpenAI",
       "aliases": [
-        { "pattern": "devstral-medium", "type": "prefix" }
+        { "pattern": "devstral-medium", "type": "prefix" },
+        { "pattern": "devstral-latest", "type": "exact" }
       ]
     }
   ]

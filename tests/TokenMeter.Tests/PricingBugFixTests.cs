@@ -330,6 +330,30 @@ public class PricingBugFixTests
     // models were missing entirely, so looking them up returned nothing (or, worse, fuzzy-
     // matched an older sibling whose limits and rates do not describe them).
 
+    // Vendors now serve these legacy ids as another model and bill them at that model's rate —
+    // xAI: GET /v1/language-models/<id> answers with the target (2026-09-23); DeepSeek: "requests
+    // are served by the DeepSeek-V4.1-Flash model and billed at the Flash price". Keeping their
+    // old rows would price grok-4 / grok-3 at 3 / 15 against an actual 1.25 / 2.5. Ids that can
+    // no longer be called at all keep their last row (the catalog also prices past usage).
+    [Theory]
+    [InlineData("grok-4", "grok-4.3")]
+    [InlineData("grok-4-0709", "grok-4.3")]
+    [InlineData("grok-3", "grok-4.3")]
+    [InlineData("grok-3-mini", "grok-4.3")]
+    [InlineData("grok-4-fast-reasoning", "grok-4.3")]
+    [InlineData("grok-4-1-fast-non-reasoning", "grok-4.3")]
+    [InlineData("grok-code-fast-1", "grok-build-0.1")]
+    [InlineData("grok-4.7", "grok-4.7")]
+    [InlineData("deepseek-v4-flash", "deepseek-flash")]
+    [InlineData("deepseek-v4-flash-vision-exp", "deepseek-flash")]
+    public void LegacyIds_ResolveToTheModelThatServesThem(string requested, string servedAs)
+    {
+        var match = ModelCatalog.FindModelMatch(requested);
+
+        Assert.NotNull(match);
+        Assert.Equal(servedAs, match.Model.ModelId);
+    }
+
     // "claude-opus-5" is a contains alias, so every id that embeds "claude-opus-5-5" (platform
     // prefixes, the bare id before its own row existed) used to be priced as Opus 5. The longer
     // alias must win, and its cache-read rate is 0.05x input rather than the usual 0.1x.
@@ -348,10 +372,13 @@ public class PricingBugFixTests
     [Theory]
     [InlineData("claude-opus-5-5", 4.00, 20.00)]
     [InlineData("claude-opus-5", 5.00, 25.00)]
+    [InlineData("gpt-6-sol", 2.00, 10.00)]
+    [InlineData("gpt-6-luna", 0.10, 0.50)]
+    [InlineData("grok-4.7", 2.00, 6.00)]
     [InlineData("claude-mythos-5", 10.00, 50.00)]
     [InlineData("gemini-3.6-flash", 0.75, 3.75)]
     [InlineData("gemini-3.5-flash-lite", 0.30, 2.50)]
-    [InlineData("deepseek-v4-flash", 0.22, 0.66)]
+    [InlineData("deepseek-flash", 0.15, 0.60)]
     [InlineData("deepseek-v4-pro", 0.66, 1.98)]
     public void CurrentFlagshipModels_ResolveExactly_AndCarryPublishedRates(
         string modelId, decimal input, decimal output)

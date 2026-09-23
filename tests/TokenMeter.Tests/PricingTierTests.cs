@@ -66,17 +66,20 @@ public class PricingTierTests
         Assert.Equal(4.00m + 12.00m, aboveThreshold);
     }
 
-    [Fact]
-    public void CalculateCost_ContextLengthTier_CacheReadFallsBackToRepresentative()
+    // Both vendors publish a cache-read rate for the long-context band (xAI: whole request at 2x
+    // from 200k prompt tokens; OpenAI GPT-6: 2x input/cache, 1.5x output past 272k), so the tier
+    // carries it rather than leaving the representative rate to stand in for it.
+    [Theory]
+    [InlineData("grok-4.6", 1.00)]
+    [InlineData("grok-4.3", 0.40)]
+    [InlineData("gpt-6-sol", 0.40)]
+    public void ContextLengthTier_CarriesThePublishedCacheReadRate(string modelId, double cacheRead)
     {
-        // The catalog does not carry a distinct cache-read rate for the long-context tier —
-        // it must fall back to the model's representative CacheReadPricePerMillion, not to
-        // the tier's (absent) one.
-        var model = ModelCatalog.FindModel("grok-4.6");
+        var model = ModelCatalog.FindModel(modelId);
         Assert.NotNull(model);
         var tier = Assert.Single(model.PricingTiers!, t => t.Axis == PricingTierAxis.ContextLength);
 
-        Assert.Null(tier.CacheReadPricePerMillion);
+        Assert.Equal((decimal)cacheRead, tier.CacheReadPricePerMillion);
     }
 
     #endregion
@@ -214,7 +217,7 @@ public class PricingTierTests
     [Fact]
     public void DeepSeek_V4Models_HavePeakWindowTiers()
     {
-        foreach (var modelId in new[] { "deepseek-v4-pro", "deepseek-v4-flash" })
+        foreach (var modelId in new[] { "deepseek-v4-pro", "deepseek-flash" })
         {
             var model = ModelCatalog.FindModel(modelId, AliasMatchType.Exact);
             Assert.NotNull(model);

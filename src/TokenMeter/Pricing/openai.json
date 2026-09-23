@@ -1,6 +1,6 @@
 {
   "provider": "OpenAI",
-  "lastUpdated": "2026-09-15",
+  "lastUpdated": "2026-09-23",
   "models": [
     {
       "modelId": "gpt-6-astra",
@@ -12,6 +12,7 @@
       "inputPricePerMillion": 10.00,
       "outputPricePerMillion": 50.00,
       "cacheReadPricePerMillion": 1.00,
+      "cacheWritePricePerMillion": 12.50,
       "pricingTiers": [
         {
           "axis": "ContextLength",
@@ -38,6 +39,78 @@
       ]
     },
     {
+      "modelId": "gpt-6-sol",
+      "displayName": "GPT-6 Sol",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 2.00,
+      "outputPricePerMillion": 10.00,
+      "cacheReadPricePerMillion": 0.20,
+      "cacheWritePricePerMillion": 2.50,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 4.00,
+          "outputPricePerMillion": 15.00,
+          "cacheReadPricePerMillion": 0.40
+        }
+      ],
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        {
+          "pattern": "gpt-6-sol",
+          "type": "prefix"
+        }
+      ]
+    },
+    {
+      "modelId": "gpt-6-luna",
+      "displayName": "GPT-6 Luna",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 0.10,
+      "outputPricePerMillion": 0.50,
+      "cacheReadPricePerMillion": 0.01,
+      "cacheWritePricePerMillion": 0.125,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 0.20,
+          "outputPricePerMillion": 0.75,
+          "cacheReadPricePerMillion": 0.02
+        }
+      ],
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        {
+          "pattern": "gpt-6-luna",
+          "type": "prefix"
+        }
+      ]
+    },
+    {
       "modelId": "gpt-5.6-sol",
       "displayName": "GPT-5.6 Sol",
       "modelType": "Chat",
@@ -46,6 +119,7 @@
       "inputPricePerMillion": 4.00,
       "outputPricePerMillion": 20.00,
       "cacheReadPricePerMillion": 0.40,
+      "cacheWritePricePerMillion": 5.00,
       "cacheWritePricePerMillion": 6.25,
       "supportsImageInput": true,
       "supportsToolCalling": true,
@@ -70,6 +144,7 @@
       "outputPricePerMillion": 12.00,
       "cacheReadPricePerMillion": 0.20,
       "cacheWritePricePerMillion": 2.50,
+      "cacheWritePricePerMillion": 2.50,
       "supportsImageInput": true,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
@@ -92,6 +167,7 @@
       "inputPricePerMillion": 0.20,
       "outputPricePerMillion": 1.20,
       "cacheReadPricePerMillion": 0.02,
+      "cacheWritePricePerMillion": 0.25,
       "cacheWritePricePerMillion": 0.25,
       "supportsImageInput": true,
       "supportsToolCalling": true,
