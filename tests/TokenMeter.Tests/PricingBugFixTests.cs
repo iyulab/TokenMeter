@@ -330,7 +330,23 @@ public class PricingBugFixTests
     // models were missing entirely, so looking them up returned nothing (or, worse, fuzzy-
     // matched an older sibling whose limits and rates do not describe them).
 
+    // "claude-opus-5" is a contains alias, so every id that embeds "claude-opus-5-5" (platform
+    // prefixes, the bare id before its own row existed) used to be priced as Opus 5. The longer
+    // alias must win, and its cache-read rate is 0.05x input rather than the usual 0.1x.
     [Theory]
+    [InlineData("anthropic.claude-opus-5-5")]
+    [InlineData("us.anthropic.claude-opus-5-5")]
+    public void OpusFiveFive_PrefixedIds_ResolveToFiveFive_NotFive(string modelId)
+    {
+        var match = ModelCatalog.FindModelMatch(modelId);
+
+        Assert.NotNull(match);
+        Assert.Equal("claude-opus-5-5", match.Model.ModelId);
+        Assert.Equal(0.20m, match.Model.CacheReadPricePerMillion);
+    }
+
+    [Theory]
+    [InlineData("claude-opus-5-5", 4.00, 20.00)]
     [InlineData("claude-opus-5", 5.00, 25.00)]
     [InlineData("claude-mythos-5", 10.00, 50.00)]
     [InlineData("gemini-3.6-flash", 0.75, 3.75)]

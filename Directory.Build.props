@@ -11,7 +11,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
-    <Version>0.7.5</Version>
+    <Version>0.7.6</Version>
   </PropertyGroup>
 
   <PropertyGroup>
