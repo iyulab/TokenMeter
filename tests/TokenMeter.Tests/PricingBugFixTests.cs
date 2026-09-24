@@ -272,7 +272,8 @@ public class PricingBugFixTests
     //     an overstatement of up to four times on the cached portion of a request.
 
     [Theory]
-    [InlineData("gpt-5.6-sol", 6.25)]
+    // Sol: 1.25 x its $4 input (0.7.5 repriced input from $5; the $6.25 left behind was 1.25 x the old price).
+    [InlineData("gpt-5.6-sol", 5.00)]
     [InlineData("gpt-5.6-terra", 2.50)]
     [InlineData("gpt-5.6-luna", 0.25)]
     public void CacheWrite_PricedAboveInput_IsNotLeftToTheInputFallback(string modelId, decimal cacheWrite)

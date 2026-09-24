@@ -6,7 +6,10 @@ internal static class ModelInfoLoader
 {
     private static readonly JsonSerializerOptions s_options = new()
     {
-        PropertyNameCaseInsensitive = true
+        PropertyNameCaseInsensitive = true,
+        // A key written twice in a model entry is an editing slip, and the serializer would otherwise keep the
+        // last value silently — a GPT-5.6 Sol cache-write rate was billed at a stale value that way.
+        AllowDuplicateProperties = false,
     };
 
     internal static IReadOnlyList<ProviderData> LoadAll()

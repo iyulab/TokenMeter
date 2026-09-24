@@ -4,6 +4,26 @@ All notable changes to this project are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/); while the major version is 0, a minor release may contain
 breaking changes, and each one is marked **Breaking** with a migration note.
 
+## [0.7.8] - unreleased
+
+### Fixed
+- **GPT-5.6 Sol cache writes are $5.00 per 1M** (1.25 × its $4 input). The row carried the key twice — the new rate
+  was added above the old $6.25 instead of replacing it, and the loader kept the last one. GPT-5.6 Terra and Luna had
+  the same duplicate with equal values. The catalog loader now rejects a key written twice
+  (`AllowDuplicateProperties = false`), so this cannot recur silently.
+
+### Added
+- **Azure GPT-5.4, GPT-5.4 Pro, GPT-5.4 mini, GPT-5.4 nano, GPT-5.5, GPT-5.6 Sol/Terra/Luna and GPT-6 Astra**, from the
+  Azure Retail Prices API (Global Standard; Data Zone is 1.1×), flagged `Official`. Before, these ids fell under the
+  `azure-gpt-5` prefix and were priced as GPT-5 ($1.25 / $10). Each has Azure's long-context band from 272K prompt
+  tokens (Azure states the threshold for GPT-5.4; the others use the same 272K as OpenAI's list for these models).
+  Cache writes on the long band are not expressible per tier and bill at the short-band rate.
+
+### Not added (still unpublished by the vendor)
+- Azure GPT-6 Sol and Luna (Azure: "in processing for publishing"). Amazon Nova 2 Pro and Omni (priced in the AWS Price
+  List, but not announced as generally available on Bedrock). Perplexity Agent API models (no context window
+  published per model; the Sonar API ends 2026-09-27, its rows stay for past usage).
+
 ## [0.7.7] - 2026-09-23
 
 ### Changed
