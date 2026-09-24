@@ -25,7 +25,8 @@ breaking changes, and each one is marked **Breaking** with a migration note.
   Cache writes on the long band are not expressible per tier and bill at the short-band rate.
 
 ### Not added (still unpublished by the vendor)
-- Azure GPT-6 Sol and Luna (Azure: "in processing for publishing"). Amazon Nova 2 Pro and Omni (priced in the AWS Price
+- Azure GPT-6 Sol and Luna (Azure: "in processing for publishing"). Azure GPT-5.5 Pro: Azure has no meter for it
+  (Retail Prices API, 2026-09-24), so `azure-gpt-5.5-pro` resolves to the GPT-5.5 row. Amazon Nova 2 Pro and Omni (priced in the AWS Price
   List, but not announced as generally available on Bedrock). Perplexity Agent API models (no context window
   published per model; the Sonar API ends 2026-09-27, its rows stay for past usage).
 
