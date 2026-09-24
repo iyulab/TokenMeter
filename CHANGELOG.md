@@ -4,7 +4,7 @@ All notable changes to this project are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/); while the major version is 0, a minor release may contain
 breaking changes, and each one is marked **Breaking** with a migration note.
 
-## [0.7.8] - unreleased
+## [0.7.8] - 2026-09-24
 
 ### Fixed
 - **GPT-5.6 Sol cache writes are $5.00 per 1M** (1.25 × its $4 input). The row carried the key twice — the new rate
