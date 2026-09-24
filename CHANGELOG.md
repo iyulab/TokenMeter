@@ -12,6 +12,11 @@ breaking changes, and each one is marked **Breaking** with a migration note.
   the same duplicate with equal values. The catalog loader now rejects a key written twice
   (`AllowDuplicateProperties = false`), so this cannot recur silently.
 
+- **OpenAI GPT-5.4, GPT-5.4 Pro, GPT-5.5, GPT-5.5 Pro and GPT-5.6 Sol/Terra/Luna now carry the long-context band.**
+  Above 272K input tokens OpenAI bills the whole request at 2× input and cached input and 1.5× output; these rows had
+  no band, so a long prompt was priced at the short-context rate. GPT-5.6 Sol stays at $4 / $20 — OpenAI's promotional
+  price "at least through November 21, 2026" (it was $5 / $30 before 2026-08-21).
+
 ### Added
 - **Azure GPT-5.4, GPT-5.4 Pro, GPT-5.4 mini, GPT-5.4 nano, GPT-5.5, GPT-5.6 Sol/Terra/Luna and GPT-6 Astra**, from the
   Azure Retail Prices API (Global Standard; Data Zone is 1.1×), flagged `Official`. Before, these ids fell under the

@@ -1,6 +1,6 @@
 {
   "provider": "OpenAI",
-  "lastUpdated": "2026-09-23",
+  "lastUpdated": "2026-09-24",
   "models": [
     {
       "modelId": "gpt-6-astra",
@@ -120,6 +120,15 @@
       "outputPricePerMillion": 20.00,
       "cacheReadPricePerMillion": 0.40,
       "cacheWritePricePerMillion": 5.00,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 8.00,
+          "outputPricePerMillion": 30.00,
+          "cacheReadPricePerMillion": 0.80
+        }
+      ],
       "supportsImageInput": true,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
@@ -143,6 +152,15 @@
       "outputPricePerMillion": 12.00,
       "cacheReadPricePerMillion": 0.20,
       "cacheWritePricePerMillion": 2.50,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 4.00,
+          "outputPricePerMillion": 18.00,
+          "cacheReadPricePerMillion": 0.40
+        }
+      ],
       "supportsImageInput": true,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
@@ -166,6 +184,15 @@
       "outputPricePerMillion": 1.20,
       "cacheReadPricePerMillion": 0.02,
       "cacheWritePricePerMillion": 0.25,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 0.40,
+          "outputPricePerMillion": 1.80,
+          "cacheReadPricePerMillion": 0.04
+        }
+      ],
       "supportsImageInput": true,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
@@ -187,6 +214,14 @@
       "contextWindow": 1050000,
       "inputPricePerMillion": 30.00,
       "outputPricePerMillion": 180.00,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 60.00,
+          "outputPricePerMillion": 270.00
+        }
+      ],
       "supportsImageInput": true,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
@@ -208,6 +243,15 @@
       "inputPricePerMillion": 5.00,
       "outputPricePerMillion": 30.00,
       "cacheReadPricePerMillion": 0.50,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 10.00,
+          "outputPricePerMillion": 45.00,
+          "cacheReadPricePerMillion": 1.00
+        }
+      ],
       "supportsImageInput": true,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
@@ -229,6 +273,14 @@
       "contextWindow": 1050000,
       "inputPricePerMillion": 30.00,
       "outputPricePerMillion": 180.00,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 60.00,
+          "outputPricePerMillion": 270.00
+        }
+      ],
       "supportsImageInput": true,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,
@@ -250,6 +302,15 @@
       "inputPricePerMillion": 2.50,
       "outputPricePerMillion": 15.00,
       "cacheReadPricePerMillion": 0.25,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 5.00,
+          "outputPricePerMillion": 22.50,
+          "cacheReadPricePerMillion": 0.50
+        }
+      ],
       "supportsImageInput": true,
       "supportsToolCalling": true,
       "supportsParallelToolCalling": true,

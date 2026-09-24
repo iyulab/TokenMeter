@@ -42,4 +42,25 @@ public class Refresh078Tests
 
         Assert.Equal((decimal)(input + output), cost);
     }
+
+    [Theory]
+    // OpenAI's own list (developers.openai.com/api/docs/pricing): above 272K input tokens the whole request is billed
+    // at 2x input and 1.5x output. These rows had no band, so a long prompt was billed at the short-context rate.
+    [InlineData("gpt-5.4", 5.00, 22.50)]
+    [InlineData("gpt-5.4-pro", 60.00, 270.00)]
+    [InlineData("gpt-5.5", 10.00, 45.00)]
+    [InlineData("gpt-5.5-pro", 60.00, 270.00)]
+    [InlineData("gpt-5.6-sol", 8.00, 30.00)]
+    [InlineData("gpt-5.6-terra", 4.00, 18.00)]
+    [InlineData("gpt-5.6-luna", 0.40, 1.80)]
+    public void OpenAiLongContextBand_AppliesAbove272kPromptTokens(string id, double input, double output)
+    {
+        var model = ModelCatalog.FindModel(id)!;
+
+        var longCost = model.CalculateCost(1_000_000, 1_000_000, new PricingTierContext { ContextLengthTokens = 300_000 });
+        var shortCost = model.CalculateCost(1_000_000, 1_000_000, new PricingTierContext { ContextLengthTokens = 100_000 });
+
+        Assert.Equal((decimal)(input + output), longCost);
+        Assert.Equal(model.InputPricePerMillion + model.OutputPricePerMillion, shortCost);
+    }
 }
