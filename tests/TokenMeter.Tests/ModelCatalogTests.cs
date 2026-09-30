@@ -115,7 +115,7 @@ public class ModelCatalogTests
         Assert.Equal(lower!.ModelId, upper!.ModelId);
     }
 
-    // ── Strict / bounded-fuzziness lookup (vault-ai self-hosted mismatch feedback) ──
+    // ── Strict / bounded-fuzziness lookup: a self-hosted derivative name must not resolve to the base model ──
 
     [Fact]
     public void FindModel_ExactStrictness_DoesNotMatchSelfHostedDerivativeName()

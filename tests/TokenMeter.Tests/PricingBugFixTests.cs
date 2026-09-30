@@ -3,7 +3,7 @@ namespace TokenMeter.Tests;
 // Migrated from ModelPricingData API → ModelCatalog + ModelInfo (Task 7 refactoring)
 public class PricingBugFixTests
 {
-    #region Issue 1 — Prefix alias collision (longest prefix match)
+    #region Prefix alias collision (longest prefix match)
 
     [Theory]
     [InlineData("gpt-4o-2024-08-06", "gpt-4o")]
@@ -66,7 +66,7 @@ public class PricingBugFixTests
 
     #endregion
 
-    #region Issue 2 — Null/empty input guard
+    #region Null/empty input guard
 
     [Fact]
     public void FindModel_Null_ReturnsNull()
@@ -94,7 +94,7 @@ public class PricingBugFixTests
 
     #endregion
 
-    #region Issue 3 — ModelInfoLoader validation
+    #region ModelInfoLoader validation
 
     [Fact]
     public void AllLoadedProviders_HaveNonEmptyNames()
@@ -118,7 +118,7 @@ public class PricingBugFixTests
 
     #endregion
 
-    #region Issue 4 — DeepSeek pricing note
+    #region DeepSeek pricing note
 
     [Fact]
     public void DeepSeek_ReasonerAndChat_PricingLoaded()
@@ -138,7 +138,7 @@ public class PricingBugFixTests
 
     #endregion
 
-    #region Issue 5 — GPT-5.6 mid-generation price reduction
+    #region GPT-5.6 mid-generation price reduction
 
     // The GPT-5.6 tiers were repriced after their launch rates were first catalogued:
     // the small tier dropped by 80% and the mid tier by 20%, while the large tier was
@@ -170,7 +170,7 @@ public class PricingBugFixTests
         Assert.NotNull(model);
 
         // One million input + one million output tokens. At the pre-reduction rates this
-        // returned 7.00 — a five-fold overstatement reported by a downstream consumer.
+        // returned 7.00 — a five-fold overstatement.
         Assert.Equal(1.40m, model.CalculateCost(1_000_000, 1_000_000));
     }
 
@@ -195,7 +195,7 @@ public class PricingBugFixTests
 
     #endregion
 
-    #region Issue 7 — 2026-09 generations (catalogued 2026-09-15 from the vendor rate cards)
+    #region 2026-09 generations (catalogued 2026-09-15 from the vendor rate cards)
 
     // Three vendors shipped a new generation in the first week of September 2026 while every
     // provider file was inside the 30-day freshness window, so the scheduled staleness job stayed
@@ -250,14 +250,14 @@ public class PricingBugFixTests
         var model = ModelCatalog.FindModel("gemini-3.8-flash");
 
         Assert.NotNull(model);
-        // The vendor states this rate doubles on 2027-01-01 — scripts/check-catalog-staleness.ps1
-        // ($announced) is what reminds the maintainer; this case pins today's row.
+        // The vendor states this rate doubles on 2027-01-01; this case pins today's row, so the
+        // catalog update on that date has to change it deliberately.
         Assert.Equal(4.50m, model.CalculateCost(1_000_000, 1_000_000));
     }
 
     #endregion
 
-    #region Issue 6 — cached-token pricing coverage
+    #region cached-token pricing coverage
 
     // Two gaps found while auditing the catalogue against the published rate card.
     //
@@ -324,7 +324,7 @@ public class PricingBugFixTests
 
     #endregion
 
-    #region Issue 7 — flagship models absent from the catalogue
+    #region Flagship models absent from the catalogue
 
     // Auditing every provider against its published rate card showed the prices that were
     // present were largely right — what had gone stale was the model list. Current flagship
@@ -444,9 +444,9 @@ public class PricingBugFixTests
 
     #endregion
 
-    #region Issue 8 — capability metadata audit (non-price fields)
+    #region Capability metadata audit (non-price fields)
 
-    // HD-40(f): auditing capability flags (not prices) on the 4 providers just re-verified for
+    // Auditing capability flags (not prices) on the 4 providers just re-verified for
     // pricing (0.7.2) turned up gaps unrelated to price — modalities and context windows that
     // were never filled in, or were carrying a stale/incorrect figure. Cross-referenced against
     // each vendor's own published FAQ/spec via a third-party host page (same PriceSource.ThirdParty
