@@ -6,6 +6,10 @@ breaking changes, and each one is marked **Breaking** with a migration note.
 
 ## [0.7.9] - Unreleased
 
+### Changed
+- **The packages now carry the LICENSE text**, so an application that redistributes them can ship the MIT notice
+  from the package itself.
+
 ### Fixed
 - **Fuzzy matching no longer crosses a version token: an unknown newer id resolves to nothing instead of to the older
   model whose alias it contains.** `claude-sonnet-5-5` used to match the `claude-sonnet-5` row through its `contains`
