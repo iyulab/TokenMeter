@@ -13,7 +13,7 @@ public class OptionsReachabilityRosterTests
 {
     // Every assembly this repository ships: an option declared in one and read in another only counts as read
     // when both are scanned.
-    private static readonly Assembly[] Libraries =
+    internal static readonly Assembly[] Libraries =
     [
         Assembly.Load("TokenMeter"),
     ];
