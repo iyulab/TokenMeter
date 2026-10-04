@@ -428,6 +428,50 @@
       ]
     },
     {
+      "modelId": "gpt-5.2-pro",
+      "displayName": "GPT-5.2 Pro",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 400000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 21.00,
+      "outputPricePerMillion": 168.00,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "gpt-5.2-pro", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-5.2",
+      "displayName": "GPT-5.2",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 400000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 1.75,
+      "outputPricePerMillion": 14.00,
+      "cacheReadPricePerMillion": 0.175,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "gpt-5.2", "type": "prefix" }
+      ]
+    },
+    {
       "modelId": "gpt-5.2-codex",
       "displayName": "GPT-5.2 Codex",
       "modelType": "Chat",
@@ -448,6 +492,29 @@
       "aliases": [
         { "pattern": "gpt-5.2-codex", "type": "prefix" },
         { "pattern": "gpt-5.2", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-5.1",
+      "displayName": "GPT-5.1",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 400000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 1.25,
+      "outputPricePerMillion": 10.00,
+      "cacheReadPricePerMillion": 0.125,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "gpt-5.1", "type": "prefix" }
       ]
     },
     {
@@ -515,6 +582,30 @@
       "aliases": [
         { "pattern": "gpt-5.1-codex", "type": "prefix" },
         { "pattern": "gpt-5.1", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-5-pro",
+      "displayName": "GPT-5 Pro",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 400000,
+      "maxOutputTokens": 272000,
+      "inputPricePerMillion": 15.00,
+      "outputPricePerMillion": 120.00,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "reasoningMode": "Always",
+      "thinkingFormat": "SeparateField",
+      "thinkingFieldName": "reasoning_content",
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "gpt-5-pro", "type": "prefix" }
       ]
     },
     {
@@ -750,6 +841,30 @@
       "aliases": [
         { "pattern": "gpt-3.5", "type": "prefix" },
         { "pattern": "gpt-35", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "o1-pro",
+      "displayName": "o1-pro",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 200000,
+      "maxOutputTokens": 100000,
+      "inputPricePerMillion": 150.00,
+      "outputPricePerMillion": 600.00,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "supportsStopSequences": true,
+      "reasoningMode": "Always",
+      "thinkingFormat": "SeparateField",
+      "thinkingFieldName": "reasoning_content",
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        { "pattern": "o1-pro", "type": "prefix" }
       ]
     },
     {

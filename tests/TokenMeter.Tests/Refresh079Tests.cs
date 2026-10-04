@@ -12,6 +12,12 @@ public class Refresh079Tests
     [InlineData("claude-sonnet-5-5", "claude-sonnet-5-5", 2.00, 10.00, 0.20)]
     [InlineData("anthropic.claude-sonnet-5-5", "claude-sonnet-5-5", 2.00, 10.00, 0.20)]
     [InlineData("gpt-6.1-sol", "gpt-6.1-sol", 2.00, 10.00, 0.10)]
+    // Served and priced, but missing until the coverage check listed them (0.7.9's version-token guard had turned
+    // their old fuzzy match onto gpt-5 into a null).
+    [InlineData("gpt-5.1", "gpt-5.1", 1.25, 10.00, 0.125)]
+    [InlineData("gpt-5.1-2025-11-13", "gpt-5.1", 1.25, 10.00, 0.125)]
+    [InlineData("gpt-5.2", "gpt-5.2", 1.75, 14.00, 0.175)]
+    [InlineData("gemini-3.1-flash-lite", "gemini-3.1-flash-lite", 0.25, 1.50, 0.025)]
     public void ServedModel_ResolvesToItsOwnRow(string id, string expectedModelId, double input, double output, double cacheRead)
     {
         var model = ModelCatalog.FindModel(id);
@@ -21,6 +27,21 @@ public class Refresh079Tests
         Assert.Equal((decimal)input, model.InputPricePerMillion);
         Assert.Equal((decimal)output, model.OutputPricePerMillion);
         Assert.Equal((decimal)cacheRead, model.CacheReadPricePerMillion);
+    }
+
+    [Theory]
+    [InlineData("gpt-5.2-pro-2025-12-11", "gpt-5.2-pro", 21.00, 168.00)]
+    [InlineData("gpt-5-pro-2025-10-06", "gpt-5-pro", 15.00, 120.00)]
+    [InlineData("o1-pro-2025-03-19", "o1-pro", 150.00, 600.00)]
+    [InlineData("grok-4.20-multi-agent-0309", "grok-4.20", 1.25, 2.50)]
+    public void ServedModelWithoutCacheRate_ResolvesToItsOwnRow(string id, string expectedModelId, double input, double output)
+    {
+        var model = ModelCatalog.FindModel(id);
+
+        Assert.NotNull(model);
+        Assert.Equal(expectedModelId, model.ModelId);
+        Assert.Equal((decimal)input, model.InputPricePerMillion);
+        Assert.Equal((decimal)output, model.OutputPricePerMillion);
     }
 
     [Fact]

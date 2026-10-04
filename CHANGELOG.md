@@ -16,6 +16,9 @@ breaking changes, and each one is marked **Breaking** with a migration note.
 ### Added
 - **Claude Sonnet 5.5** ($2 / $10, cache read $0.20, adaptive thinking optional) and **GPT-6.1 Sol** ($2 / $10, cached
   input $0.10; above 272K input tokens $4 / $15 / $0.20) — both served by the vendors, neither in the catalog.
+- **GPT-5.1, GPT-5.2, GPT-5.2 Pro, GPT-5 Pro, o1-pro and Gemini 3.1 Flash-Lite (GA)** from the vendors' price pages, and
+  `grok-4.20-multi-agent-0309` as an exact alias of Grok 4.20 (same rates). All served today; before this release
+  `gpt-5.1`/`gpt-5.2` were priced as GPT-5 by a fuzzy alias, and the Pro rows were absent.
 
 ## [0.7.8] - 2026-09-24
 
