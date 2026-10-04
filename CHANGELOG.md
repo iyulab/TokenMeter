@@ -4,6 +4,19 @@ All notable changes to this project are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/); while the major version is 0, a minor release may contain
 breaking changes, and each one is marked **Breaking** with a migration note.
 
+## [0.7.9] - Unreleased
+
+### Fixed
+- **Fuzzy matching no longer crosses a version token: an unknown newer id resolves to nothing instead of to the older
+  model whose alias it contains.** `claude-sonnet-5-5` used to match the `claude-sonnet-5` row through its `contains`
+  alias and was priced and described as that model. An alias that ends in a version number no longer matches an id that
+  continues the number (`-5`, `.5`, a further digit); snapshot and deployment suffixes (`-20250929`, `-2025-08-07`,
+  `-0309`, `-latest`, `-v1`) still match.
+
+### Added
+- **Claude Sonnet 5.5** ($2 / $10, cache read $0.20, adaptive thinking optional) and **GPT-6.1 Sol** ($2 / $10, cached
+  input $0.10; above 272K input tokens $4 / $15 / $0.20) — both served by the vendors, neither in the catalog.
+
 ## [0.7.8] - 2026-09-24
 
 ### Fixed

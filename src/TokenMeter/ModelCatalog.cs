@@ -162,6 +162,7 @@ public static class ModelCatalog
         {
             if (rule.MatchType == AliasMatchType.Prefix &&
                 normalized.StartsWith(rule.Pattern, StringComparison.Ordinal) &&
+                !CrossesVersionToken(normalized, rule.Pattern.Length, rule.Pattern) &&
                 (bestPrefix is null || rule.Pattern.Length > bestPrefix.Pattern.Length))
                 bestPrefix = rule;
         }
@@ -174,11 +175,48 @@ public static class ModelCatalog
         foreach (var rule in s_aliasRules)
         {
             if (rule.MatchType == AliasMatchType.Contains &&
-                normalized.Contains(rule.Pattern, StringComparison.Ordinal) &&
+                ContainsWithinVersion(normalized, rule.Pattern) &&
                 (bestContains is null || rule.Pattern.Length > bestContains.Pattern.Length))
                 bestContains = rule;
         }
         return bestContains is not null ? new ModelMatch(bestContains.Target, AliasMatchType.Contains) : null;
+    }
+
+    /// <summary>
+    /// Whether <paramref name="input"/> contains <paramref name="pattern"/> at a place where the match does not run into a
+    /// further version token — see <see cref="CrossesVersionToken"/>.
+    /// </summary>
+    private static bool ContainsWithinVersion(string input, string pattern)
+    {
+        for (var at = input.IndexOf(pattern, StringComparison.Ordinal); at >= 0;
+             at = input.IndexOf(pattern, at + 1, StringComparison.Ordinal))
+        {
+            if (!CrossesVersionToken(input, at + pattern.Length, pattern))
+                return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// A fuzzy pass must not cross a version token: an alias ending in a version number (<c>claude-sonnet-5</c>,
+    /// <c>gpt-5</c>) does not describe an id that continues that number (<c>claude-sonnet-5-5</c>, <c>gpt-5.5</c>,
+    /// <c>gpt-55</c>) — that is a newer model the catalog does not know, and matching it would price it as the older one.
+    /// A snapshot or deployment suffix (<c>-20250929</c>, <c>-2025-08-07</c>, <c>-0309</c>, <c>-latest</c>, <c>-v1</c>)
+    /// still matches: a continuation is one or two digits, a date three or more.
+    /// </summary>
+    private static bool CrossesVersionToken(string input, int matchEnd, string pattern)
+    {
+        if (pattern.Length == 0 || !char.IsAsciiDigit(pattern[^1]) || matchEnd >= input.Length)
+            return false;
+        var next = input[matchEnd];
+        if (char.IsAsciiDigit(next))
+            return true;
+        if (next is not ('-' or '.' or '_'))
+            return false;
+        var digits = 0;
+        for (var k = matchEnd + 1; k < input.Length && char.IsAsciiDigit(input[k]); k++)
+            digits++;
+        return digits is 1 or 2;
     }
 
     // ── Filtering ─────────────────────────────────────────────────────────────

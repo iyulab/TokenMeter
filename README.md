@@ -42,6 +42,10 @@ Console.WriteLine(model?.SupportsMcpToolUse);      // True
 > `deepseek-r1-distill-qwen-7b`) can therefore match a catalog entry whose context window and
 > pricing do not describe your deployment. For self-hosted models, take the effective context
 > length from your deployment configuration (e.g. llama.cpp `n_ctx`), not from the catalog.
+>
+> Fuzzy passes never cross a version token: an alias ending in a version number (`claude-sonnet-5`) does not
+> match an id that continues it (`claude-sonnet-5-5`) — an unknown newer model returns `null` rather than the older
+> model's row. Snapshot and deployment suffixes (`-20250929`, `-latest`, `-v1`) still match.
 
 ```csharp
 // When correctness matters more than recall, bound the fuzziness:

@@ -1,6 +1,6 @@
 {
   "provider": "OpenAI",
-  "lastUpdated": "2026-09-24",
+  "lastUpdated": "2026-10-04",
   "models": [
     {
       "modelId": "gpt-6-astra",
@@ -34,6 +34,42 @@
       "aliases": [
         {
           "pattern": "gpt-6-astra",
+          "type": "prefix"
+        }
+      ]
+    },
+    {
+      "modelId": "gpt-6.1-sol",
+      "displayName": "GPT-6.1 Sol",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 2.00,
+      "outputPricePerMillion": 10.00,
+      "cacheReadPricePerMillion": 0.10,
+      "cacheWritePricePerMillion": 2.50,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 4.00,
+          "outputPricePerMillion": 15.00,
+          "cacheReadPricePerMillion": 0.20
+        }
+      ],
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        {
+          "pattern": "gpt-6.1-sol",
           "type": "prefix"
         }
       ]
