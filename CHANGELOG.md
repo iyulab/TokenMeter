@@ -4,6 +4,13 @@ All notable changes to this project are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/); while the major version is 0, a minor release may contain
 breaking changes, and each one is marked **Breaking** with a migration note.
 
+## [0.7.10] - Unreleased
+
+### Added
+- **Claude Haiku 5.5** (`claude-haiku-5-5`, 1M context, 128K output): $0.10 / $0.50 per 1M tokens when the prompt is
+  100K tokens or fewer, $0.50 / $2.50 above that (a `ContextLength` pricing tier from 100,001 tokens); cache read
+  $0.01 ($0.05 above 100K), cache write $0.125. Served by the vendor and absent from the catalog until now.
+
 ## [0.7.9] - 2026-10-05
 
 ### Changed

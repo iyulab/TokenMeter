@@ -1,6 +1,6 @@
 {
   "provider": "Anthropic",
-  "lastUpdated": "2026-10-04",
+  "lastUpdated": "2026-10-07",
   "models": [
     {
       "modelId": "claude-fable-5-1",
@@ -471,6 +471,44 @@
         { "pattern": "claude-sonnet-4-5", "type": "contains" },
         { "pattern": "claude-sonnet-4.5", "type": "contains" },
         { "pattern": "claude-sonnet-4-5-20250929", "type": "exact" }
+      ]
+    },
+    {
+      "modelId": "claude-haiku-5-5",
+      "displayName": "Claude Haiku 5.5",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 0.10,
+      "outputPricePerMillion": 0.50,
+      "cacheReadPricePerMillion": 0.01,
+      "cacheWritePricePerMillion": 0.125,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 100001,
+          "inputPricePerMillion": 0.50,
+          "outputPricePerMillion": 2.50,
+          "cacheReadPricePerMillion": 0.05
+        }
+      ],
+      "supportsImageInput": true,
+      "supportsDocumentInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Explicit",
+      "supportsStopSequences": true,
+      "supportsMcpToolUse": true,
+      "reasoningMode": "Optional",
+      "thinkingFormat": "Block",
+      "toolCallingFormat": "Anthropic",
+      "aliases": [
+        { "pattern": "claude-haiku-5-5", "type": "contains" },
+        { "pattern": "claude-haiku-5.5", "type": "contains" }
       ]
     },
     {

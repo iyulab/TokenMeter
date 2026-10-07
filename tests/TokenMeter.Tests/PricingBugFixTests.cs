@@ -245,6 +245,19 @@ public class PricingBugFixTests
     }
 
     [Fact]
+    public void ClaudeHaiku55_LongPromptRateCard_AppliesAbove100K()
+    {
+        // Anthropic pricing: $0.10 / $0.50 per MTok when the prompt is 100K tokens or fewer,
+        // $0.50 / $2.50 when it is longer; cache reads are 0.1x the input rate.
+        var model = ModelCatalog.FindModel("claude-haiku-5-5");
+
+        Assert.NotNull(model);
+        Assert.Equal(0.60m, model.CalculateCost(1_000_000, 1_000_000, new PricingTierContext { ContextLengthTokens = 100_000 }));
+        Assert.Equal(3.00m, model.CalculateCost(1_000_000, 1_000_000, new PricingTierContext { ContextLengthTokens = 100_001 }));
+        Assert.Equal(0.01m, model.CacheReadPricePerMillion);
+    }
+
+    [Fact]
     public void Gemini38Flash_CostAtIntroductoryRate()
     {
         var model = ModelCatalog.FindModel("gemini-3.8-flash");
@@ -386,6 +399,7 @@ public class PricingBugFixTests
     [Theory]
     [InlineData("claude-opus-5-5", 4.00, 20.00)]
     [InlineData("claude-opus-5", 5.00, 25.00)]
+    [InlineData("claude-haiku-5-5", 0.10, 0.50)]
     [InlineData("gpt-6-sol", 2.00, 10.00)]
     [InlineData("gpt-6-luna", 0.10, 0.50)]
     [InlineData("grok-4.7", 2.00, 6.00)]
