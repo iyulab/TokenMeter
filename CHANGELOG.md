@@ -4,7 +4,7 @@ All notable changes to this project are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/); while the major version is 0, a minor release may contain
 breaking changes, and each one is marked **Breaking** with a migration note.
 
-## [0.7.10] - Unreleased
+## [0.7.10] - 2026-10-08
 
 ### Added
 - **Claude Haiku 5.5** (`claude-haiku-5-5`, 1M context, 128K output): $0.10 / $0.50 per 1M tokens when the prompt is
