@@ -64,6 +64,22 @@ internal sealed class ModelInfoJson
     [JsonPropertyName("pricingTiers")]
     public List<PricingTierJson>? PricingTiers { get; set; }
 
+    [JsonPropertyName("cacheWritePrices")]
+    public List<CacheWritePriceJson>? CacheWritePrices { get; set; }
+
+    [JsonPropertyName("scheduledPrices")]
+    public List<ScheduledPriceJson>? ScheduledPrices { get; set; }
+
+    // Lifecycle — ISO-8601 dates (yyyy-MM-dd) as the vendor publishes them for its own API.
+    [JsonPropertyName("deprecationDate")]
+    public string? DeprecationDate { get; set; }
+
+    [JsonPropertyName("retirementDate")]
+    public string? RetirementDate { get; set; }
+
+    [JsonPropertyName("replacementModelId")]
+    public string? ReplacementModelId { get; set; }
+
     [JsonPropertyName("priceSource")]
     public string PriceSource { get; set; } = "Official";
 
@@ -140,6 +156,35 @@ internal sealed class AliasJson
 
     [JsonPropertyName("type")]
     public string Type { get; set; } = "exact";
+}
+
+internal sealed class CacheWritePriceJson
+{
+    /// <summary>Cache lifetime as a number and a unit: "5m", "1h", "30s".</summary>
+    [JsonPropertyName("ttl")]
+    public string Ttl { get; set; } = "";
+
+    [JsonPropertyName("pricePerMillion")]
+    public decimal PricePerMillion { get; set; }
+}
+
+internal sealed class ScheduledPriceJson
+{
+    /// <summary>ISO-8601 date (yyyy-MM-dd), UTC — the first day the rates apply.</summary>
+    [JsonPropertyName("effectiveFrom")]
+    public string EffectiveFrom { get; set; } = "";
+
+    [JsonPropertyName("inputPricePerMillion")]
+    public decimal? InputPricePerMillion { get; set; }
+
+    [JsonPropertyName("outputPricePerMillion")]
+    public decimal? OutputPricePerMillion { get; set; }
+
+    [JsonPropertyName("cacheReadPricePerMillion")]
+    public decimal? CacheReadPricePerMillion { get; set; }
+
+    [JsonPropertyName("cacheWritePricePerMillion")]
+    public decimal? CacheWritePricePerMillion { get; set; }
 }
 
 internal sealed class PricingTierJson

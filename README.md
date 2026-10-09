@@ -71,6 +71,12 @@ var costWithCache = model?.CalculateCost(
     cacheReadTokens: 400_000,
     cacheWriteTokens: 50_000);
 
+// Cache writes priced by lifetime (Anthropic: 5-minute vs 1-hour writes — CacheWritePrices)
+var costOneHourCache = model?.CalculateCost(100_000, 50_000, 400_000, 50_000, cacheWriteTtl: TimeSpan.FromHours(1));
+
+// The rates in effect on a date — applies vendor-announced price changes (ScheduledPrices)
+var costNextYear = model?.AsOf(new DateOnly(2027, 1, 1)).CalculateCost(500_000, 200_000);
+
 // Via CostCalculator (DI-friendly) — same overloads, plus a tiered one (see Tiered Pricing below)
 ICostCalculator calc = CostCalculator.Default();
 var price = calc.CalculateCost("gpt-4o", inputTokens: 1_000, outputTokens: 500);
@@ -163,11 +169,29 @@ var cost = calc.CalculateCost("my-fine-tuned-model", 10_000, 5_000);
 | `ImageInputPrice` | Per-image input cost |
 | `AudioInputPricePerSecond` | Audio input cost per second |
 | `PricingTiers` | Non-representative price bands (context-length or time-of-day) — see [Tiered Pricing](#tiered-pricing) |
+| `CacheWritePrices` | Cache-write price per cache lifetime (`Ttl` → price) where the vendor prices them apart — Anthropic 5-minute and 1-hour writes; `GetCacheWritePrice(ttl)` |
+| `ScheduledPrices` | Vendor-announced price changes with an `EffectiveFrom` date; `AsOf(date)` returns the model with the rates in effect then. Past prices are not kept — record a call's cost when it is made |
 
 > **Note — these fields hold the representative rate**: the price outside of any
 > [pricing tier](#tiered-pricing) a model carries. Cache-write cost falls back to the input rate
 > when a provider does not price it separately, which matches how automatic prompt caching is
 > normally billed.
+>
+> **Reasoning tokens** are billed at the output rate by OpenAI, Anthropic and Google — pass them as output tokens.
+> OpenAI (`output_tokens` includes `reasoning_tokens`) and Anthropic (thinking is part of `output_tokens`) already count
+> them there; Gemini reports them apart (`thoughtsTokenCount`), so its output is `candidatesTokenCount + thoughtsTokenCount`.
+> Prices are in the vendor's currency (USD).
+
+### Lifecycle
+| Property | Description |
+|----------|-------------|
+| `DeprecationDate` | When the vendor deprecated the model on its own API (`null` = not deprecated) |
+| `RetirementDate` | When the vendor stops serving it — requests fail from then on |
+| `ReplacementModelId` | The vendor's recommended successor, as the vendor names it (resolves through `ModelCatalog.FindModel`) |
+
+`GetLifecycleStatus(asOf)` returns `Active` / `Deprecated` / `Retired` for a date, computed from the dates so an older
+package still answers correctly. Filled for Anthropic and OpenAI from their deprecation pages; partner clouds
+(Bedrock, Vertex AI, Azure) keep their own schedules and are not covered.
 
 ### Input Modalities
 | Property | Description |

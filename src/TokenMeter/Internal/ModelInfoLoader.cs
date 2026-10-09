@@ -89,6 +89,27 @@ internal static class ModelInfoLoader
         ImageInputPrice = j.ImageInputPrice,
         AudioInputPricePerSecond = j.AudioInputPricePerSecond,
         PricingTiers = j.PricingTiers?.Select(ToPricingTier).ToList(),
+        // An entry whose lifetime or date does not parse is left out rather than thrown on, as a malformed
+        // lastUpdated is: the loader fails only on unreadable JSON. The test suite holds every entry to parsing.
+        CacheWritePrices = j.CacheWritePrices?
+            .Where(p => ParseTtl(p.Ttl) is not null)
+            .Select(p => new CacheWritePrice { Ttl = ParseTtl(p.Ttl)!.Value, PricePerMillion = p.PricePerMillion })
+            .ToList(),
+        ScheduledPrices = j.ScheduledPrices?
+            .Where(p => ParseDate(p.EffectiveFrom) is not null)
+            .Select(p => new ScheduledPrice
+            {
+                EffectiveFrom = ParseDate(p.EffectiveFrom)!.Value,
+                InputPricePerMillion = p.InputPricePerMillion,
+                OutputPricePerMillion = p.OutputPricePerMillion,
+                CacheReadPricePerMillion = p.CacheReadPricePerMillion,
+                CacheWritePricePerMillion = p.CacheWritePricePerMillion,
+            })
+            .OrderBy(p => p.EffectiveFrom)
+            .ToList(),
+        DeprecationDate = ParseDate(j.DeprecationDate),
+        RetirementDate = ParseDate(j.RetirementDate),
+        ReplacementModelId = j.ReplacementModelId,
         PriceSource = ParseEnum<PriceSource>(j.PriceSource, PriceSource.Official),
         SupportsImageInput = j.SupportsImageInput,
         SupportsAudioInput = j.SupportsAudioInput,
@@ -124,6 +145,29 @@ internal static class ModelInfoLoader
         OutputPricePerMillion = j.OutputPricePerMillion,
         CacheReadPricePerMillion = j.CacheReadPricePerMillion,
     };
+
+    internal static DateOnly? ParseDate(string? value) =>
+        DateOnly.TryParseExact(value, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture,
+            System.Globalization.DateTimeStyles.None, out var parsed)
+            ? parsed
+            : null;
+
+    // "5m", "1h", "30s" — the way vendors name cache lifetimes.
+    internal static TimeSpan? ParseTtl(string? value)
+    {
+        if (value is not { Length: >= 2 }
+            || !int.TryParse(value.AsSpan(0, value.Length - 1), System.Globalization.NumberStyles.None,
+                System.Globalization.CultureInfo.InvariantCulture, out var amount))
+            return null;
+
+        return value[^1] switch
+        {
+            's' => TimeSpan.FromSeconds(amount),
+            'm' => TimeSpan.FromMinutes(amount),
+            'h' => TimeSpan.FromHours(amount),
+            _ => null,
+        };
+    }
 
     private static TimeOnly? ParseTimeOfDay(string? value) =>
         TimeOnly.TryParse(value, System.Globalization.CultureInfo.InvariantCulture, out var parsed)

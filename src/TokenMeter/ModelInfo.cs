@@ -75,6 +75,50 @@ public record ModelInfo
     /// </summary>
     public PriceSource PriceSource { get; init; }
 
+    /// <summary>
+    /// Cache-write prices per cache lifetime, for a vendor whose write price depends on it (Anthropic: 5 minutes and
+    /// 1 hour). <c>null</c> when the vendor has one write price (<see cref="CacheWritePricePerMillion"/>). See
+    /// <see cref="GetCacheWritePrice(TimeSpan)"/>.
+    /// </summary>
+    public IReadOnlyList<CacheWritePrice>? CacheWritePrices { get; init; }
+
+    /// <summary>
+    /// Price changes the vendor has announced with an effective date. The price fields above are the rates in effect
+    /// when the catalog was last verified; <see cref="AsOf(DateOnly)"/> applies the changes in effect on a later date.
+    /// <c>null</c> when none is announced. Past prices are not kept — record the cost of a call when it is made.
+    /// </summary>
+    public IReadOnlyList<ScheduledPrice>? ScheduledPrices { get; init; }
+
+    // ── Lifecycle ─────────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// The date the vendor deprecated the model (announced its retirement) on its own API; <c>null</c> when it has not.
+    /// Partner clouds (Bedrock, Vertex AI, Azure) keep their own schedules.
+    /// </summary>
+    public DateOnly? DeprecationDate { get; init; }
+
+    /// <summary>
+    /// The date the vendor stops serving the model on its own API — requests fail from then on; <c>null</c> when no
+    /// date is set.
+    /// </summary>
+    public DateOnly? RetirementDate { get; init; }
+
+    /// <summary>The model the vendor recommends moving to, as the vendor names it; <c>null</c> when none is named.</summary>
+    public string? ReplacementModelId { get; init; }
+
+    /// <summary>
+    /// The model's lifecycle state on <paramref name="asOf"/>: <see cref="ModelLifecycleStatus.Retired"/> from
+    /// <see cref="RetirementDate"/>, <see cref="ModelLifecycleStatus.Deprecated"/> from <see cref="DeprecationDate"/>,
+    /// otherwise <see cref="ModelLifecycleStatus.Active"/>. Computed from the dates rather than stored, so a catalog
+    /// read months after it was published still answers correctly.
+    /// </summary>
+    public ModelLifecycleStatus GetLifecycleStatus(DateOnly asOf)
+    {
+        if (RetirementDate is { } retired && asOf >= retired) return ModelLifecycleStatus.Retired;
+        if (DeprecationDate is { } deprecated && asOf >= deprecated) return ModelLifecycleStatus.Deprecated;
+        return ModelLifecycleStatus.Active;
+    }
+
     // ── Input Modalities ──────────────────────────────────────────────────────
 
     /// <summary>Model accepts image data in requests.</summary>
@@ -205,6 +249,59 @@ public record ModelInfo
             * (CacheWritePricePerMillion ?? InputPricePerMillion.Value);
 
         return inputCost + outputCost + cacheReadCost + cacheWriteCost;
+    }
+
+    /// <summary>
+    /// Calculates total cost including prompt cache tokens written with a specific cache lifetime: the write is priced at
+    /// <see cref="GetCacheWritePrice(TimeSpan)"/> for <paramref name="cacheWriteTtl"/>. Otherwise the same as
+    /// <see cref="CalculateCost(int, int, int, int)"/>.
+    /// </summary>
+    public decimal? CalculateCost(
+        int inputTokens, int outputTokens,
+        int cacheReadTokens, int cacheWriteTokens, TimeSpan cacheWriteTtl)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(cacheWriteTokens);
+        var cost = CalculateCost(inputTokens, outputTokens, cacheReadTokens, 0);
+        if (cost is null) return null;
+        var writePrice = GetCacheWritePrice(cacheWriteTtl) ?? InputPricePerMillion!.Value;
+        return cost + (cacheWriteTokens / 1_000_000m) * writePrice;
+    }
+
+    /// <summary>
+    /// The cache-write price for entries that live <paramref name="ttl"/>: the matching <see cref="CacheWritePrices"/>
+    /// entry, else <see cref="CacheWritePricePerMillion"/> (the vendor's default lifetime). <c>null</c> when the
+    /// catalog has no cache-write price.
+    /// </summary>
+    public decimal? GetCacheWritePrice(TimeSpan ttl)
+        => CacheWritePrices?.FirstOrDefault(p => p.Ttl == ttl)?.PricePerMillion ?? CacheWritePricePerMillion;
+
+    /// <summary>
+    /// This model with the rates in effect on <paramref name="date"/> (UTC): every <see cref="ScheduledPrices"/> entry
+    /// whose <see cref="ScheduledPrice.EffectiveFrom"/> is on or before it is applied, oldest first. Returns this
+    /// instance when none applies. A per-lifetime cache-write price (<see cref="CacheWritePrices"/>) keeps its ratio to
+    /// the default write price when a change moves that price.
+    /// </summary>
+    public ModelInfo AsOf(DateOnly date)
+    {
+        if (ScheduledPrices is null or []) return this;
+
+        var result = this;
+        foreach (var change in ScheduledPrices.Where(p => p.EffectiveFrom <= date).OrderBy(p => p.EffectiveFrom))
+        {
+            var oldWrite = result.CacheWritePricePerMillion;
+            var newWrite = change.CacheWritePricePerMillion ?? oldWrite;
+            result = result with
+            {
+                InputPricePerMillion = change.InputPricePerMillion ?? result.InputPricePerMillion,
+                OutputPricePerMillion = change.OutputPricePerMillion ?? result.OutputPricePerMillion,
+                CacheReadPricePerMillion = change.CacheReadPricePerMillion ?? result.CacheReadPricePerMillion,
+                CacheWritePricePerMillion = newWrite,
+                CacheWritePrices = oldWrite is > 0 && newWrite is { } write && write != oldWrite
+                    ? result.CacheWritePrices?.Select(p => p with { PricePerMillion = p.PricePerMillion * write / oldWrite.Value }).ToList()
+                    : result.CacheWritePrices,
+            };
+        }
+        return result;
     }
 
     /// <summary>

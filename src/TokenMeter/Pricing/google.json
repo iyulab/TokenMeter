@@ -12,6 +12,9 @@
       "inputPricePerMillion": 0.75,
       "outputPricePerMillion": 3.75,
       "cacheReadPricePerMillion": 0.075,
+      "scheduledPrices": [
+        { "effectiveFrom": "2027-01-01", "inputPricePerMillion": 1.50, "outputPricePerMillion": 7.50, "cacheReadPricePerMillion": 0.15 }
+      ],
       "supportsImageInput": true,
       "supportsVideoInput": true,
       "supportsDocumentInput": true,
@@ -47,6 +50,9 @@
       "inputPricePerMillion": 0.75,
       "outputPricePerMillion": 3.75,
       "cacheReadPricePerMillion": 0.075,
+      "scheduledPrices": [
+        { "effectiveFrom": "2027-01-01", "inputPricePerMillion": 1.50, "outputPricePerMillion": 7.50, "cacheReadPricePerMillion": 0.15 }
+      ],
       "supportsImageInput": true,
       "supportsVideoInput": true,
       "supportsDocumentInput": true,
@@ -76,6 +82,9 @@
       "inputPricePerMillion": 0.75,
       "outputPricePerMillion": 3.75,
       "cacheReadPricePerMillion": 0.075,
+      "scheduledPrices": [
+        { "effectiveFrom": "2027-01-01", "inputPricePerMillion": 1.50, "outputPricePerMillion": 7.50, "cacheReadPricePerMillion": 0.15 }
+      ],
       "supportsImageInput": true,
       "supportsVideoInput": true,
       "supportsDocumentInput": true,

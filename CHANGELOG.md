@@ -4,6 +4,25 @@ All notable changes to this project are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/); while the major version is 0, a minor release may contain
 breaking changes, and each one is marked **Breaking** with a migration note.
 
+## [Unreleased]
+
+### Added
+- **Model lifecycle.** `ModelInfo.DeprecationDate`, `RetirementDate` and `ReplacementModelId`, with
+  `GetLifecycleStatus(asOf)` → `Active` / `Deprecated` / `Retired` computed from the dates. Filled for Anthropic
+  (10 models) and OpenAI (18) from the vendors' deprecation pages — e.g. `claude-sonnet-4-5` retires 2026-11-30 for
+  `claude-sonnet-5-5`, `gpt-4`/`o1`/`o4-mini` on 2026-10-23.
+- **Cache-write prices per cache lifetime.** `ModelInfo.CacheWritePrices` and `GetCacheWritePrice(ttl)`, and a
+  `CalculateCost(..., cacheWriteTtl)` overload. Every Anthropic model carries its 5-minute and 1-hour write prices
+  (1-hour = 2x input).
+- **Announced price changes.** `ModelInfo.ScheduledPrices` and `AsOf(date)`, which returns the model with the rates in
+  effect on a date. Gemini 3.8/3.7/3.6 Flash carry their 2027-01-01 rates (input 1.50, output 7.50, cache read 0.15).
+
+### Fixed
+- **Claude Sonnet 5.5 cache reads cost 0.10 per MTok**, not 0.20 (0.05x input, per Anthropic's pricing page).
+
+### Documentation
+- How reasoning tokens are billed and counted per vendor (Gemini reports them apart from candidate tokens).
+
 ## [0.7.10] - 2026-10-08
 
 ### Added

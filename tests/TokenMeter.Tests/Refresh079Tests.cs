@@ -9,8 +9,9 @@ namespace TokenMeter.Tests;
 public class Refresh079Tests
 {
     [Theory]
-    [InlineData("claude-sonnet-5-5", "claude-sonnet-5-5", 2.00, 10.00, 0.20)]
-    [InlineData("anthropic.claude-sonnet-5-5", "claude-sonnet-5-5", 2.00, 10.00, 0.20)]
+    // Cache read 0.10: Sonnet 5.5 cache hits are 0.05x input (pricing page footnote, re-read 2026-10-09; 0.20 was 0.1x).
+    [InlineData("claude-sonnet-5-5", "claude-sonnet-5-5", 2.00, 10.00, 0.10)]
+    [InlineData("anthropic.claude-sonnet-5-5", "claude-sonnet-5-5", 2.00, 10.00, 0.10)]
     [InlineData("gpt-6.1-sol", "gpt-6.1-sol", 2.00, 10.00, 0.10)]
     // Served and priced, but missing until the coverage check listed them (0.7.9's version-token guard had turned
     // their old fuzzy match onto gpt-5 into a null).
