@@ -57,11 +57,12 @@ public record ModelInfo
     /// </summary>
     public decimal? CacheWritePricePerMillion { get; init; }
 
-    /// <summary>Cost per image sent as input. <c>null</c> if not applicable or unknown.</summary>
-    public decimal? ImageInputPrice { get; init; }
-
-    /// <summary>Cost per second of audio input. <c>null</c> if not applicable or unknown.</summary>
-    public decimal? AudioInputPricePerSecond { get; init; }
+    /// <summary>
+    /// Per-token prices for modalities the vendor prices apart from the representative rate — audio input and audio cache
+    /// reads on Gemini Flash models, image output on Gemini image models. A modality not listed is priced at the
+    /// representative rate. <c>null</c> or empty when the vendor prices every modality alike.
+    /// </summary>
+    public IReadOnlyList<ModalityPrice>? ModalityPrices { get; init; }
 
     /// <summary>
     /// Non-representative price bands (context-length or time-of-day) layered on top of the
@@ -340,7 +341,9 @@ public record ModelInfo
     /// whole request → the <see cref="CostContext.ServiceTier"/> multiplier → the <see cref="CostContext.Region"/>
     /// multiplier (both on every token price) → per-call fees for server-side tools. Cache reads are priced at the read
     /// price and each cache write at the price for its lifetime; a price the catalog lacks falls back tier → model rate →
-    /// input price for cache tokens.
+    /// input price for cache tokens. Tokens a usage reports in a modality the model prices apart
+    /// (<see cref="ModalityPrices"/>; <see cref="TokenCounts.InputTokensByModality"/> and its siblings) are priced at that
+    /// modality's price instead of the input, cache-read or output price — a modality price is not tier-adjusted.
     /// Returns <c>null</c> when the model has no input or output price, is not offered at the requested service tier, or
     /// has no fee for a tool the usage calls — an unknown price, never the standard one.
     /// </summary>
@@ -352,6 +355,9 @@ public record ModelInfo
         ArgumentOutOfRangeException.ThrowIfNegative(usage.OutputTokens);
         foreach (var write in usage.CacheWrites ?? [])
             ArgumentOutOfRangeException.ThrowIfNegative(write.Tokens);
+        ValidateBreakdown(usage.InputTokensByModality, usage.InputTokens, nameof(TokenCounts.InputTokensByModality));
+        ValidateBreakdown(usage.CacheReadTokensByModality, usage.CacheReadTokens, nameof(TokenCounts.CacheReadTokensByModality));
+        ValidateBreakdown(usage.OutputTokensByModality, usage.OutputTokens, nameof(TokenCounts.OutputTokensByModality));
 
         var model = context.Date is { } date ? AsOf(date) : this;
         if (model.InputPricePerMillion is null || model.OutputPricePerMillion is null) return null;
@@ -375,6 +381,10 @@ public record ModelInfo
             var writePrice = WritePrice(tier, write.Ttl) ?? model.WritePrice(write.Ttl) ?? inputPrice;
             cost += (write.Tokens / 1_000_000m) * writePrice;
         }
+
+        cost += model.ModalityAdjustment(usage.InputTokensByModality, TokenUse.Input, inputPrice)
+              + model.ModalityAdjustment(usage.CacheReadTokensByModality, TokenUse.CacheRead, readPrice)
+              + model.ModalityAdjustment(usage.OutputTokensByModality, TokenUse.Output, outputPrice);
 
         if (context.ServiceTier != ServiceTier.Standard)
         {
@@ -418,6 +428,34 @@ public record ModelInfo
         var model = date is { } d ? AsOf(d) : this;
         if (model.CacheStoragePricePerMillionPerHour is not { } price) return null;
         return (cachedTokens / 1_000_000m) * price * (storedFor.Ticks / (decimal)TimeSpan.TicksPerHour);
+    }
+
+    // What pricing the breakdown's tokens at their modality's price changes against the base price they were counted at.
+    private decimal ModalityAdjustment(IReadOnlyDictionary<TokenModality, int>? breakdown, TokenUse use, decimal basePrice)
+    {
+        if (breakdown is null or { Count: 0 } || ModalityPrices is null or []) return 0m;
+
+        var adjustment = 0m;
+        foreach (var (modality, tokens) in breakdown)
+        {
+            if (ModalityPrices.FirstOrDefault(p => p.Modality == modality && p.Use == use) is { } price)
+                adjustment += (tokens / 1_000_000m) * (price.PricePerMillion - basePrice);
+        }
+        return adjustment;
+    }
+
+    private static void ValidateBreakdown(IReadOnlyDictionary<TokenModality, int>? breakdown, int total, string name)
+    {
+        if (breakdown is null) return;
+        var sum = 0L;
+        foreach (var tokens in breakdown.Values)
+        {
+            if (tokens < 0)
+                throw new ArgumentOutOfRangeException(name, tokens, "A modality's token count cannot be negative.");
+            sum += tokens;
+        }
+        if (sum > total)
+            throw new ArgumentException($"The modality breakdown adds up to {sum} tokens, more than the {total} it divides.", name);
     }
 
     // The tier's write price for a lifetime: its per-lifetime entry, else its default-lifetime price.

@@ -247,6 +247,7 @@
       "toolCallPricesPerThousand": { "google_search": 14.0 },
       "cacheReadPricePerMillion": 0.025,
       "cacheStoragePricePerMillionPerHour": 1.00,
+      "modalityPrices": { "input": { "audio": 0.50 }, "cacheRead": { "audio": 0.05 } },
       "supportsImageInput": true,
       "supportsVideoInput": true,
       "supportsDocumentInput": true,
@@ -303,6 +304,7 @@
       "toolCallPricesPerThousand": { "google_search": 14.0 },
       "cacheReadPricePerMillion": 0.05,
       "cacheStoragePricePerMillionPerHour": 1.00,
+      "modalityPrices": { "input": { "audio": 1.00 }, "cacheRead": { "audio": 0.10 } },
       "supportsImageInput": true,
       "supportsVideoInput": true,
       "supportsDocumentInput": true,
@@ -367,6 +369,7 @@
       "toolCallPricesPerThousand": { "google_search": 35.0 },
       "cacheReadPricePerMillion": 0.01,
       "cacheStoragePricePerMillionPerHour": 1.00,
+      "modalityPrices": { "input": { "audio": 0.30 }, "cacheRead": { "audio": 0.03 } },
       "supportsImageInput": true,
       "supportsVideoInput": true,
       "supportsDocumentInput": true,
@@ -395,6 +398,7 @@
       "toolCallPricesPerThousand": { "google_search": 35.0 },
       "cacheReadPricePerMillion": 0.03,
       "cacheStoragePricePerMillionPerHour": 1.00,
+      "modalityPrices": { "input": { "audio": 1.00 }, "cacheRead": { "audio": 0.10 } },
       "supportsImageInput": true,
       "supportsVideoInput": true,
       "supportsDocumentInput": true,
@@ -520,6 +524,136 @@
       "aliases": [
         { "pattern": "gemini-1.5-flash", "type": "contains" },
         { "pattern": "gemini-1-5-flash", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-nano-banana-2.1",
+      "displayName": "Gemini Nano Banana 2.1",
+      "modelType": "ImageGeneration",
+      "inputPricePerMillion": 1.50,
+      "outputPricePerMillion": 7.50,
+      "modalityPrices": { "output": { "image": 30.00 } },
+      "supportsImageInput": true,
+      "supportsStreaming": true,
+      "toolCallingFormat": "Gemini",
+      "aliases": [
+        { "pattern": "gemini-nano-banana-2.1", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-3.1-flash-image",
+      "displayName": "Gemini 3.1 Flash Image",
+      "deprecationDate": "2026-10-06",
+      "replacementModelId": "gemini-nano-banana-2.1",
+      "modelType": "ImageGeneration",
+      "inputPricePerMillion": 0.50,
+      "outputPricePerMillion": 3.00,
+      "modalityPrices": { "output": { "image": 60.00 } },
+      "supportsImageInput": true,
+      "supportsStreaming": true,
+      "toolCallingFormat": "Gemini",
+      "aliases": [
+        { "pattern": "gemini-3.1-flash-image", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-3.1-flash-lite-image",
+      "displayName": "Gemini 3.1 Flash-Lite Image",
+      "modelType": "ImageGeneration",
+      "inputPricePerMillion": 0.25,
+      "outputPricePerMillion": 1.50,
+      "modalityPrices": { "output": { "image": 30.00 } },
+      "supportsImageInput": true,
+      "supportsStreaming": true,
+      "toolCallingFormat": "Gemini",
+      "aliases": [
+        { "pattern": "gemini-3.1-flash-lite-image", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-3-pro-image",
+      "displayName": "Gemini 3 Pro Image",
+      "modelType": "ImageGeneration",
+      "inputPricePerMillion": 2.00,
+      "outputPricePerMillion": 12.00,
+      "modalityPrices": { "output": { "image": 120.00 } },
+      "supportsImageInput": true,
+      "supportsStreaming": true,
+      "toolCallingFormat": "Gemini",
+      "aliases": [
+        { "pattern": "gemini-3-pro-image", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-3.8-flash-tts",
+      "displayName": "Gemini 3.8 Flash TTS",
+      "modelType": "TextToSpeech",
+      "inputPricePerMillion": 0.50,
+      "outputPricePerMillion": 9.00,
+      "scheduledPrices": [
+        { "effectiveFrom": "2027-01-01", "inputPricePerMillion": 1.00, "outputPricePerMillion": 18.00 }
+      ],
+      "supportsStreaming": true,
+      "toolCallingFormat": "Gemini",
+      "aliases": [
+        { "pattern": "gemini-3.8-flash-tts", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-3.8-flash-lite-tts",
+      "displayName": "Gemini 3.8 Flash-Lite TTS",
+      "modelType": "TextToSpeech",
+      "inputPricePerMillion": 0.50,
+      "outputPricePerMillion": 6.00,
+      "scheduledPrices": [
+        { "effectiveFrom": "2027-01-01", "inputPricePerMillion": 1.00, "outputPricePerMillion": 12.00 }
+      ],
+      "supportsStreaming": true,
+      "toolCallingFormat": "Gemini",
+      "aliases": [
+        { "pattern": "gemini-3.8-flash-lite-tts", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-3.1-flash-tts-preview",
+      "displayName": "Gemini 3.1 Flash TTS Preview",
+      "retirementDate": "2026-11-17",
+      "replacementModelId": "gemini-3.8-flash-tts",
+      "modelType": "TextToSpeech",
+      "inputPricePerMillion": 1.00,
+      "outputPricePerMillion": 20.00,
+      "supportsStreaming": true,
+      "toolCallingFormat": "Gemini",
+      "aliases": [
+        { "pattern": "gemini-3.1-flash-tts-preview", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-2.5-flash-preview-tts",
+      "displayName": "Gemini 2.5 Flash Preview TTS",
+      "retirementDate": "2026-11-17",
+      "replacementModelId": "gemini-3.8-flash-tts",
+      "modelType": "TextToSpeech",
+      "inputPricePerMillion": 0.50,
+      "outputPricePerMillion": 10.00,
+      "supportsStreaming": true,
+      "toolCallingFormat": "Gemini",
+      "aliases": [
+        { "pattern": "gemini-2.5-flash-preview-tts", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-2.5-pro-preview-tts",
+      "displayName": "Gemini 2.5 Pro Preview TTS",
+      "retirementDate": "2026-11-17",
+      "replacementModelId": "gemini-3.8-flash-tts",
+      "modelType": "TextToSpeech",
+      "inputPricePerMillion": 1.00,
+      "outputPricePerMillion": 20.00,
+      "supportsStreaming": true,
+      "toolCallingFormat": "Gemini",
+      "aliases": [
+        { "pattern": "gemini-2.5-pro-preview-tts", "type": "contains" }
       ]
     }
   ]

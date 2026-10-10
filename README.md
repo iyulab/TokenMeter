@@ -147,7 +147,7 @@ foreach (var m in ModelCatalog.Anthropic.Values)
 // By provider — string-keyed (when the name is only known at runtime)
 var openai = ModelCatalog.GetProvider("OpenAI");   // dict, empty if unknown
 
-// By model type (the built-in catalog currently contains Chat models only)
+// By model type (Chat, plus Gemini ImageGeneration and TextToSpeech models)
 var chatModels = ModelCatalog.GetByType(ModelType.Chat);
 
 // All providers
@@ -202,8 +202,7 @@ var strict = CostCalculator.Default(AliasMatchType.Exact);
 | `OutputPricePerMillion` | Standard output token price |
 | `CacheReadPricePerMillion` | Prompt cache hit price (often 90% discount) |
 | `CacheWritePricePerMillion` | Prompt cache population price |
-| `ImageInputPrice` | Per-image input cost |
-| `AudioInputPricePerSecond` | Audio input cost per second |
+| `ModalityPrices` | Per-token prices for a modality the vendor prices apart (`Modality` × `Use` = Input / CacheRead / Output): Gemini Flash audio input and audio cache reads, Gemini image models' image output. Applied to `TokenCounts.InputTokensByModality` / `CacheReadTokensByModality` / `OutputTokensByModality` |
 | `PricingTiers` | Non-representative price bands (context-length or time-of-day) — see [Tiered Pricing](#tiered-pricing) |
 | `CacheWritePrices` | Cache-write price per cache lifetime (`Ttl` → price) where the vendor prices them apart — Anthropic 5-minute and 1-hour writes; `GetCacheWritePrice(ttl)` |
 | `ServiceTierMultipliers` | Batch / Flex / Fast multipliers on every token price (OpenAI, Anthropic). A tier not listed is not offered |

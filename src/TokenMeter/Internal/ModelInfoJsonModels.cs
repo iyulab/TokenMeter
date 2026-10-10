@@ -58,11 +58,9 @@ internal sealed class ModelInfoJson
     [JsonPropertyName("cacheStoragePricePerMillionPerHour")]
     public decimal? CacheStoragePricePerMillionPerHour { get; set; }
 
-    [JsonPropertyName("imageInputPrice")]
-    public decimal? ImageInputPrice { get; set; }
-
-    [JsonPropertyName("audioInputPricePerSecond")]
-    public decimal? AudioInputPricePerSecond { get; set; }
+    /// <summary>Use (<c>input</c> / <c>cacheRead</c> / <c>output</c>) → modality (<c>audio</c>, <c>image</c>, …) → price per 1M tokens.</summary>
+    [JsonPropertyName("modalityPrices")]
+    public Dictionary<string, Dictionary<string, decimal>>? ModalityPrices { get; set; }
 
     [JsonPropertyName("pricingTiers")]
     public List<PricingTierJson>? PricingTiers { get; set; }

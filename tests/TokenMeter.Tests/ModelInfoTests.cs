@@ -29,8 +29,7 @@ public class ModelInfoTests
         Assert.Null(info.OutputPricePerMillion);
         Assert.Null(info.CacheReadPricePerMillion);
         Assert.Null(info.CacheWritePricePerMillion);
-        Assert.Null(info.ImageInputPrice);
-        Assert.Null(info.AudioInputPricePerSecond);
+        Assert.Null(info.ModalityPrices);
         Assert.Null(info.ThinkingTagPattern);
         Assert.Null(info.ThinkingFieldName);
         Assert.Null(info.MaxThinkingTokens);

@@ -87,8 +87,19 @@ internal static class ModelInfoLoader
         CacheReadPricePerMillion = j.CacheReadPricePerMillion,
         CacheWritePricePerMillion = j.CacheWritePricePerMillion,
         CacheStoragePricePerMillionPerHour = j.CacheStoragePricePerMillionPerHour,
-        ImageInputPrice = j.ImageInputPrice,
-        AudioInputPricePerSecond = j.AudioInputPricePerSecond,
+        // A use or modality name that does not parse is left out, as an unparseable tier is; the test suite holds every
+        // entry to parsing.
+        ModalityPrices = j.ModalityPrices?
+            .Where(use => Enum.TryParse<TokenUse>(use.Key, ignoreCase: true, out _))
+            .SelectMany(use => use.Value
+                .Where(m => Enum.TryParse<TokenModality>(m.Key, ignoreCase: true, out _))
+                .Select(m => new ModalityPrice
+                {
+                    Use = Enum.Parse<TokenUse>(use.Key, ignoreCase: true),
+                    Modality = Enum.Parse<TokenModality>(m.Key, ignoreCase: true),
+                    PricePerMillion = m.Value,
+                }))
+            .ToList(),
         PricingTiers = j.PricingTiers?.Select(ToPricingTier).ToList(),
         // An entry whose lifetime or date does not parse is left out rather than thrown on, as a malformed
         // lastUpdated is: the loader fails only on unreadable JSON. The test suite holds every entry to parsing.

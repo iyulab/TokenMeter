@@ -33,6 +33,25 @@ public sealed record TokenCounts
     public IReadOnlyDictionary<string, int>? ToolCalls { get; init; }
 
     /// <summary>
+    /// How many of <see cref="InputTokens"/> were in each modality, as vendors report it (Gemini
+    /// <c>promptTokensDetails</c> less the cached part, OpenAI <c>input_tokens_details.audio_tokens</c>). A breakdown of the
+    /// total, not an addition to it — modalities left out stay at the representative rate. Null when not reported.
+    /// </summary>
+    public IReadOnlyDictionary<TokenModality, int>? InputTokensByModality { get; init; }
+
+    /// <summary>
+    /// How many of <see cref="CacheReadTokens"/> were in each modality (Gemini <c>cacheTokensDetails</c>). A breakdown of the
+    /// total. Null when not reported.
+    /// </summary>
+    public IReadOnlyDictionary<TokenModality, int>? CacheReadTokensByModality { get; init; }
+
+    /// <summary>
+    /// How many of <see cref="OutputTokens"/> were in each modality (Gemini <c>candidatesTokensDetails</c> — image output on
+    /// an image model). A breakdown of the total. Null when not reported.
+    /// </summary>
+    public IReadOnlyDictionary<TokenModality, int>? OutputTokensByModality { get; init; }
+
+    /// <summary>
     /// The prompt length a vendor's long-context tier is decided by: every input token, cache reads and writes
     /// included.
     /// </summary>

@@ -13,11 +13,27 @@ breaking changes, and each one is marked **Breaking** with a migration note.
   storage change. Filled for Gemini from Google's pricing page (2026-10-10): 3.8 Flash and 3.6 Flash $0.50 per 1M tokens
   per hour ($1.00 from 2027-01-01), 3.1 Pro Preview and 2.5 Pro $4.50, 3.5 Flash-Lite, 3.1 Flash-Lite, 3 Flash Preview,
   2.5 Flash and 2.5 Flash-Lite $1.00.
+- **Per-token modality prices.** `ModelInfo.ModalityPrices` (`ModalityPrice`: `TokenModality` × `TokenUse` Input /
+  CacheRead / Output) and `TokenCounts.InputTokensByModality` / `CacheReadTokensByModality` / `OutputTokensByModality` —
+  breakdowns of the totals, as vendors report them. `CalculateCost(TokenCounts, CostContext)` prices the tokens of a
+  modality the model prices apart at that rate (before service-tier and regional multipliers); a breakdown larger than its
+  total throws. Filled from Google's pricing page (2026-10-10): audio input / audio cache read on Gemini 2.5 Flash
+  (1.00 / 0.10), 2.5 Flash-Lite (0.30 / 0.03), 3 Flash Preview (1.00 / 0.10) and 3.1 Flash-Lite (0.50 / 0.05).
+- **Gemini image and speech models.** `gemini-nano-banana-2.1`, `gemini-3.1-flash-image` (deprecated 2026-10-06),
+  `gemini-3.1-flash-lite-image` and `gemini-3-pro-image` (`ImageGeneration`, image output 30 – 120 per 1M tokens), and
+  `gemini-3.8-flash-tts`, `gemini-3.8-flash-lite-tts` (with their 2027-01-01 rates), `gemini-3.1-flash-tts-preview`,
+  `gemini-2.5-flash-preview-tts`, `gemini-2.5-pro-preview-tts` (`TextToSpeech`, output = audio). These ids used to match
+  the chat model whose name they contain and were priced as chat output.
 - **Google model lifecycle.** From Google's deprecations page and changelog (2026-10-10): `gemini-3.5-flash` deprecated
   2026-10-08 for `gemini-3.6-flash`; `gemini-3.7-flash` → `gemini-3.8-flash` and `gemini-3-flash-preview` →
   `gemini-3.6-flash` as replacements; `gemini-3.1-flash-lite` shuts down no earlier than 2027-05-07 (`gemini-3.5-flash-lite`);
   `gemini-3-pro-preview`, `gemini-3.1-flash-lite-preview`, `gemini-2.0-flash(-lite)` and `gemini-1.5-pro/flash` carry
   their past shutdown dates and report `Retired`.
+
+### Removed
+- **Breaking: `ModelInfo.ImageInputPrice` and `AudioInputPricePerSecond`.** No catalog row set them and no calculation read
+  them. Migration: per-token modality rates are in `ModalityPrices`; a per-image or per-second price of your own belongs in
+  your own data.
 
 ## [0.9.0] - 2026-10-10
 
