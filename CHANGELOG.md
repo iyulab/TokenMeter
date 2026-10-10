@@ -4,6 +4,27 @@ All notable changes to this project are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/); while the major version is 0, a minor release may contain
 breaking changes, and each one is marked **Breaking** with a migration note.
 
+## [Unreleased]
+
+### Added
+- **One cost calculation per request.** `ModelInfo.CalculateCost(TokenCounts, CostContext)` and
+  `ICostCalculator.CalculateCost(modelId, TokenCounts, CostContext)` price uncached input, cache reads, cache writes by
+  lifetime (`CacheWriteTokenCount(Ttl, Tokens)`) and output together, at the rates of `CostContext.Date` (`AsOf`) and in
+  the tier the request falls in. `CostContext.At(instant)` sets the date and time of day from one timestamp.
+- **Tiers carry cache-write prices.** `PricingTier.CacheWritePricePerMillion` and `CacheWritePrices`; Claude Haiku 5.5's
+  over-100K tier has its 5-minute and 1-hour write prices.
+- **Gemini long-context tiers and cache-read prices.** Gemini 2.5 Pro (over 200K: input 2.50, output 15.00, cache read
+  0.25) and 3.1 Pro Preview (4.00 / 18.00 / 0.40); cache-read prices for 2.5 Pro, 3.1 Pro Preview, 3 Flash Preview,
+  2.5 Flash and 2.5 Flash-Lite (Google pricing page, 2026-10-10).
+- **Per-provider freshness.** `ModelCatalog.GetLastUpdated(providerName)`.
+- **A calculator that does not guess a self-hosted model.** `CostCalculator.Default(AliasMatchType maxFuzziness)` bounds
+  how an unregistered id is matched against the catalog.
+
+### Changed
+- **A tier is decided by the request's prompt length.** `PricingTierContext.ContextLengthTokens` is documented as every
+  input token, cache reads and writes included — the vendors' rule — not «prompt + expected completion». The calculation
+  did not change; a caller that added the expected completion should pass the prompt length alone.
+
 ## [0.8.0] - 2026-10-09
 
 ### Added

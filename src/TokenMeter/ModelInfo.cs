@@ -305,6 +305,60 @@ public record ModelInfo
     }
 
     /// <summary>
+    /// The cost of one request, every part priced the way the vendor prices it: the rates in effect on
+    /// <see cref="CostContext.Date"/> (<see cref="AsOf(DateOnly)"/>), the <see cref="PricingTiers"/> entry its prompt length
+    /// (<see cref="TokenCounts.PromptTokens"/> — cache reads and writes included) or call time falls in, applied to the
+    /// whole request, cache reads at the read price and each cache write at the price for its lifetime. A price the
+    /// catalog lacks falls back the way the other overloads do: tier → model rate → input price for cache tokens.
+    /// Returns <c>null</c> when the model has no input or output price.
+    /// </summary>
+    public decimal? CalculateCost(TokenCounts usage, CostContext context = default)
+    {
+        ArgumentNullException.ThrowIfNull(usage);
+        ArgumentOutOfRangeException.ThrowIfNegative(usage.InputTokens);
+        ArgumentOutOfRangeException.ThrowIfNegative(usage.CacheReadTokens);
+        ArgumentOutOfRangeException.ThrowIfNegative(usage.OutputTokens);
+        foreach (var write in usage.CacheWrites ?? [])
+            ArgumentOutOfRangeException.ThrowIfNegative(write.Tokens);
+
+        var model = context.Date is { } date ? AsOf(date) : this;
+        if (model.InputPricePerMillion is null || model.OutputPricePerMillion is null) return null;
+
+        var tier = model.FindApplicableTier(new PricingTierContext
+        {
+            ContextLengthTokens = usage.PromptTokens,
+            CallTimeUtc = context.CallTimeUtc,
+        });
+
+        var inputPrice = tier?.InputPricePerMillion ?? model.InputPricePerMillion.Value;
+        var outputPrice = tier?.OutputPricePerMillion ?? model.OutputPricePerMillion.Value;
+        var readPrice = tier?.CacheReadPricePerMillion ?? model.CacheReadPricePerMillion ?? inputPrice;
+
+        var cost = (usage.InputTokens / 1_000_000m) * inputPrice
+                 + (usage.OutputTokens / 1_000_000m) * outputPrice
+                 + (usage.CacheReadTokens / 1_000_000m) * readPrice;
+
+        foreach (var write in usage.CacheWrites ?? [])
+        {
+            var writePrice = WritePrice(tier, write.Ttl) ?? model.WritePrice(write.Ttl) ?? inputPrice;
+            cost += (write.Tokens / 1_000_000m) * writePrice;
+        }
+
+        return cost;
+    }
+
+    // The tier's write price for a lifetime: its per-lifetime entry, else its default-lifetime price.
+    private static decimal? WritePrice(PricingTier? tier, TimeSpan? ttl)
+        => tier is null
+            ? null
+            : (ttl is { } t ? tier.CacheWritePrices?.FirstOrDefault(p => p.Ttl == t)?.PricePerMillion : null)
+                ?? tier.CacheWritePricePerMillion;
+
+    // The model's write price for a lifetime (null lifetime = the vendor's default).
+    private decimal? WritePrice(TimeSpan? ttl)
+        => ttl is { } t ? GetCacheWritePrice(t) : CacheWritePricePerMillion;
+
+    /// <summary>
     /// Calculates cost for input/output token usage, applying a matching <see cref="PricingTiers"/>
     /// entry (if any) instead of the representative rate. Supplying a <paramref name="context"/>
     /// with both fields <c>null</c> — or a model with no <see cref="PricingTiers"/> — reproduces

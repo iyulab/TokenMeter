@@ -91,10 +91,7 @@ internal static class ModelInfoLoader
         PricingTiers = j.PricingTiers?.Select(ToPricingTier).ToList(),
         // An entry whose lifetime or date does not parse is left out rather than thrown on, as a malformed
         // lastUpdated is: the loader fails only on unreadable JSON. The test suite holds every entry to parsing.
-        CacheWritePrices = j.CacheWritePrices?
-            .Where(p => ParseTtl(p.Ttl) is not null)
-            .Select(p => new CacheWritePrice { Ttl = ParseTtl(p.Ttl)!.Value, PricePerMillion = p.PricePerMillion })
-            .ToList(),
+        CacheWritePrices = ToCacheWritePrices(j.CacheWritePrices),
         ScheduledPrices = j.ScheduledPrices?
             .Where(p => ParseDate(p.EffectiveFrom) is not null)
             .Select(p => new ScheduledPrice
@@ -144,7 +141,14 @@ internal static class ModelInfoLoader
         InputPricePerMillion = j.InputPricePerMillion,
         OutputPricePerMillion = j.OutputPricePerMillion,
         CacheReadPricePerMillion = j.CacheReadPricePerMillion,
+        CacheWritePricePerMillion = j.CacheWritePricePerMillion,
+        CacheWritePrices = ToCacheWritePrices(j.CacheWritePrices),
     };
+
+    private static List<CacheWritePrice>? ToCacheWritePrices(List<CacheWritePriceJson>? prices) => prices?
+        .Where(p => ParseTtl(p.Ttl) is not null)
+        .Select(p => new CacheWritePrice { Ttl = ParseTtl(p.Ttl)!.Value, PricePerMillion = p.PricePerMillion })
+        .ToList();
 
     internal static DateOnly? ParseDate(string? value) =>
         DateOnly.TryParseExact(value, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture,

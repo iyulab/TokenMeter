@@ -212,4 +212,10 @@ internal sealed class PricingTierJson
 
     [JsonPropertyName("cacheReadPricePerMillion")]
     public decimal? CacheReadPricePerMillion { get; set; }
+
+    [JsonPropertyName("cacheWritePricePerMillion")]
+    public decimal? CacheWritePricePerMillion { get; set; }
+
+    [JsonPropertyName("cacheWritePrices")]
+    public List<CacheWritePriceJson>? CacheWritePrices { get; set; }
 }

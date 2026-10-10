@@ -1,6 +1,6 @@
 {
   "provider": "Google",
-  "lastUpdated": "2026-10-04",
+  "lastUpdated": "2026-10-10",
   "models": [
     {
       "modelId": "gemini-3.8-flash",
@@ -197,6 +197,10 @@
       "contextWindow": 1048576,
       "inputPricePerMillion": 2.00,
       "outputPricePerMillion": 12.00,
+      "cacheReadPricePerMillion": 0.20,
+      "pricingTiers": [
+        { "axis": "ContextLength", "minContextLengthTokens": 200001, "inputPricePerMillion": 4.00, "outputPricePerMillion": 18.00, "cacheReadPricePerMillion": 0.40 }
+      ],
       "supportsImageInput": true,
       "supportsVideoInput": true,
       "supportsDocumentInput": true,
@@ -274,6 +278,7 @@
       "contextWindow": 1000000,
       "inputPricePerMillion": 0.50,
       "outputPricePerMillion": 3.00,
+      "cacheReadPricePerMillion": 0.05,
       "supportsImageInput": true,
       "supportsVideoInput": true,
       "supportsDocumentInput": true,
@@ -302,6 +307,10 @@
       "contextWindow": 1000000,
       "inputPricePerMillion": 1.25,
       "outputPricePerMillion": 10.00,
+      "cacheReadPricePerMillion": 0.125,
+      "pricingTiers": [
+        { "axis": "ContextLength", "minContextLengthTokens": 200001, "inputPricePerMillion": 2.50, "outputPricePerMillion": 15.00, "cacheReadPricePerMillion": 0.25 }
+      ],
       "supportsImageInput": true,
       "supportsVideoInput": true,
       "supportsDocumentInput": true,
@@ -329,6 +338,7 @@
       "contextWindow": 1000000,
       "inputPricePerMillion": 0.10,
       "outputPricePerMillion": 0.40,
+      "cacheReadPricePerMillion": 0.01,
       "supportsImageInput": true,
       "supportsVideoInput": true,
       "supportsDocumentInput": true,
@@ -354,6 +364,7 @@
       "contextWindow": 1000000,
       "inputPricePerMillion": 0.30,
       "outputPricePerMillion": 2.50,
+      "cacheReadPricePerMillion": 0.03,
       "supportsImageInput": true,
       "supportsVideoInput": true,
       "supportsDocumentInput": true,

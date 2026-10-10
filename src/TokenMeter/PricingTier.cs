@@ -23,8 +23,8 @@ public sealed record PricingTier
     public required PricingTierAxis Axis { get; init; }
 
     /// <summary>
-    /// <see cref="PricingTierAxis.ContextLength"/> only: this tier applies when the request's
-    /// total context length is at least this many tokens.
+    /// <see cref="PricingTierAxis.ContextLength"/> only: this tier applies when the request's prompt length (every input
+    /// token, cache reads and writes included) is at least this many tokens.
     /// </summary>
     public int? MinContextLengthTokens { get; init; }
 
@@ -49,6 +49,18 @@ public sealed record PricingTier
 
     /// <summary>Cost per 1 million cache-read tokens while this tier applies. Falls back to the model's representative rate if <c>null</c>.</summary>
     public decimal? CacheReadPricePerMillion { get; init; }
+
+    /// <summary>
+    /// Cost per 1 million cache-write tokens at the vendor's default cache lifetime while this tier applies. Falls back to
+    /// the model's representative rate if <c>null</c>.
+    /// </summary>
+    public decimal? CacheWritePricePerMillion { get; init; }
+
+    /// <summary>
+    /// Cache-write prices per cache lifetime while this tier applies (Anthropic: 5 minutes, 1 hour). A lifetime not listed
+    /// falls back to <see cref="CacheWritePricePerMillion"/>, then to the model's rates.
+    /// </summary>
+    public IReadOnlyList<CacheWritePrice>? CacheWritePrices { get; init; }
 }
 
 /// <summary>
@@ -58,7 +70,11 @@ public sealed record PricingTier
 /// </summary>
 public readonly record struct PricingTierContext
 {
-    /// <summary>Total context length (prompt + expected completion) for the request, if known.</summary>
+    /// <summary>
+    /// The request's prompt length, if known: every input token, cache reads and cache writes included — the length the
+    /// vendors' long-context tiers are decided by (a request over the threshold pays the tier's prices for all of its
+    /// tokens). The completion is not part of it.
+    /// </summary>
     public int? ContextLengthTokens { get; init; }
 
     /// <summary>Wall-clock time of the call in UTC, if the caller wants time-of-day tiers applied.</summary>

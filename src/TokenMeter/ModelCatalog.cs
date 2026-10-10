@@ -15,6 +15,7 @@ public static class ModelCatalog
     private static readonly Dictionary<string, IReadOnlyDictionary<string, ModelInfo>> s_byProvider;
     private static readonly List<AliasRule> s_aliasRules;
     private static readonly DateOnly s_lastUpdated;
+    private static readonly Dictionary<string, DateOnly> s_providerLastUpdated = new(StringComparer.OrdinalIgnoreCase);
 
     static ModelCatalog()
     {
@@ -32,8 +33,12 @@ public static class ModelCatalog
             s_byProvider[provider.ProviderName] = provider.Models;
             s_aliasRules.AddRange(provider.AliasRules);
 
-            if (provider.LastUpdated is { } date && date > s_lastUpdated)
-                s_lastUpdated = date;
+            if (provider.LastUpdated is { } date)
+            {
+                s_providerLastUpdated[provider.ProviderName] = date;
+                if (date > s_lastUpdated)
+                    s_lastUpdated = date;
+            }
         }
     }
 
@@ -45,6 +50,15 @@ public static class ModelCatalog
     /// undated catalog reports as stale rather than fresh.
     /// </summary>
     public static DateOnly LastUpdated => s_lastUpdated;
+
+    /// <summary>
+    /// The date one provider's bundled data was last checked against the vendor (its file's <c>lastUpdated</c>), or
+    /// <c>null</c> for an unknown or undated provider. <see cref="LastUpdated"/> is the newest of these, so a catalog can
+    /// look fresh while one provider's prices are months old — a consumer that prices with one vendor reads that vendor's
+    /// date.
+    /// </summary>
+    public static DateOnly? GetLastUpdated(string providerName)
+        => s_providerLastUpdated.TryGetValue(providerName, out var date) ? date : null;
 
     /// <summary>Days elapsed since <see cref="LastUpdated"/>.</summary>
     public static int DataAgeDays =>

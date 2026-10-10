@@ -31,6 +31,13 @@ public interface ICostCalculator
     decimal? CalculateCost(string modelId, int inputTokens, int outputTokens, PricingTierContext context);
 
     /// <summary>
+    /// The cost of one request — rates in effect on <see cref="CostContext.Date"/>, the long-context or time-of-day tier the
+    /// request falls in, cache reads and per-lifetime cache writes (<see cref="ModelInfo.CalculateCost(TokenCounts, CostContext)"/>).
+    /// Returns <c>null</c> if pricing is unavailable for the model.
+    /// </summary>
+    decimal? CalculateCost(string modelId, TokenCounts usage, CostContext context = default);
+
+    /// <summary>
     /// Retrieves the model metadata used for cost calculation.
     /// Applies alias matching. Returns <c>null</c> if not found.
     /// </summary>

@@ -567,7 +567,12 @@
           "minContextLengthTokens": 100001,
           "inputPricePerMillion": 0.50,
           "outputPricePerMillion": 2.50,
-          "cacheReadPricePerMillion": 0.05
+          "cacheReadPricePerMillion": 0.05,
+          "cacheWritePricePerMillion": 0.625,
+          "cacheWritePrices": [
+            { "ttl": "5m", "pricePerMillion": 0.625 },
+            { "ttl": "1h", "pricePerMillion": 1.00 }
+          ]
         }
       ],
       "supportsImageInput": true,

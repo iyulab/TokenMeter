@@ -60,6 +60,24 @@ Console.WriteLine(match?.Model.ModelId);
 
 ### Cost Calculation
 
+One request, every part priced the way the vendor prices it — the rates of the call's date, the long-context or
+time-of-day tier the request falls in (decided by its whole prompt, cache reads and writes included, and applied to the
+whole request), cache reads, and each cache write at the price for its lifetime:
+
+```csharp
+var usage = new TokenCounts
+{
+    InputTokens = 20_000,                                   // neither read from nor written to the cache
+    CacheReadTokens = 150_000,
+    CacheWrites = [new CacheWriteTokenCount(TimeSpan.FromHours(1), 30_000)],   // null lifetime = the vendor default
+    OutputTokens = 2_000,                                   // reasoning included
+};
+var requestCost = model?.CalculateCost(usage, CostContext.At(callTimeUtc));
+var viaCalculator = CostCalculator.Default().CalculateCost("claude-haiku-5-5", usage, CostContext.At(callTimeUtc));
+```
+
+The overloads below are the same calculation for one part at a time:
+
 ```csharp
 // Basic cost (input + output tokens)
 var cost = model?.CalculateCost(inputTokens: 500_000, outputTokens: 200_000);
@@ -89,6 +107,9 @@ long-context surcharge past a prompt-length threshold (xAI), or a peak-hour surc
 specific UTC windows (DeepSeek). `ModelInfo.PricingTiers` carries those bands; passing a
 `PricingTierContext` picks the right one automatically. Omitting the context, or a model with no
 tiers, reproduces the representative-rate calculation exactly — existing callers are unaffected.
+`ContextLengthTokens` is the request's **prompt** length — every input token, cache reads and writes included — which is
+how the vendors decide the tier; `CalculateCost(TokenCounts, …)` computes it for you. A tier can carry its own cache
+read and write prices (Claude Haiku 5.5 over 100K, Gemini 2.5 Pro / 3.1 Pro Preview over 200K).
 
 ```csharp
 var model = ModelCatalog.FindModel("grok-4.6");
@@ -138,6 +159,10 @@ calc.RegisterModel(new ModelInfo
 });
 
 var cost = calc.CalculateCost("my-fine-tuned-model", 10_000, 5_000);
+
+// A self-hosted name that embeds a public one ("qwen3-8b-local") would match the public model fuzzily.
+// Bound the matching so an unregistered name is unknown instead of priced as something else:
+var strict = CostCalculator.Default(AliasMatchType.Exact);
 ```
 
 ## Model Metadata
@@ -256,7 +281,8 @@ Console.WriteLine(ModelCatalog.IsDataStale());      // true if > 90 days old
 
 `LastUpdated` is derived from the `lastUpdated` field each bundled provider file declares, and
 reports the **most recent** of them. Providers are refreshed independently, so an individual
-provider's data can be considerably older than this value.
+provider's data can be considerably older than this value — read that provider's own date with
+`ModelCatalog.GetLastUpdated("Google")` (null for an unknown provider).
 
 > **Note — what the signal does and does not tell you**: it reports when this catalog was last
 > refreshed, not whether a provider has changed its prices since. A vendor can cut a rate the day
