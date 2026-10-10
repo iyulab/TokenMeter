@@ -158,8 +158,6 @@ public class VariantIdMatchingTests
 {
     [Theory]
     [InlineData("gpt-4o-audio-preview")]
-    [InlineData("gpt-4o-mini-tts")]
-    [InlineData("gpt-4o-transcribe")]
     [InlineData("gpt-4o-realtime-preview")]
     [InlineData("gpt-4o-search-preview")]
     [InlineData("gpt-5.5-audio")]
@@ -170,7 +168,45 @@ public class VariantIdMatchingTests
     [Theory]
     [InlineData("gpt-4o-2024-08-06", "gpt-4o")]
     [InlineData("gpt-4o-mini", "gpt-4o-mini")]
+    [InlineData("gpt-4o-mini-tts", "gpt-4o-mini-tts")]
+    [InlineData("gpt-4o-transcribe", "gpt-4o-transcribe")]
     [InlineData("gemini-3.8-flash-tts", "gemini-3.8-flash-tts")]
     public void SnapshotsAndRowsOfTheirOwn_StillResolve(string id, string expected)
         => Assert.Equal(expected, ModelCatalog.FindModel(id)?.ModelId);
+}
+
+/// <summary>OpenAI's realtime, audio, speech, transcription and search models carry their own prices.</summary>
+public class OpenAIVariantRowTests
+{
+    [Fact]
+    public void Realtime_PricesAudioAndImageApartFromText()
+    {
+        var realtime = ModelCatalog.FindModel("gpt-realtime-2.1", AliasMatchType.Exact);
+        Assert.NotNull(realtime);
+
+        // 1M input: 600K text x 4 + 400K audio x 32; 100K output audio x 64 + 100K text x 24 (developers.openai.com pricing).
+        var usage = new TokenCounts
+        {
+            InputTokens = 1_000_000,
+            InputTokensByModality = new Dictionary<TokenModality, int> { [TokenModality.Audio] = 400_000 },
+            OutputTokens = 200_000,
+            OutputTokensByModality = new Dictionary<TokenModality, int> { [TokenModality.Audio] = 100_000 },
+        };
+
+        Assert.Equal(2.4m + 12.8m + 6.4m + 2.4m, realtime.CalculateCost(usage));
+    }
+
+    [Theory]
+    [InlineData("gpt-4o-mini-tts", ModelType.TextToSpeech, 0.60, 12.00)]
+    [InlineData("gpt-4o-transcribe", ModelType.SpeechToText, 2.50, 10.00)]
+    [InlineData("gpt-4o-mini-transcribe", ModelType.SpeechToText, 1.25, 5.00)]
+    [InlineData("gpt-audio", ModelType.Chat, 2.50, 10.00)]
+    public void SpeechTranscriptionAndSearchModels_HaveTheirOwnRates(string id, ModelType type, double input, double output)
+    {
+        var model = ModelCatalog.FindModel(id, AliasMatchType.Exact);
+        Assert.NotNull(model);
+        Assert.Equal(type, model.ModelType);
+        Assert.Equal((decimal)input, model.InputPricePerMillion);
+        Assert.Equal((decimal)output, model.OutputPricePerMillion);
+    }
 }

@@ -6,6 +6,13 @@ breaking changes, and each one is marked **Breaking** with a migration note.
 
 ## [Unreleased]
 
+### Added
+- **OpenAI realtime, audio, speech and transcription models.** `gpt-realtime-2.1`, `gpt-realtime-2.1-mini`,
+  `gpt-realtime-2`, `gpt-realtime-1.5`, `gpt-realtime-mini`, `gpt-realtime` (text rate plus audio and image input,
+  audio and image cache-read and audio output as modality prices), `gpt-audio-1.5`, `gpt-audio-mini`, `gpt-audio`,
+  `gpt-4o-mini-tts` (`TextToSpeech`, output = audio), `gpt-4o-transcribe`, `gpt-4o-mini-transcribe` and
+  `gpt-4o-transcribe-diarize` (`SpeechToText`), from OpenAI's pricing and model pages (2026-10-10).
+
 ### Changed
 - **Breaking: a speech, transcription, search, realtime or image id no longer resolves to the chat model whose name it
   contains.** `gpt-4o-audio-preview`, `gpt-4o-realtime-preview`, `gpt-4o-mini-tts`, `gpt-4o-transcribe` and
