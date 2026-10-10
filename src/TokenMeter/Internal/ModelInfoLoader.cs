@@ -1,15 +1,19 @@
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 
 namespace TokenMeter.Internal;
 
 internal static class ModelInfoLoader
 {
+    // Source-generated metadata (CatalogJsonContext), so the catalog loads in an application that disables reflection-based
+    // serialization (Native AOT, trimming, file-based apps).
     private static readonly JsonSerializerOptions s_options = new()
     {
         PropertyNameCaseInsensitive = true,
         // A key written twice in a model entry is an editing slip, and the serializer would otherwise keep the
         // last value silently — a GPT-5.6 Sol cache-write rate was billed at a stale value that way.
         AllowDuplicateProperties = false,
+        TypeInfoResolver = CatalogJsonContext.Default,
     };
 
     internal static IReadOnlyList<ProviderData> LoadAll()
@@ -25,7 +29,7 @@ internal static class ModelInfoLoader
             using var stream = assembly.GetManifestResourceStream(resourceName);
             if (stream is null) continue;
 
-            var provider = JsonSerializer.Deserialize<ProviderDataJson>(stream, s_options)
+            var provider = JsonSerializer.Deserialize(stream, (JsonTypeInfo<ProviderDataJson>)s_options.GetTypeInfo(typeof(ProviderDataJson)))
                 ?? throw new InvalidOperationException(
                     $"Failed to deserialize model data from embedded resource '{resourceName}'. " +
                     "The JSON may be malformed or empty.");

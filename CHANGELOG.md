@@ -4,6 +4,21 @@ All notable changes to this project are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/); while the major version is 0, a minor release may contain
 breaking changes, and each one is marked **Breaking** with a migration note.
 
+## [Unreleased]
+
+### Changed
+- **Breaking: a speech, transcription, search, realtime or image id no longer resolves to the chat model whose name it
+  contains.** `gpt-4o-audio-preview`, `gpt-4o-realtime-preview`, `gpt-4o-mini-tts`, `gpt-4o-transcribe` and
+  `gpt-4o-search-preview` matched `gpt-4o` / `gpt-4o-mini` through their `contains` aliases and were priced as chat
+  output. A fuzzy match is now not taken when the rest of the id names a variant (`audio`, `realtime`, `tts`, `transcribe`,
+  `search`, `image`, `embedding`, `live`, `translate`, `moderation`); such an id resolves only by a row or alias of its own
+  and is otherwise unknown (`null`). Migration: register those models with `CostCalculator.RegisterModel` if you price them.
+
+### Fixed
+- **The catalog loads in applications that disable reflection-based JSON** (Native AOT, trimmed or file-based apps):
+  `ModelCatalog` threw `TypeInitializationException` there. The embedded catalog is now read with source-generated
+  metadata, and the package is marked `IsAotCompatible`.
+
 ## [0.10.0] - 2026-10-10
 
 ### Added

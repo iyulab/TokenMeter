@@ -177,6 +177,7 @@ public static class ModelCatalog
             if (rule.MatchType == AliasMatchType.Prefix &&
                 normalized.StartsWith(rule.Pattern, StringComparison.Ordinal) &&
                 !CrossesVersionToken(normalized, rule.Pattern.Length, rule.Pattern) &&
+                !NamesAVariant(normalized, rule.Pattern.Length) &&
                 (bestPrefix is null || rule.Pattern.Length > bestPrefix.Pattern.Length))
                 bestPrefix = rule;
         }
@@ -205,7 +206,7 @@ public static class ModelCatalog
         for (var at = input.IndexOf(pattern, StringComparison.Ordinal); at >= 0;
              at = input.IndexOf(pattern, at + 1, StringComparison.Ordinal))
         {
-            if (!CrossesVersionToken(input, at + pattern.Length, pattern))
+            if (!CrossesVersionToken(input, at + pattern.Length, pattern) && !NamesAVariant(input, at + pattern.Length))
                 return true;
         }
         return false;
@@ -218,6 +219,29 @@ public static class ModelCatalog
     /// A snapshot or deployment suffix (<c>-20250929</c>, <c>-2025-08-07</c>, <c>-0309</c>, <c>-latest</c>, <c>-v1</c>)
     /// still matches: a continuation is one or two digits, a date three or more.
     /// </summary>
+    // Words that turn a chat model's name into a different product with its own price list.
+    private static readonly HashSet<string> s_variantWords = new(StringComparer.Ordinal)
+    {
+        "audio", "realtime", "tts", "transcribe", "search", "image", "embedding", "live", "translate", "moderation",
+    };
+
+    /// <summary>
+    /// A fuzzy pass must not describe a variant of the matched model: <c>gpt-4o-audio-preview</c>, <c>gpt-4o-mini-tts</c>,
+    /// <c>gpt-4o-transcribe</c>, <c>gpt-4o-search-preview</c> and <c>gemini-3.8-flash-tts</c> contain a chat model's name but
+    /// are speech, transcription, search or image products priced differently — matching them would price them as the chat
+    /// model. When the rest of the id after the match has one of those words, the match is not taken (an unknown price, not a
+    /// wrong one); a variant with its own row still resolves by exact id or its own alias.
+    /// </summary>
+    private static bool NamesAVariant(string input, int matchEnd)
+    {
+        if (matchEnd >= input.Length) return false;
+        foreach (var word in input[matchEnd..].Split(['-', '_', '.', '/', ':'], StringSplitOptions.RemoveEmptyEntries))
+        {
+            if (s_variantWords.Contains(word)) return true;
+        }
+        return false;
+    }
+
     private static bool CrossesVersionToken(string input, int matchEnd, string pattern)
     {
         if (pattern.Length == 0 || !char.IsAsciiDigit(pattern[^1]) || matchEnd >= input.Length)

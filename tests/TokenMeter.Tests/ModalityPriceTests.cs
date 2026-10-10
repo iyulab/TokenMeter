@@ -150,3 +150,27 @@ public class ModalityPriceTests
         Assert.Empty(problems);
     }
 }
+
+/// <summary>
+/// A speech, transcription, search or image product whose id contains a chat model's name is not priced as that chat model.
+/// </summary>
+public class VariantIdMatchingTests
+{
+    [Theory]
+    [InlineData("gpt-4o-audio-preview")]
+    [InlineData("gpt-4o-mini-tts")]
+    [InlineData("gpt-4o-transcribe")]
+    [InlineData("gpt-4o-realtime-preview")]
+    [InlineData("gpt-4o-search-preview")]
+    [InlineData("gpt-5.5-audio")]
+    [InlineData("gemini-2.5-flash-live-preview")]
+    public void AVariantId_DoesNotResolveToTheChatModelItContains(string id)
+        => Assert.Null(ModelCatalog.FindModel(id));
+
+    [Theory]
+    [InlineData("gpt-4o-2024-08-06", "gpt-4o")]
+    [InlineData("gpt-4o-mini", "gpt-4o-mini")]
+    [InlineData("gemini-3.8-flash-tts", "gemini-3.8-flash-tts")]
+    public void SnapshotsAndRowsOfTheirOwn_StillResolve(string id, string expected)
+        => Assert.Equal(expected, ModelCatalog.FindModel(id)?.ModelId);
+}
