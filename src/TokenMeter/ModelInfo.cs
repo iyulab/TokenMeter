@@ -89,6 +89,14 @@ public record ModelInfo
     /// </summary>
     public IReadOnlyList<ScheduledPrice>? ScheduledPrices { get; init; }
 
+    /// <summary>
+    /// Cost per 1 million cached tokens per hour they are kept, for a vendor that bills storing an explicit prompt cache
+    /// (Gemini context caching) — a charge on the cache's lifetime, apart from the requests that read it. <c>null</c> when
+    /// the vendor does not bill storage or the price is unknown. See
+    /// <see cref="CalculateCacheStorageCost(int, TimeSpan, DateOnly?)"/>.
+    /// </summary>
+    public decimal? CacheStoragePricePerMillionPerHour { get; init; }
+
     // ── Lifecycle ─────────────────────────────────────────────────────────────
 
     /// <summary>
@@ -316,6 +324,7 @@ public record ModelInfo
                 OutputPricePerMillion = change.OutputPricePerMillion ?? result.OutputPricePerMillion,
                 CacheReadPricePerMillion = change.CacheReadPricePerMillion ?? result.CacheReadPricePerMillion,
                 CacheWritePricePerMillion = newWrite,
+                CacheStoragePricePerMillionPerHour = change.CacheStoragePricePerMillionPerHour ?? result.CacheStoragePricePerMillionPerHour,
                 CacheWritePrices = oldWrite is > 0 && newWrite is { } write && write != oldWrite
                     ? result.CacheWritePrices?.Select(p => p with { PricePerMillion = p.PricePerMillion * write / oldWrite.Value }).ToList()
                     : result.CacheWritePrices,
@@ -391,6 +400,24 @@ public record ModelInfo
         }
 
         return cost;
+    }
+
+    /// <summary>
+    /// The cost of keeping <paramref name="cachedTokens"/> in an explicit prompt cache for <paramref name="storedFor"/> — the
+    /// storage time the vendor bills — at the rate in effect on <paramref name="date"/> (UTC; <c>null</c> for the current
+    /// rate). Linear in the time, with no rounding. Service tiers and regional multipliers do not apply: the vendor bills
+    /// storage at the standard rate. Requests that read the cache are priced by
+    /// <see cref="CalculateCost(TokenCounts, CostContext)"/> as cache reads.
+    /// Returns <c>null</c> when the model has no storage price — an unknown price, not a free one.
+    /// </summary>
+    public decimal? CalculateCacheStorageCost(int cachedTokens, TimeSpan storedFor, DateOnly? date = null)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(cachedTokens);
+        ArgumentOutOfRangeException.ThrowIfLessThan(storedFor, TimeSpan.Zero);
+
+        var model = date is { } d ? AsOf(d) : this;
+        if (model.CacheStoragePricePerMillionPerHour is not { } price) return null;
+        return (cachedTokens / 1_000_000m) * price * (storedFor.Ticks / (decimal)TimeSpan.TicksPerHour);
     }
 
     // The tier's write price for a lifetime: its per-lifetime entry, else its default-lifetime price.

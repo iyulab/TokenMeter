@@ -21,4 +21,7 @@ public sealed record ScheduledPrice
 
     /// <summary>New cost per 1 million cache-write tokens (default lifetime), or <c>null</c> when unchanged.</summary>
     public decimal? CacheWritePricePerMillion { get; init; }
+
+    /// <summary>New cost per 1 million cached tokens per hour of storage, or <c>null</c> when unchanged.</summary>
+    public decimal? CacheStoragePricePerMillionPerHour { get; init; }
 }

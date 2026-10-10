@@ -55,6 +55,9 @@ internal sealed class ModelInfoJson
     [JsonPropertyName("cacheWritePricePerMillion")]
     public decimal? CacheWritePricePerMillion { get; set; }
 
+    [JsonPropertyName("cacheStoragePricePerMillionPerHour")]
+    public decimal? CacheStoragePricePerMillionPerHour { get; set; }
+
     [JsonPropertyName("imageInputPrice")]
     public decimal? ImageInputPrice { get; set; }
 
@@ -197,6 +200,9 @@ internal sealed class ScheduledPriceJson
 
     [JsonPropertyName("cacheWritePricePerMillion")]
     public decimal? CacheWritePricePerMillion { get; set; }
+
+    [JsonPropertyName("cacheStoragePricePerMillionPerHour")]
+    public decimal? CacheStoragePricePerMillionPerHour { get; set; }
 }
 
 internal sealed class PricingTierJson

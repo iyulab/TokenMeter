@@ -13,8 +13,9 @@
       "outputPricePerMillion": 3.75,
       "toolCallPricesPerThousand": { "google_search": 14.0 },
       "cacheReadPricePerMillion": 0.075,
+      "cacheStoragePricePerMillionPerHour": 0.50,
       "scheduledPrices": [
-        { "effectiveFrom": "2027-01-01", "inputPricePerMillion": 1.50, "outputPricePerMillion": 7.50, "cacheReadPricePerMillion": 0.15 }
+        { "effectiveFrom": "2027-01-01", "inputPricePerMillion": 1.50, "outputPricePerMillion": 7.50, "cacheReadPricePerMillion": 0.15, "cacheStoragePricePerMillionPerHour": 1.00 }
       ],
       "supportsImageInput": true,
       "supportsVideoInput": true,
@@ -44,6 +45,7 @@
     {
       "modelId": "gemini-3.7-flash",
       "displayName": "Gemini 3.7 Flash",
+      "replacementModelId": "gemini-3.8-flash",
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 1048576,
@@ -84,8 +86,9 @@
       "outputPricePerMillion": 3.75,
       "toolCallPricesPerThousand": { "google_search": 14.0 },
       "cacheReadPricePerMillion": 0.075,
+      "cacheStoragePricePerMillionPerHour": 0.50,
       "scheduledPrices": [
-        { "effectiveFrom": "2027-01-01", "inputPricePerMillion": 1.50, "outputPricePerMillion": 7.50, "cacheReadPricePerMillion": 0.15 }
+        { "effectiveFrom": "2027-01-01", "inputPricePerMillion": 1.50, "outputPricePerMillion": 7.50, "cacheReadPricePerMillion": 0.15, "cacheStoragePricePerMillionPerHour": 1.00 }
       ],
       "supportsImageInput": true,
       "supportsVideoInput": true,
@@ -117,6 +120,7 @@
       "outputPricePerMillion": 2.50,
       "toolCallPricesPerThousand": { "google_search": 14.0 },
       "cacheReadPricePerMillion": 0.03,
+      "cacheStoragePricePerMillionPerHour": 1.00,
       "supportsImageInput": true,
       "supportsVideoInput": true,
       "supportsDocumentInput": true,
@@ -139,6 +143,8 @@
     {
       "modelId": "gemini-3.5-flash",
       "displayName": "Gemini 3.5 Flash",
+      "deprecationDate": "2026-10-08",
+      "replacementModelId": "gemini-3.6-flash",
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 1048576,
@@ -167,6 +173,9 @@
     {
       "modelId": "gemini-3-pro-preview",
       "displayName": "Gemini 3 Pro Preview",
+      "deprecationDate": "2026-02-26",
+      "retirementDate": "2026-03-09",
+      "replacementModelId": "gemini-3.1-pro-preview",
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 1000000,
@@ -202,6 +211,7 @@
       "outputPricePerMillion": 12.00,
       "toolCallPricesPerThousand": { "google_search": 14.0 },
       "cacheReadPricePerMillion": 0.20,
+      "cacheStoragePricePerMillionPerHour": 4.50,
       "pricingTiers": [
         { "axis": "ContextLength", "minContextLengthTokens": 200001, "inputPricePerMillion": 4.00, "outputPricePerMillion": 18.00, "cacheReadPricePerMillion": 0.40 }
       ],
@@ -227,6 +237,8 @@
     {
       "modelId": "gemini-3.1-flash-lite",
       "displayName": "Gemini 3.1 Flash-Lite",
+      "retirementDate": "2027-05-07",
+      "replacementModelId": "gemini-3.5-flash-lite",
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 1048576,
@@ -234,6 +246,7 @@
       "outputPricePerMillion": 1.50,
       "toolCallPricesPerThousand": { "google_search": 14.0 },
       "cacheReadPricePerMillion": 0.025,
+      "cacheStoragePricePerMillionPerHour": 1.00,
       "supportsImageInput": true,
       "supportsVideoInput": true,
       "supportsDocumentInput": true,
@@ -253,6 +266,9 @@
     {
       "modelId": "gemini-3.1-flash-lite-preview",
       "displayName": "Gemini 3.1 Flash-Lite Preview",
+      "deprecationDate": "2026-05-11",
+      "retirementDate": "2026-05-25",
+      "replacementModelId": "gemini-3.1-flash-lite",
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 1048576,
@@ -278,6 +294,7 @@
     {
       "modelId": "gemini-3-flash-preview",
       "displayName": "Gemini 3 Flash Preview",
+      "replacementModelId": "gemini-3.6-flash",
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 1000000,
@@ -285,6 +302,7 @@
       "outputPricePerMillion": 3.00,
       "toolCallPricesPerThousand": { "google_search": 14.0 },
       "cacheReadPricePerMillion": 0.05,
+      "cacheStoragePricePerMillionPerHour": 1.00,
       "supportsImageInput": true,
       "supportsVideoInput": true,
       "supportsDocumentInput": true,
@@ -315,6 +333,7 @@
       "outputPricePerMillion": 10.00,
       "toolCallPricesPerThousand": { "google_search": 35.0 },
       "cacheReadPricePerMillion": 0.125,
+      "cacheStoragePricePerMillionPerHour": 4.50,
       "pricingTiers": [
         { "axis": "ContextLength", "minContextLengthTokens": 200001, "inputPricePerMillion": 2.50, "outputPricePerMillion": 15.00, "cacheReadPricePerMillion": 0.25 }
       ],
@@ -347,6 +366,7 @@
       "outputPricePerMillion": 0.40,
       "toolCallPricesPerThousand": { "google_search": 35.0 },
       "cacheReadPricePerMillion": 0.01,
+      "cacheStoragePricePerMillionPerHour": 1.00,
       "supportsImageInput": true,
       "supportsVideoInput": true,
       "supportsDocumentInput": true,
@@ -374,6 +394,7 @@
       "outputPricePerMillion": 2.50,
       "toolCallPricesPerThousand": { "google_search": 35.0 },
       "cacheReadPricePerMillion": 0.03,
+      "cacheStoragePricePerMillionPerHour": 1.00,
       "supportsImageInput": true,
       "supportsVideoInput": true,
       "supportsDocumentInput": true,
@@ -396,6 +417,9 @@
     {
       "modelId": "gemini-2.0-flash-lite",
       "displayName": "Gemini 2.0 Flash-Lite",
+      "deprecationDate": "2026-02-18",
+      "retirementDate": "2026-06-01",
+      "replacementModelId": "gemini-3.1-flash-lite",
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 1000000,
@@ -421,6 +445,9 @@
     {
       "modelId": "gemini-2.0-flash",
       "displayName": "Gemini 2.0 Flash",
+      "deprecationDate": "2026-02-18",
+      "retirementDate": "2026-06-01",
+      "replacementModelId": "gemini-3.6-flash",
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 1000000,
@@ -446,6 +473,7 @@
     {
       "modelId": "gemini-1.5-pro",
       "displayName": "Gemini 1.5 Pro",
+      "retirementDate": "2025-09-29",
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 2000000,
@@ -471,6 +499,7 @@
     {
       "modelId": "gemini-1.5-flash",
       "displayName": "Gemini 1.5 Flash",
+      "retirementDate": "2025-09-29",
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 1000000,

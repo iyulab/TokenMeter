@@ -53,13 +53,99 @@ public class LifecycleAndScheduleTests
         {
             if (model.RetirementDate is { } retired && model.DeprecationDate is { } deprecated && retired < deprecated)
                 problems.Add($"{model.ModelId}: retires {retired} before it is deprecated {deprecated}");
-            if (model.RetirementDate is not null && model.DeprecationDate is null)
-                problems.Add($"{model.ModelId}: a retirement date without a deprecation date");
+            // A retirement date without a deprecation date is a planned end of life: Google publishes a shutdown date for a
+            // generally available model from its release (gemini-3.1-flash-lite: May 7, 2027) and gives no announcement
+            // date for older shutdowns (gemini-1.5-*).
             if (model.ReplacementModelId is { } replacement && ModelCatalog.FindModel(replacement, AliasMatchType.Prefix) is null)
                 problems.Add($"{model.ModelId}: replacement '{replacement}' is not in the catalog");
         }
 
         Assert.Empty(problems);
+    }
+
+    [Fact]
+    public void Catalog_CarriesGooglesShutdowns_AndAutoRoutedReplacements()
+    {
+        // ai.google.dev deprecations page and changelog, 2026-10-10.
+        var flash35 = ModelCatalog.FindModel("gemini-3.5-flash", AliasMatchType.Exact);
+        Assert.NotNull(flash35);
+        Assert.Equal(new DateOnly(2026, 10, 8), flash35.DeprecationDate);
+        Assert.Null(flash35.RetirementDate);
+        Assert.Equal("gemini-3.6-flash", flash35.ReplacementModelId);
+        Assert.Equal(ModelLifecycleStatus.Deprecated, flash35.GetLifecycleStatus(new DateOnly(2026, 10, 10)));
+
+        var flash20 = ModelCatalog.FindModel("gemini-2.0-flash", AliasMatchType.Exact);
+        Assert.NotNull(flash20);
+        Assert.Equal(ModelLifecycleStatus.Deprecated, flash20.GetLifecycleStatus(new DateOnly(2026, 5, 31)));
+        Assert.Equal(ModelLifecycleStatus.Retired, flash20.GetLifecycleStatus(new DateOnly(2026, 6, 1)));
+
+        var flashLite31 = ModelCatalog.FindModel("gemini-3.1-flash-lite", AliasMatchType.Exact);
+        Assert.NotNull(flashLite31);
+        Assert.Equal(ModelLifecycleStatus.Active, flashLite31.GetLifecycleStatus(new DateOnly(2027, 5, 6)));
+        Assert.Equal(ModelLifecycleStatus.Retired, flashLite31.GetLifecycleStatus(new DateOnly(2027, 5, 7)));
+        Assert.Equal("gemini-3.5-flash-lite", flashLite31.ReplacementModelId);
+
+        Assert.Equal(ModelLifecycleStatus.Retired,
+            ModelCatalog.FindModel("gemini-1.5-pro", AliasMatchType.Exact)!.GetLifecycleStatus(new DateOnly(2025, 9, 29)));
+        Assert.Equal("gemini-3.8-flash", ModelCatalog.FindModel("gemini-3.7-flash", AliasMatchType.Exact)!.ReplacementModelId);
+    }
+
+    #endregion
+
+    #region Cache storage
+
+    [Fact]
+    public void CalculateCacheStorageCost_IsTokensTimesHoursTimesTheRate()
+    {
+        var pro = ModelCatalog.FindModel("gemini-2.5-pro", AliasMatchType.Exact);
+        Assert.NotNull(pro);
+        Assert.Equal(4.50m, pro.CacheStoragePricePerMillionPerHour);
+
+        // 1M tokens for an hour, 200K tokens for 90 minutes (linear in the time, no rounding).
+        Assert.Equal(4.50m, pro.CalculateCacheStorageCost(1_000_000, TimeSpan.FromHours(1)));
+        Assert.Equal(1.35m, pro.CalculateCacheStorageCost(200_000, TimeSpan.FromMinutes(90)));
+        Assert.Equal(0m, pro.CalculateCacheStorageCost(1_000_000, TimeSpan.Zero));
+    }
+
+    [Fact]
+    public void CalculateCacheStorageCost_FollowsTheAnnouncedRate_OnItsDate()
+    {
+        var flash = ModelCatalog.FindModel("gemini-3.8-flash", AliasMatchType.Exact);
+        Assert.NotNull(flash);
+
+        Assert.Equal(0.50m, flash.CalculateCacheStorageCost(1_000_000, TimeSpan.FromHours(1), new DateOnly(2026, 12, 31)));
+        Assert.Equal(1.00m, flash.CalculateCacheStorageCost(1_000_000, TimeSpan.FromHours(1), new DateOnly(2027, 1, 1)));
+        Assert.Equal(1.00m, flash.AsOf(new DateOnly(2027, 1, 1)).CacheStoragePricePerMillionPerHour);
+    }
+
+    [Fact]
+    public void CalculateCacheStorageCost_NoStoragePrice_IsUnknown()
+    {
+        var claude = ModelCatalog.FindModel("claude-opus-4-8");
+        Assert.NotNull(claude);
+        Assert.Null(claude.CalculateCacheStorageCost(1_000_000, TimeSpan.FromHours(1)));
+    }
+
+    [Fact]
+    public void CalculateCacheStorageCost_RejectsNegativeInput()
+    {
+        var model = new ModelInfo { ModelId = "m", CacheStoragePricePerMillionPerHour = 1m };
+        Assert.Throws<ArgumentOutOfRangeException>(() => model.CalculateCacheStorageCost(-1, TimeSpan.FromHours(1)));
+        Assert.Throws<ArgumentOutOfRangeException>(() => model.CalculateCacheStorageCost(1, TimeSpan.FromHours(-1)));
+    }
+
+    [Fact]
+    public void GeminiModels_WithExplicitCaching_CarryTheirStorageRate()
+    {
+        // ai.google.dev pricing page (Standard), 2026-10-10.
+        var expected = new Dictionary<string, decimal>
+        {
+            ["gemini-3.8-flash"] = 0.50m, ["gemini-3.6-flash"] = 0.50m, ["gemini-3.5-flash-lite"] = 1.00m,
+            ["gemini-3.1-flash-lite"] = 1.00m, ["gemini-3.1-pro-preview"] = 4.50m, ["gemini-3-flash-preview"] = 1.00m,
+            ["gemini-2.5-pro"] = 4.50m, ["gemini-2.5-flash"] = 1.00m, ["gemini-2.5-flash-lite"] = 1.00m,
+        };
+        var actual = expected.Keys.ToDictionary(id => id, id => ModelCatalog.FindModel(id, AliasMatchType.Exact)?.CacheStoragePricePerMillionPerHour);
+        Assert.Equal(expected.ToDictionary(kv => kv.Key, kv => (decimal?)kv.Value), actual);
     }
 
     #endregion

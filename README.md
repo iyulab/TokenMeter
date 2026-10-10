@@ -209,6 +209,7 @@ var strict = CostCalculator.Default(AliasMatchType.Exact);
 | `ServiceTierMultipliers` | Batch / Flex / Fast multipliers on every token price (OpenAI, Anthropic). A tier not listed is not offered |
 | `RegionalMultipliers` | Data-residency surcharges on every token price (Anthropic `inference_geo: "us"` 1.1x on Claude 4.6+) |
 | `ToolCallPrices` | Per-call fees for server-side tools (web search, file search, Gemini Search grounding) |
+| `CacheStoragePricePerMillionPerHour` | Explicit-cache storage per 1M tokens per hour (Gemini context caching); `CalculateCacheStorageCost(tokens, storedFor, date)` prices a cache's lifetime apart from the requests that read it |
 | `ScheduledPrices` | Vendor-announced price changes with an `EffectiveFrom` date; `AsOf(date)` returns the model with the rates in effect then. Past prices are not kept — record a call's cost when it is made |
 
 > **Note — these fields hold the representative rate**: the price outside of any
@@ -229,8 +230,10 @@ var strict = CostCalculator.Default(AliasMatchType.Exact);
 | `ReplacementModelId` | The vendor's recommended successor, as the vendor names it (resolves through `ModelCatalog.FindModel`) |
 
 `GetLifecycleStatus(asOf)` returns `Active` / `Deprecated` / `Retired` for a date, computed from the dates so an older
-package still answers correctly. Filled for Anthropic and OpenAI from their deprecation pages; partner clouds
-(Bedrock, Vertex AI, Azure) keep their own schedules and are not covered.
+package still answers correctly. Filled for Anthropic, OpenAI and Google from their deprecation pages; partner clouds
+(Bedrock, Vertex AI, Azure) keep their own schedules and are not covered. Google publishes a shutdown date for a generally
+available model from its release (the earliest date it may be shut down), so a Google model can carry a `RetirementDate`
+without a `DeprecationDate`; a model whose requests Google routes to its successor carries only `ReplacementModelId`.
 
 ### Input Modalities
 | Property | Description |

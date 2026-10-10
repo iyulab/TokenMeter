@@ -86,6 +86,7 @@ internal static class ModelInfoLoader
         OutputPricePerMillion = j.OutputPricePerMillion,
         CacheReadPricePerMillion = j.CacheReadPricePerMillion,
         CacheWritePricePerMillion = j.CacheWritePricePerMillion,
+        CacheStoragePricePerMillionPerHour = j.CacheStoragePricePerMillionPerHour,
         ImageInputPrice = j.ImageInputPrice,
         AudioInputPricePerSecond = j.AudioInputPricePerSecond,
         PricingTiers = j.PricingTiers?.Select(ToPricingTier).ToList(),
@@ -113,6 +114,7 @@ internal static class ModelInfoLoader
                 OutputPricePerMillion = p.OutputPricePerMillion,
                 CacheReadPricePerMillion = p.CacheReadPricePerMillion,
                 CacheWritePricePerMillion = p.CacheWritePricePerMillion,
+                CacheStoragePricePerMillionPerHour = p.CacheStoragePricePerMillionPerHour,
             })
             .OrderBy(p => p.EffectiveFrom)
             .ToList(),

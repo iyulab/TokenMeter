@@ -4,6 +4,21 @@ All notable changes to this project are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/); while the major version is 0, a minor release may contain
 breaking changes, and each one is marked **Breaking** with a migration note.
 
+## [Unreleased]
+
+### Added
+- **Explicit-cache storage cost.** `ModelInfo.CacheStoragePricePerMillionPerHour` and
+  `CalculateCacheStorageCost(cachedTokens, storedFor, date)` price keeping tokens in an explicit prompt cache, apart from
+  the requests that read it (linear in the time; service tiers and regions do not apply). `ScheduledPrice` carries a
+  storage change. Filled for Gemini from Google's pricing page (2026-10-10): 3.8 Flash and 3.6 Flash $0.50 per 1M tokens
+  per hour ($1.00 from 2027-01-01), 3.1 Pro Preview and 2.5 Pro $4.50, 3.5 Flash-Lite, 3.1 Flash-Lite, 3 Flash Preview,
+  2.5 Flash and 2.5 Flash-Lite $1.00.
+- **Google model lifecycle.** From Google's deprecations page and changelog (2026-10-10): `gemini-3.5-flash` deprecated
+  2026-10-08 for `gemini-3.6-flash`; `gemini-3.7-flash` → `gemini-3.8-flash` and `gemini-3-flash-preview` →
+  `gemini-3.6-flash` as replacements; `gemini-3.1-flash-lite` shuts down no earlier than 2027-05-07 (`gemini-3.5-flash-lite`);
+  `gemini-3-pro-preview`, `gemini-3.1-flash-lite-preview`, `gemini-2.0-flash(-lite)` and `gemini-1.5-pro/flash` carry
+  their past shutdown dates and report `Retired`.
+
 ## [0.9.0] - 2026-10-10
 
 ### Added
