@@ -167,3 +167,68 @@ public class ProviderFreshnessTests
         Assert.Null(ModelCatalog.GetLastUpdated("no-such-provider"));
     }
 }
+
+public class PriceModifierTests
+{
+    private static readonly TokenCounts Usage = new() { InputTokens = 1_000_000, OutputTokens = 1_000_000 };
+
+    [Fact]
+    public void A_listed_service_tier_multiplies_every_token_price()
+    {
+        // 100K in / 100K out: under gpt-5.5's 272K long-context threshold.
+        var model = ModelCatalog.FindModel("gpt-5.5", AliasMatchType.Exact)!;
+        var usage = new TokenCounts { InputTokens = 100_000, OutputTokens = 100_000 };
+
+        Assert.Equal(0.5m + 3m, model.CalculateCost(usage));
+        Assert.Equal((0.5m + 3m) * 0.5m, model.CalculateCost(usage, new CostContext { ServiceTier = ServiceTier.Batch }));
+        Assert.Equal((0.5m + 3m) * 2.5m, model.CalculateCost(usage, new CostContext { ServiceTier = ServiceTier.Fast }));
+    }
+
+    [Fact]
+    public void A_tier_the_model_is_not_offered_at_is_an_unknown_price_not_the_standard_one()
+    {
+        var nano = ModelCatalog.FindModel("gpt-5-nano", AliasMatchType.Exact)!;   // no Fast on the vendor's table
+        var codex = ModelCatalog.FindModel("gpt-5.3-codex", AliasMatchType.Exact)!; // no tiers in the catalog
+
+        Assert.NotNull(nano.CalculateCost(Usage, new CostContext { ServiceTier = ServiceTier.Batch }));
+        Assert.Null(nano.CalculateCost(Usage, new CostContext { ServiceTier = ServiceTier.Fast }));
+        Assert.Null(codex.CalculateCost(Usage, new CostContext { ServiceTier = ServiceTier.Batch }));
+    }
+
+    [Fact]
+    public void Multipliers_apply_after_the_date_and_the_long_context_tier()
+    {
+        // Anthropic stacks: fast mode × data residency; Haiku 5.5's long-context prices are multiplied too.
+        var opus = ModelCatalog.FindModel("claude-opus-5-5", AliasMatchType.Exact)!;
+        Assert.Equal((4m + 20m) * 2.0m * 1.1m,
+            opus.CalculateCost(Usage, new CostContext { ServiceTier = ServiceTier.Fast, Region = "us" }));
+
+        var haiku = ModelCatalog.FindModel("claude-haiku-5-5", AliasMatchType.Exact)!;
+        Assert.Equal((0.5m + 2.5m) * 0.5m, haiku.CalculateCost(Usage, new CostContext { ServiceTier = ServiceTier.Batch }));
+
+        // Gemini 3.8 Flash's 2027 rates exist only as a scheduled price — and have no batch entry here, so null.
+        var flash = ModelCatalog.FindModel("gemini-3.8-flash", AliasMatchType.Exact)!;
+        Assert.Null(flash.CalculateCost(Usage, new CostContext { Date = new DateOnly(2027, 1, 1), ServiceTier = ServiceTier.Batch }));
+    }
+
+    [Fact]
+    public void A_region_without_a_surcharge_is_the_standard_price()
+    {
+        var older = ModelCatalog.FindModel("claude-4-5-sonnet", AliasMatchType.Exact)!;   // before 4.6: no geo multiplier
+
+        Assert.Equal(older.CalculateCost(Usage), older.CalculateCost(Usage, new CostContext { Region = "us" }));
+    }
+
+    [Fact]
+    public void Server_tool_calls_add_their_per_call_fee_and_an_unpriced_tool_is_unknown()
+    {
+        var model = ModelCatalog.FindModel("claude-sonnet-5-5", AliasMatchType.Exact)!;
+        var withSearch = Usage with { ToolCalls = new Dictionary<string, int> { ["web_search"] = 3 } };
+        var withUnknown = Usage with { ToolCalls = new Dictionary<string, int> { ["code_execution"] = 1 } };
+
+        Assert.Equal(model.CalculateCost(Usage) + 0.03m, model.CalculateCost(withSearch));
+        // The fee is not multiplied by the batch discount — it is a per-call charge, not a token price.
+        Assert.Equal(model.CalculateCost(Usage)! * 0.5m + 0.03m, model.CalculateCost(withSearch, new CostContext { ServiceTier = ServiceTier.Batch }));
+        Assert.Null(model.CalculateCost(withUnknown));
+    }
+}

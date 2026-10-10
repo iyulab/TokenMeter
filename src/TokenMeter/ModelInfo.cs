@@ -211,6 +211,26 @@ public record ModelInfo
     /// </summary>
     public ToolCallingFormat ToolCallingFormat { get; init; }
 
+    // ── Price modifiers ───────────────────────────────────────────────────────
+
+    /// <summary>
+    /// The service tiers this model is offered at besides <see cref="TokenMeter.ServiceTier.Standard"/>, each as a multiplier
+    /// on every token price. A tier not listed is not offered (or its price is not in the catalog) —
+    /// <see cref="CalculateCost(TokenCounts, CostContext)"/> returns null for it rather than the standard price.
+    /// </summary>
+    public IReadOnlyList<ServiceTierMultiplier>? ServiceTierMultipliers { get; init; }
+
+    /// <summary>
+    /// Regional surcharges, each as a multiplier on every token price. A region not listed is priced at the standard rate.
+    /// </summary>
+    public IReadOnlyList<RegionalMultiplier>? RegionalMultipliers { get; init; }
+
+    /// <summary>
+    /// Per-call fees for the vendor's server-side tools. A tool not listed has no fee in the catalog —
+    /// <see cref="CalculateCost(TokenCounts, CostContext)"/> returns null when the usage calls it.
+    /// </summary>
+    public IReadOnlyList<ToolCallPrice>? ToolCallPrices { get; init; }
+
     // ── Cost Calculation ──────────────────────────────────────────────────────
 
     /// <summary>
@@ -305,12 +325,15 @@ public record ModelInfo
     }
 
     /// <summary>
-    /// The cost of one request, every part priced the way the vendor prices it: the rates in effect on
-    /// <see cref="CostContext.Date"/> (<see cref="AsOf(DateOnly)"/>), the <see cref="PricingTiers"/> entry its prompt length
+    /// The cost of one request, every part priced the way the vendor prices it, in this order: the rates in effect on
+    /// <see cref="CostContext.Date"/> (<see cref="AsOf(DateOnly)"/>) → the <see cref="PricingTiers"/> entry its prompt length
     /// (<see cref="TokenCounts.PromptTokens"/> — cache reads and writes included) or call time falls in, applied to the
-    /// whole request, cache reads at the read price and each cache write at the price for its lifetime. A price the
-    /// catalog lacks falls back the way the other overloads do: tier → model rate → input price for cache tokens.
-    /// Returns <c>null</c> when the model has no input or output price.
+    /// whole request → the <see cref="CostContext.ServiceTier"/> multiplier → the <see cref="CostContext.Region"/>
+    /// multiplier (both on every token price) → per-call fees for server-side tools. Cache reads are priced at the read
+    /// price and each cache write at the price for its lifetime; a price the catalog lacks falls back tier → model rate →
+    /// input price for cache tokens.
+    /// Returns <c>null</c> when the model has no input or output price, is not offered at the requested service tier, or
+    /// has no fee for a tool the usage calls — an unknown price, never the standard one.
     /// </summary>
     public decimal? CalculateCost(TokenCounts usage, CostContext context = default)
     {
@@ -342,6 +365,29 @@ public record ModelInfo
         {
             var writePrice = WritePrice(tier, write.Ttl) ?? model.WritePrice(write.Ttl) ?? inputPrice;
             cost += (write.Tokens / 1_000_000m) * writePrice;
+        }
+
+        if (context.ServiceTier != ServiceTier.Standard)
+        {
+            if (model.ServiceTierMultipliers?.FirstOrDefault(m => m.Tier == context.ServiceTier) is not { } serviceTier)
+                return null;
+            cost *= serviceTier.Multiplier;
+        }
+
+        if (context.Region is { } region
+            && model.RegionalMultipliers?.FirstOrDefault(m => string.Equals(m.Region, region, StringComparison.OrdinalIgnoreCase)) is { } regional)
+        {
+            cost *= regional.Multiplier;
+        }
+
+        foreach (var (tool, calls) in usage.ToolCalls ?? new Dictionary<string, int>())
+        {
+            ArgumentOutOfRangeException.ThrowIfNegative(calls);
+            if (calls == 0)
+                continue;
+            if (model.ToolCallPrices?.FirstOrDefault(p => string.Equals(p.Tool, tool, StringComparison.OrdinalIgnoreCase)) is not { } fee)
+                return null;
+            cost += (calls / 1_000m) * fee.PricePerThousandCalls;
         }
 
         return cost;

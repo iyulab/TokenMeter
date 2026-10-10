@@ -67,6 +67,18 @@ internal sealed class ModelInfoJson
     [JsonPropertyName("cacheWritePrices")]
     public List<CacheWritePriceJson>? CacheWritePrices { get; set; }
 
+    /// <summary>Service tier → multiplier on every token price, e.g. <c>{ "Batch": 0.5, "Fast": 2.0 }</c>.</summary>
+    [JsonPropertyName("serviceTierMultipliers")]
+    public Dictionary<string, decimal>? ServiceTierMultipliers { get; set; }
+
+    /// <summary>Region → multiplier on every token price, e.g. <c>{ "us": 1.1 }</c>.</summary>
+    [JsonPropertyName("regionalMultipliers")]
+    public Dictionary<string, decimal>? RegionalMultipliers { get; set; }
+
+    /// <summary>Server-side tool → cost per 1,000 calls, e.g. <c>{ "web_search": 10.0 }</c>.</summary>
+    [JsonPropertyName("toolCallPricesPerThousand")]
+    public Dictionary<string, decimal>? ToolCallPricesPerThousand { get; set; }
+
     [JsonPropertyName("scheduledPrices")]
     public List<ScheduledPriceJson>? ScheduledPrices { get; set; }
 

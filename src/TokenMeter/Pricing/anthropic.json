@@ -11,6 +11,9 @@
       "maxOutputTokens": 128000,
       "inputPricePerMillion": 10.0,
       "outputPricePerMillion": 50.0,
+      "serviceTierMultipliers": { "Batch": 0.5 },
+      "regionalMultipliers": { "us": 1.1 },
+      "toolCallPricesPerThousand": { "web_search": 10.0 },
       "cacheReadPricePerMillion": 0.25,
       "cacheWritePricePerMillion": 12.5,
       "cacheWritePrices": [
@@ -44,6 +47,9 @@
       "maxOutputTokens": 128000,
       "inputPricePerMillion": 10.0,
       "outputPricePerMillion": 50.0,
+      "serviceTierMultipliers": { "Batch": 0.5 },
+      "regionalMultipliers": { "us": 1.1 },
+      "toolCallPricesPerThousand": { "web_search": 10.0 },
       "cacheReadPricePerMillion": 0.25,
       "cacheWritePricePerMillion": 12.5,
       "cacheWritePrices": [
@@ -77,6 +83,9 @@
       "maxOutputTokens": 128000,
       "inputPricePerMillion": 10.00,
       "outputPricePerMillion": 50.00,
+      "serviceTierMultipliers": { "Batch": 0.5 },
+      "regionalMultipliers": { "us": 1.1 },
+      "toolCallPricesPerThousand": { "web_search": 10.0 },
       "cacheReadPricePerMillion": 1.00,
       "cacheWritePricePerMillion": 12.50,
       "cacheWritePrices": [
@@ -107,6 +116,9 @@
       "maxOutputTokens": 128000,
       "inputPricePerMillion": 10.00,
       "outputPricePerMillion": 50.00,
+      "serviceTierMultipliers": { "Batch": 0.5 },
+      "regionalMultipliers": { "us": 1.1 },
+      "toolCallPricesPerThousand": { "web_search": 10.0 },
       "cacheReadPricePerMillion": 1.00,
       "cacheWritePricePerMillion": 12.50,
       "cacheWritePrices": [
@@ -139,6 +151,9 @@
       "maxOutputTokens": 128000,
       "inputPricePerMillion": 4.00,
       "outputPricePerMillion": 20.00,
+      "serviceTierMultipliers": { "Batch": 0.5, "Fast": 2.0 },
+      "regionalMultipliers": { "us": 1.1 },
+      "toolCallPricesPerThousand": { "web_search": 10.0 },
       "cacheReadPricePerMillion": 0.20,
       "cacheWritePricePerMillion": 5.00,
       "cacheWritePrices": [
@@ -171,6 +186,9 @@
       "maxOutputTokens": 128000,
       "inputPricePerMillion": 5.00,
       "outputPricePerMillion": 25.00,
+      "serviceTierMultipliers": { "Batch": 0.5, "Fast": 2.0 },
+      "regionalMultipliers": { "us": 1.1 },
+      "toolCallPricesPerThousand": { "web_search": 10.0 },
       "cacheReadPricePerMillion": 0.50,
       "cacheWritePricePerMillion": 6.25,
       "cacheWritePrices": [
@@ -203,6 +221,9 @@
       "maxOutputTokens": 128000,
       "inputPricePerMillion": 5.00,
       "outputPricePerMillion": 25.00,
+      "serviceTierMultipliers": { "Batch": 0.5, "Fast": 2.0 },
+      "regionalMultipliers": { "us": 1.1 },
+      "toolCallPricesPerThousand": { "web_search": 10.0 },
       "cacheReadPricePerMillion": 0.50,
       "cacheWritePricePerMillion": 6.25,
       "cacheWritePrices": [
@@ -234,6 +255,9 @@
       "maxOutputTokens": 128000,
       "inputPricePerMillion": 5.00,
       "outputPricePerMillion": 25.00,
+      "serviceTierMultipliers": { "Batch": 0.5 },
+      "regionalMultipliers": { "us": 1.1 },
+      "toolCallPricesPerThousand": { "web_search": 10.0 },
       "cacheReadPricePerMillion": 0.50,
       "cacheWritePricePerMillion": 6.25,
       "cacheWritePrices": [
@@ -265,6 +289,9 @@
       "maxOutputTokens": 128000,
       "inputPricePerMillion": 2.00,
       "outputPricePerMillion": 10.00,
+      "serviceTierMultipliers": { "Batch": 0.5 },
+      "regionalMultipliers": { "us": 1.1 },
+      "toolCallPricesPerThousand": { "web_search": 10.0 },
       "cacheReadPricePerMillion": 0.10,
       "cacheWritePricePerMillion": 2.50,
       "cacheWritePrices": [
@@ -298,6 +325,9 @@
       "maxOutputTokens": 128000,
       "inputPricePerMillion": 2.00,
       "outputPricePerMillion": 10.00,
+      "serviceTierMultipliers": { "Batch": 0.5 },
+      "regionalMultipliers": { "us": 1.1 },
+      "toolCallPricesPerThousand": { "web_search": 10.0 },
       "cacheReadPricePerMillion": 0.20,
       "cacheWritePricePerMillion": 2.50,
       "cacheWritePrices": [
@@ -329,6 +359,9 @@
       "maxOutputTokens": 32000,
       "inputPricePerMillion": 5.00,
       "outputPricePerMillion": 25.00,
+      "serviceTierMultipliers": { "Batch": 0.5 },
+      "regionalMultipliers": { "us": 1.1 },
+      "toolCallPricesPerThousand": { "web_search": 10.0 },
       "cacheReadPricePerMillion": 0.50,
       "cacheWritePricePerMillion": 6.25,
       "cacheWritePrices": [
@@ -364,6 +397,9 @@
       "maxOutputTokens": 64000,
       "inputPricePerMillion": 3.00,
       "outputPricePerMillion": 15.00,
+      "serviceTierMultipliers": { "Batch": 0.5 },
+      "regionalMultipliers": { "us": 1.1 },
+      "toolCallPricesPerThousand": { "web_search": 10.0 },
       "cacheReadPricePerMillion": 0.30,
       "cacheWritePricePerMillion": 3.75,
       "cacheWritePrices": [
@@ -402,6 +438,7 @@
       "maxOutputTokens": 32000,
       "inputPricePerMillion": 15.00,
       "outputPricePerMillion": 75.00,
+      "serviceTierMultipliers": { "Batch": 0.5 },
       "cacheReadPricePerMillion": 1.50,
       "cacheWritePricePerMillion": 18.75,
       "cacheWritePrices": [
@@ -438,6 +475,8 @@
       "maxOutputTokens": 32000,
       "inputPricePerMillion": 5.00,
       "outputPricePerMillion": 25.00,
+      "serviceTierMultipliers": { "Batch": 0.5 },
+      "toolCallPricesPerThousand": { "web_search": 10.0 },
       "cacheReadPricePerMillion": 0.50,
       "cacheWritePricePerMillion": 6.25,
       "cacheWritePrices": [
@@ -479,6 +518,7 @@
       "maxOutputTokens": 32000,
       "inputPricePerMillion": 15.00,
       "outputPricePerMillion": 75.00,
+      "serviceTierMultipliers": { "Batch": 0.5 },
       "cacheReadPricePerMillion": 1.50,
       "cacheWritePricePerMillion": 18.75,
       "cacheWritePrices": [
@@ -517,6 +557,8 @@
       "maxOutputTokens": 64000,
       "inputPricePerMillion": 3.00,
       "outputPricePerMillion": 15.00,
+      "serviceTierMultipliers": { "Batch": 0.5 },
+      "toolCallPricesPerThousand": { "web_search": 10.0 },
       "cacheReadPricePerMillion": 0.30,
       "cacheWritePricePerMillion": 3.75,
       "cacheWritePrices": [
@@ -555,6 +597,9 @@
       "maxOutputTokens": 128000,
       "inputPricePerMillion": 0.10,
       "outputPricePerMillion": 0.50,
+      "serviceTierMultipliers": { "Batch": 0.5 },
+      "regionalMultipliers": { "us": 1.1 },
+      "toolCallPricesPerThousand": { "web_search": 10.0 },
       "cacheReadPricePerMillion": 0.01,
       "cacheWritePricePerMillion": 0.125,
       "cacheWritePrices": [
@@ -601,6 +646,8 @@
       "contextWindow": 200000,
       "inputPricePerMillion": 1.00,
       "outputPricePerMillion": 5.00,
+      "serviceTierMultipliers": { "Batch": 0.5 },
+      "toolCallPricesPerThousand": { "web_search": 10.0 },
       "cacheReadPricePerMillion": 0.10,
       "cacheWritePricePerMillion": 1.25,
       "cacheWritePrices": [
@@ -638,6 +685,7 @@
       "maxOutputTokens": 64000,
       "inputPricePerMillion": 3.00,
       "outputPricePerMillion": 15.00,
+      "serviceTierMultipliers": { "Batch": 0.5 },
       "cacheReadPricePerMillion": 0.30,
       "cacheWritePricePerMillion": 3.75,
       "cacheWritePrices": [
@@ -754,6 +802,7 @@
       "maxOutputTokens": 8192,
       "inputPricePerMillion": 0.80,
       "outputPricePerMillion": 4.00,
+      "serviceTierMultipliers": { "Batch": 0.5 },
       "cacheReadPricePerMillion": 0.08,
       "cacheWritePricePerMillion": 1.00,
       "cacheWritePrices": [

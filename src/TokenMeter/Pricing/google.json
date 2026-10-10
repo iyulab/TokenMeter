@@ -11,6 +11,7 @@
       "maxOutputTokens": 65536,
       "inputPricePerMillion": 0.75,
       "outputPricePerMillion": 3.75,
+      "toolCallPricesPerThousand": { "google_search": 14.0 },
       "cacheReadPricePerMillion": 0.075,
       "scheduledPrices": [
         { "effectiveFrom": "2027-01-01", "inputPricePerMillion": 1.50, "outputPricePerMillion": 7.50, "cacheReadPricePerMillion": 0.15 }
@@ -81,6 +82,7 @@
       "maxOutputTokens": 65536,
       "inputPricePerMillion": 0.75,
       "outputPricePerMillion": 3.75,
+      "toolCallPricesPerThousand": { "google_search": 14.0 },
       "cacheReadPricePerMillion": 0.075,
       "scheduledPrices": [
         { "effectiveFrom": "2027-01-01", "inputPricePerMillion": 1.50, "outputPricePerMillion": 7.50, "cacheReadPricePerMillion": 0.15 }
@@ -113,6 +115,7 @@
       "maxOutputTokens": 65536,
       "inputPricePerMillion": 0.30,
       "outputPricePerMillion": 2.50,
+      "toolCallPricesPerThousand": { "google_search": 14.0 },
       "cacheReadPricePerMillion": 0.03,
       "supportsImageInput": true,
       "supportsVideoInput": true,
@@ -197,6 +200,7 @@
       "contextWindow": 1048576,
       "inputPricePerMillion": 2.00,
       "outputPricePerMillion": 12.00,
+      "toolCallPricesPerThousand": { "google_search": 14.0 },
       "cacheReadPricePerMillion": 0.20,
       "pricingTiers": [
         { "axis": "ContextLength", "minContextLengthTokens": 200001, "inputPricePerMillion": 4.00, "outputPricePerMillion": 18.00, "cacheReadPricePerMillion": 0.40 }
@@ -228,6 +232,7 @@
       "contextWindow": 1048576,
       "inputPricePerMillion": 0.25,
       "outputPricePerMillion": 1.50,
+      "toolCallPricesPerThousand": { "google_search": 14.0 },
       "cacheReadPricePerMillion": 0.025,
       "supportsImageInput": true,
       "supportsVideoInput": true,
@@ -278,6 +283,7 @@
       "contextWindow": 1000000,
       "inputPricePerMillion": 0.50,
       "outputPricePerMillion": 3.00,
+      "toolCallPricesPerThousand": { "google_search": 14.0 },
       "cacheReadPricePerMillion": 0.05,
       "supportsImageInput": true,
       "supportsVideoInput": true,
@@ -307,6 +313,7 @@
       "contextWindow": 1000000,
       "inputPricePerMillion": 1.25,
       "outputPricePerMillion": 10.00,
+      "toolCallPricesPerThousand": { "google_search": 35.0 },
       "cacheReadPricePerMillion": 0.125,
       "pricingTiers": [
         { "axis": "ContextLength", "minContextLengthTokens": 200001, "inputPricePerMillion": 2.50, "outputPricePerMillion": 15.00, "cacheReadPricePerMillion": 0.25 }
@@ -338,6 +345,7 @@
       "contextWindow": 1000000,
       "inputPricePerMillion": 0.10,
       "outputPricePerMillion": 0.40,
+      "toolCallPricesPerThousand": { "google_search": 35.0 },
       "cacheReadPricePerMillion": 0.01,
       "supportsImageInput": true,
       "supportsVideoInput": true,
@@ -364,6 +372,7 @@
       "contextWindow": 1000000,
       "inputPricePerMillion": 0.30,
       "outputPricePerMillion": 2.50,
+      "toolCallPricesPerThousand": { "google_search": 35.0 },
       "cacheReadPricePerMillion": 0.03,
       "supportsImageInput": true,
       "supportsVideoInput": true,

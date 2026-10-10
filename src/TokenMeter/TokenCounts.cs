@@ -27,6 +27,12 @@ public sealed record TokenCounts
     public int OutputTokens { get; init; }
 
     /// <summary>
+    /// Calls to server-side tools the vendor bills per call, by the vendor's tool name (<c>web_search</c>,
+    /// <c>file_search</c>, <c>google_search</c> — see <see cref="ModelInfo.ToolCallPrices"/>). Null or empty when none.
+    /// </summary>
+    public IReadOnlyDictionary<string, int>? ToolCalls { get; init; }
+
+    /// <summary>
     /// The prompt length a vendor's long-context tier is decided by: every input token, cache reads and writes
     /// included.
     /// </summary>
@@ -40,9 +46,9 @@ public sealed record TokenCounts
 public sealed record CacheWriteTokenCount(TimeSpan? Ttl, int Tokens);
 
 /// <summary>
-/// When a request was made, for the prices that depend on it: <see cref="Date"/> selects the rates in effect that day
-/// (<see cref="ModelInfo.AsOf(DateOnly)"/>), <see cref="CallTimeUtc"/> a time-of-day tier. Both null = the catalog's
-/// current rates, no time-of-day tier.
+/// The facts about a request the price depends on besides its tokens: <see cref="Date"/> selects the rates in effect that
+/// day (<see cref="ModelInfo.AsOf(DateOnly)"/>), <see cref="CallTimeUtc"/> a time-of-day tier, <see cref="ServiceTier"/>
+/// and <see cref="Region"/> the vendor's multipliers. The default is the catalog's current standard rates.
 /// </summary>
 public readonly record struct CostContext
 {
@@ -51,6 +57,12 @@ public readonly record struct CostContext
 
     /// <summary>The UTC time of the call, for time-of-day tiers; null applies none.</summary>
     public TimeOnly? CallTimeUtc { get; init; }
+
+    /// <summary>How the request was served (<see cref="TokenMeter.ServiceTier.Standard"/> by default).</summary>
+    public ServiceTier ServiceTier { get; init; }
+
+    /// <summary>The inference region requested (<c>us</c>), or null for the vendor's default (global) routing.</summary>
+    public string? Region { get; init; }
 
     /// <summary>The context for a call made at <paramref name="utc"/>: its date and its time of day.</summary>
     public static CostContext At(DateTimeOffset utc)

@@ -74,7 +74,18 @@ var usage = new TokenCounts
 };
 var requestCost = model?.CalculateCost(usage, CostContext.At(callTimeUtc));
 var viaCalculator = CostCalculator.Default().CalculateCost("claude-haiku-5-5", usage, CostContext.At(callTimeUtc));
+
+// Batch / Flex / Fast and a data-residency region multiply every token price; server-side tool calls add their fee
+var batchInUs = model?.CalculateCost(
+    usage with { ToolCalls = new Dictionary<string, int> { ["web_search"] = 2 } },
+    CostContext.At(callTimeUtc) with { ServiceTier = ServiceTier.Batch, Region = "us" });
 ```
+
+The order is: rates of the date (`AsOf`) → long-context / time-of-day tier → service-tier multiplier → regional
+multiplier → per-call tool fees. A service tier the model is not offered at, or a tool with no fee in the catalog, makes
+the result `null` (unknown) rather than the standard price. Tool names are the vendors' own (`web_search`, `file_search`,
+`google_search`); tokens a tool adds to the context are already in the token counts, and a vendor's monthly free
+allowance is not applied.
 
 The overloads below are the same calculation for one part at a time:
 
@@ -195,6 +206,9 @@ var strict = CostCalculator.Default(AliasMatchType.Exact);
 | `AudioInputPricePerSecond` | Audio input cost per second |
 | `PricingTiers` | Non-representative price bands (context-length or time-of-day) — see [Tiered Pricing](#tiered-pricing) |
 | `CacheWritePrices` | Cache-write price per cache lifetime (`Ttl` → price) where the vendor prices them apart — Anthropic 5-minute and 1-hour writes; `GetCacheWritePrice(ttl)` |
+| `ServiceTierMultipliers` | Batch / Flex / Fast multipliers on every token price (OpenAI, Anthropic). A tier not listed is not offered |
+| `RegionalMultipliers` | Data-residency surcharges on every token price (Anthropic `inference_geo: "us"` 1.1x on Claude 4.6+) |
+| `ToolCallPrices` | Per-call fees for server-side tools (web search, file search, Gemini Search grounding) |
 | `ScheduledPrices` | Vendor-announced price changes with an `EffectiveFrom` date; `AsOf(date)` returns the model with the rates in effect then. Past prices are not kept — record a call's cost when it is made |
 
 > **Note — these fields hold the representative rate**: the price outside of any

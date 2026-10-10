@@ -7,10 +7,18 @@ breaking changes, and each one is marked **Breaking** with a migration note.
 ## [Unreleased]
 
 ### Added
-- **One cost calculation per request.** `ModelInfo.CalculateCost(TokenCounts, CostContext)` and
-  `ICostCalculator.CalculateCost(modelId, TokenCounts, CostContext)` price uncached input, cache reads, cache writes by
-  lifetime (`CacheWriteTokenCount(Ttl, Tokens)`) and output together, at the rates of `CostContext.Date` (`AsOf`) and in
-  the tier the request falls in. `CostContext.At(instant)` sets the date and time of day from one timestamp.
+- **One cost calculation per request.** `ModelInfo.CalculateCost(TokenCounts, CostContext)` prices uncached input, cache
+  reads, cache writes by lifetime (`CacheWriteTokenCount(Ttl, Tokens)`), output and server-side tool calls together, in
+  this order: the rates of `CostContext.Date` (`AsOf`) → the long-context or time-of-day tier → the
+  `CostContext.ServiceTier` multiplier → the `CostContext.Region` multiplier → per-call tool fees.
+  `CostContext.At(instant)` sets the date and time of day from one timestamp. A service tier the model is not offered at,
+  or a tool with no fee, gives `null` — an unknown price, not the standard one.
+- **Service tiers, data residency and server tool fees.** `ModelInfo.ServiceTierMultipliers` (`ServiceTier.Batch` /
+  `Flex` / `Fast`), `RegionalMultipliers` and `ToolCallPrices`, with `TokenCounts.ToolCalls` keyed by the vendor's tool
+  name. Filled from the vendors' pricing pages (2026-10-10): OpenAI gpt-5 – gpt-6 families Batch/Flex 0.5x, Fast 2x
+  (gpt-5.5 2.5x, gpt-5-mini 1.8x, none for the nano models), Pro models Batch 0.5x, `web_search` $10 and `file_search`
+  $2.50 per 1,000 calls; Anthropic Batch 0.5x, fast mode 2x on Opus 5.5 / 5 / 4.8, `inference_geo: "us"` 1.1x on Claude
+  4.6 and later, `web_search` $10 per 1,000; Gemini `google_search` $14 (3.x) and $35 (2.5) per 1,000 grounded prompts.
 - **Tiers carry cache-write prices.** `PricingTier.CacheWritePricePerMillion` and `CacheWritePrices`; Claude Haiku 5.5's
   over-100K tier has its 5-minute and 1-hour write prices.
 - **Gemini long-context tiers and cache-read prices.** Gemini 2.5 Pro (over 200K: input 2.50, output 15.00, cache read
@@ -21,6 +29,9 @@ breaking changes, and each one is marked **Breaking** with a migration note.
   how an unregistered id is matched against the catalog.
 
 ### Changed
+- **Breaking: `ICostCalculator` has a new member**, `CalculateCost(string modelId, TokenCounts usage, CostContext context)`.
+  Migration: an implementation of the interface adds it — delegating to `GetModel(modelId)?.CalculateCost(usage, context)`
+  is the built-in behaviour.
 - **A tier is decided by the request's prompt length.** `PricingTierContext.ContextLengthTokens` is documented as every
   input token, cache reads and writes included — the vendors' rule — not «prompt + expected completion». The calculation
   did not change; a caller that added the expected completion should pass the prompt length alone.

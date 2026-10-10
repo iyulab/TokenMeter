@@ -92,6 +92,18 @@ internal static class ModelInfoLoader
         // An entry whose lifetime or date does not parse is left out rather than thrown on, as a malformed
         // lastUpdated is: the loader fails only on unreadable JSON. The test suite holds every entry to parsing.
         CacheWritePrices = ToCacheWritePrices(j.CacheWritePrices),
+        // A tier name that does not parse is left out, as an unparseable lifetime is; the test suite holds every entry to
+        // parsing.
+        ServiceTierMultipliers = j.ServiceTierMultipliers?
+            .Where(kv => Enum.TryParse<ServiceTier>(kv.Key, ignoreCase: true, out _))
+            .Select(kv => new ServiceTierMultiplier { Tier = Enum.Parse<ServiceTier>(kv.Key, ignoreCase: true), Multiplier = kv.Value })
+            .ToList(),
+        RegionalMultipliers = j.RegionalMultipliers?
+            .Select(kv => new RegionalMultiplier { Region = kv.Key, Multiplier = kv.Value })
+            .ToList(),
+        ToolCallPrices = j.ToolCallPricesPerThousand?
+            .Select(kv => new ToolCallPrice { Tool = kv.Key, PricePerThousandCalls = kv.Value })
+            .ToList(),
         ScheduledPrices = j.ScheduledPrices?
             .Where(p => ParseDate(p.EffectiveFrom) is not null)
             .Select(p => new ScheduledPrice
