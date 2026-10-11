@@ -6,7 +6,20 @@ breaking changes, and each one is marked **Breaking** with a migration note.
 
 ## [Unreleased]
 
+### Added
+- **Embedding models are priced.** `text-embedding-3-small` ($0.02 / 1M input), `text-embedding-3-large` ($0.13) and
+  `text-embedding-ada-002` ($0.10) for OpenAI, `gemini-embedding-2` ($0.20 text; image, audio and video input in `ModalityPrices`;
+  Batch half price) for Google. They are `ModelType.Embedding` rows: `GetByType(ModelType.Embedding)` lists them and
+  `CalculateCost(inputTokens, 0)` prices them.
+
 ### Changed
+- **Exact lookup finds the vendors' undated Claude aliases.** `FindModelMatch("claude-sonnet-4-5", AliasMatchType.Exact)` (and
+  `claude-haiku-4-5`, `claude-opus-4-5`) returned `null` and reached its row only through the Contains pass; `claude-3-5-sonnet-latest`,
+  `claude-3-5-haiku-latest` and `claude-3-opus-latest` are exact too. A test now requires every dated exact alias's undated name to
+  resolve exactly to the same row.
+- **Breaking** — the Claude 4.5 rows' `ModelId` is the vendor's name: `claude-sonnet-4-5`, `claude-haiku-4-5`, `claude-opus-4-5` (were
+  `claude-4-5-sonnet`, `claude-4-5-haiku`, `claude-4-5-opus`). Looking up the former ids still resolves exactly; code that compares
+  `ModelInfo.ModelId` with them must use the new names.
 - **The nuget.org «Release Notes» of every package link to the GitHub release of its version**, whose notes are this CHANGELOG's section for that version.
 
 ## [0.11.0] - 2026-10-10

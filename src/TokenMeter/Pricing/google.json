@@ -655,6 +655,21 @@
       "aliases": [
         { "pattern": "gemini-2.5-pro-preview-tts", "type": "contains" }
       ]
+    },
+    {
+      "modelId": "gemini-embedding-2",
+      "displayName": "Gemini Embedding 2",
+      "modelType": "Embedding",
+      "inputPricePerMillion": 0.20,
+      "outputPricePerMillion": 0,
+      "serviceTierMultipliers": { "Batch": 0.5 },
+      "modalityPrices": { "input": { "image": 0.45, "audio": 6.50, "video": 12.00 } },
+      "supportsImageInput": true,
+      "supportsVideoInput": true,
+      "supportsDocumentInput": true,
+      "supportsAudioInput": true,
+      "toolCallingFormat": "Gemini",
+      "aliases": []
     }
   ]
 }

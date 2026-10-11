@@ -1331,6 +1331,33 @@
       "supportsStreaming": true,
       "toolCallingFormat": "OpenAI",
       "aliases": []
+    },
+    {
+      "modelId": "text-embedding-3-small",
+      "displayName": "Text Embedding 3 Small",
+      "modelType": "Embedding",
+      "inputPricePerMillion": 0.02,
+      "outputPricePerMillion": 0,
+      "toolCallingFormat": "OpenAI",
+      "aliases": []
+    },
+    {
+      "modelId": "text-embedding-3-large",
+      "displayName": "Text Embedding 3 Large",
+      "modelType": "Embedding",
+      "inputPricePerMillion": 0.13,
+      "outputPricePerMillion": 0,
+      "toolCallingFormat": "OpenAI",
+      "aliases": []
+    },
+    {
+      "modelId": "text-embedding-ada-002",
+      "displayName": "Text Embedding Ada 002",
+      "modelType": "Embedding",
+      "inputPricePerMillion": 0.10,
+      "outputPricePerMillion": 0,
+      "toolCallingFormat": "OpenAI",
+      "aliases": []
     }
   ]
 }

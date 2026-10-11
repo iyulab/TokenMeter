@@ -28,7 +28,8 @@ no DI extension or setup call. Register `ICostCalculator` yourself if you want i
 | Feature | Entry point | How to use |
 |---------|-------------|------------|
 | Model lookup by id or alias (Bedrock/Vertex prefixes, date suffixes) | `ModelCatalog.FindModel(id)` | Default: full fuzzy matching |
-| Bounded / confidence-aware lookup | `ModelCatalog.FindModel(id, AliasMatchType)`, `ModelCatalog.FindModelMatch(id)` → `ModelMatch.MatchKind` | Pass `AliasMatchType.Exact` or `Prefix` to limit fuzziness |
+| Bounded / confidence-aware lookup | `ModelCatalog.FindModel(id, AliasMatchType)`, `ModelCatalog.FindModelMatch(id)` → `ModelMatch.MatchKind` | Pass `AliasMatchType.Exact` or `Prefix` to limit fuzziness; `Exact` finds every name the vendor's API takes (dated snapshots and the vendor's undated aliases such as `claude-sonnet-4-5`) |
+| Embedding model pricing (OpenAI `text-embedding-3-small` / `-large` / `ada-002`, Gemini `gemini-embedding-2`) | `ModelCatalog.GetByType(ModelType.Embedding)`, `ModelInfo.CalculateCost(inputTokens, 0)` | Rows priced on input tokens; Gemini's image/audio/video input in `ModalityPrices` |
 | Catalog browsing | `ModelCatalog.All`, `ByProvider`, `GetProvider(name)`, `GetByProvider`, `GetByType(ModelType)`, `GetProviderNames()`, typed properties (`ModelCatalog.OpenAI`, `.Anthropic`, …) | Static, always on |
 | Model metadata (limits, modalities, capabilities, reasoning/thinking format, tool-calling wire format) | `ModelInfo` properties | See [Model Metadata](#model-metadata) |
 | Full request cost (date rates, tiers, cache reads, cache writes by lifetime, modality prices, service tier, region, tool fees) | `ModelInfo.CalculateCost(TokenCounts, CostContext)`, `ICostCalculator.CalculateCost(modelId, TokenCounts, CostContext)` | `CostContext.At(callTimeUtc)`; set `ServiceTier` / `Region` with `with { … }` |

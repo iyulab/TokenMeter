@@ -467,7 +467,7 @@
       ]
     },
     {
-      "modelId": "claude-4-5-opus",
+      "modelId": "claude-opus-4-5",
       "displayName": "Claude 4.5 Opus",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -503,7 +503,8 @@
         { "pattern": "claude-4.5-opus", "type": "contains" },
         { "pattern": "claude-opus-4-5", "type": "contains" },
         { "pattern": "claude-opus-4.5", "type": "contains" },
-        { "pattern": "claude-opus-4-5-20251101", "type": "exact" }
+        { "pattern": "claude-opus-4-5-20251101", "type": "exact" },
+        { "pattern": "claude-4-5-opus", "type": "exact" }
       ]
     },
     {
@@ -546,7 +547,7 @@
       ]
     },
     {
-      "modelId": "claude-4-5-sonnet",
+      "modelId": "claude-sonnet-4-5",
       "displayName": "Claude 4.5 Sonnet",
       "deprecationDate": "2026-09-30",
       "retirementDate": "2026-11-30",
@@ -585,7 +586,8 @@
         { "pattern": "claude-4.5-sonnet", "type": "contains" },
         { "pattern": "claude-sonnet-4-5", "type": "contains" },
         { "pattern": "claude-sonnet-4.5", "type": "contains" },
-        { "pattern": "claude-sonnet-4-5-20250929", "type": "exact" }
+        { "pattern": "claude-sonnet-4-5-20250929", "type": "exact" },
+        { "pattern": "claude-4-5-sonnet", "type": "exact" }
       ]
     },
     {
@@ -639,7 +641,7 @@
       ]
     },
     {
-      "modelId": "claude-4-5-haiku",
+      "modelId": "claude-haiku-4-5",
       "displayName": "Claude 4.5 Haiku",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -670,7 +672,8 @@
         { "pattern": "claude-4.5-haiku", "type": "contains" },
         { "pattern": "claude-haiku-4-5", "type": "contains" },
         { "pattern": "claude-haiku-4.5", "type": "contains" },
-        { "pattern": "claude-haiku-4-5-20251001", "type": "exact" }
+        { "pattern": "claude-haiku-4-5-20251001", "type": "exact" },
+        { "pattern": "claude-4-5-haiku", "type": "exact" }
       ]
     },
     {
@@ -786,6 +789,7 @@
       "maxThinkingTokens": 32000,
       "toolCallingFormat": "Anthropic",
       "aliases": [
+        { "pattern": "claude-3-5-sonnet-latest", "type": "exact" },
         { "pattern": "claude-3-5-sonnet", "type": "contains" },
         { "pattern": "claude-3.5-sonnet", "type": "contains" }
       ]
@@ -821,6 +825,7 @@
       "supportsMcpToolUse": true,
       "toolCallingFormat": "Anthropic",
       "aliases": [
+        { "pattern": "claude-3-5-haiku-latest", "type": "exact" },
         { "pattern": "claude-3-5-haiku", "type": "contains" },
         { "pattern": "claude-3.5-haiku", "type": "contains" },
         { "pattern": "claude-haiku-3-5", "type": "contains" },
@@ -857,6 +862,7 @@
       "supportsMcpToolUse": true,
       "toolCallingFormat": "Anthropic",
       "aliases": [
+        { "pattern": "claude-3-opus-latest", "type": "exact" },
         { "pattern": "claude-3-opus", "type": "contains" }
       ]
     },
