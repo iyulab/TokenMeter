@@ -12,13 +12,34 @@ Provides context windows, pricing, capability flags (vision, audio, reasoning, t
 
 | Package | Description |
 |---------|-------------|
-| `TokenMeter` | Full model catalog + cost calculation |
+| `TokenMeter` | Bundled model metadata catalog (`ModelCatalog`, `ModelInfo`) + cost calculation (`CostCalculator`) — no dependencies, AOT/trim compatible |
 
 ## Installation
 
 ```bash
 dotnet add package TokenMeter
 ```
+
+## Features
+
+Everything is available as soon as the package is referenced — the catalog is embedded and loads on first use; there is
+no DI extension or setup call. Register `ICostCalculator` yourself if you want it injected.
+
+| Feature | Entry point | How to use |
+|---------|-------------|------------|
+| Model lookup by id or alias (Bedrock/Vertex prefixes, date suffixes) | `ModelCatalog.FindModel(id)` | Default: full fuzzy matching |
+| Bounded / confidence-aware lookup | `ModelCatalog.FindModel(id, AliasMatchType)`, `ModelCatalog.FindModelMatch(id)` → `ModelMatch.MatchKind` | Pass `AliasMatchType.Exact` or `Prefix` to limit fuzziness |
+| Catalog browsing | `ModelCatalog.All`, `ByProvider`, `GetProvider(name)`, `GetByProvider`, `GetByType(ModelType)`, `GetProviderNames()`, typed properties (`ModelCatalog.OpenAI`, `.Anthropic`, …) | Static, always on |
+| Model metadata (limits, modalities, capabilities, reasoning/thinking format, tool-calling wire format) | `ModelInfo` properties | See [Model Metadata](#model-metadata) |
+| Full request cost (date rates, tiers, cache reads, cache writes by lifetime, modality prices, service tier, region, tool fees) | `ModelInfo.CalculateCost(TokenCounts, CostContext)`, `ICostCalculator.CalculateCost(modelId, TokenCounts, CostContext)` | `CostContext.At(callTimeUtc)`; set `ServiceTier` / `Region` with `with { … }` |
+| Per-part cost overloads | `ModelInfo.CalculateCost(input, output[, cacheRead, cacheWrite[, cacheWriteTtl]])`, `CalculateCost(input, output, PricingTierContext)` | Always on |
+| Long-context / time-of-day pricing tiers | `ModelInfo.PricingTiers` + `PricingTierContext` | Applied when a context is passed (or automatically via `TokenCounts`) |
+| Vendor-announced future prices | `ModelInfo.AsOf(date)` (`ScheduledPrices`) | Call `AsOf`, or set `CostContext.Date` |
+| Explicit-cache storage cost | `ModelInfo.CalculateCacheStorageCost(tokens, storedFor, date)` | Models with `CacheStoragePricePerMillionPerHour` |
+| Lifecycle (deprecated / retired / successor) | `ModelInfo.GetLifecycleStatus(asOf)`, `ReplacementModelId` | Anthropic, OpenAI, Google |
+| Custom / self-hosted models | `CostCalculator.Default()`, `Default(AliasMatchType)`, `CustomOnly()`, `RegisterModel(ModelInfo)` | Registered models win by exact id |
+| Data freshness | `ModelCatalog.LastUpdated`, `GetLastUpdated(provider)`, `DataAgeDays`, `IsDataStale(maxAgeDays = 90)` | Always on |
+| Price provenance | `ModelInfo.PriceSource` (`Official` / `ThirdParty`) | See [Price Source](#price-source) |
 
 ## Quick Start
 
@@ -110,7 +131,7 @@ var costOneHourCache = model?.CalculateCost(100_000, 50_000, 400_000, 50_000, ca
 // The rates in effect on a date — applies vendor-announced price changes (ScheduledPrices)
 var costNextYear = model?.AsOf(new DateOnly(2027, 1, 1)).CalculateCost(500_000, 200_000);
 
-// Via CostCalculator (DI-friendly) — same overloads, plus a tiered one (see Tiered Pricing below)
+// Via CostCalculator (DI-friendly) — the basic and cache overloads, the tiered one (see Tiered Pricing below) and TokenCounts
 ICostCalculator calc = CostCalculator.Default();
 var price = calc.CalculateCost("gpt-4o", inputTokens: 1_000, outputTokens: 500);
 ```
@@ -151,7 +172,7 @@ foreach (var m in ModelCatalog.Anthropic.Values)
 // By provider — string-keyed (when the name is only known at runtime)
 var openai = ModelCatalog.GetProvider("OpenAI");   // dict, empty if unknown
 
-// By model type (Chat, plus Gemini ImageGeneration and TextToSpeech models)
+// By model type (mostly Chat, plus Gemini ImageGeneration/TextToSpeech and OpenAI TextToSpeech/SpeechToText models)
 var chatModels = ModelCatalog.GetByType(ModelType.Chat);
 
 // All providers
@@ -254,6 +275,7 @@ without a `DeprecationDate`; a model whose requests Google routes to its success
 | `SupportsStructuredOutput` | JSON Schema-enforced output |
 | `SupportsJsonMode` | JSON-guided output (soft) |
 | `SupportsStreaming` | SSE streaming |
+| `SupportsStopSequences` | Stop sequences |
 | `PromptCachingMode` | None / Explicit / Automatic |
 | `SupportsMcpToolUse` | Native MCP tool support |
 
@@ -294,7 +316,7 @@ without a `DeprecationDate`; a model whose requests Google routes to its success
 ## Data Freshness
 
 ```csharp
-Console.WriteLine(ModelCatalog.LastUpdated);        // 2026-08-01
+Console.WriteLine(ModelCatalog.LastUpdated);        // e.g. 2026-10-10
 Console.WriteLine(ModelCatalog.DataAgeDays);        // days since last update
 Console.WriteLine(ModelCatalog.IsDataStale());      // true if > 90 days old
 ```
@@ -313,7 +335,7 @@ provider's data can be considerably older than this value — read that provider
 ## Price Source
 
 ```csharp
-var model = ModelCatalog.FindModel("qwen-max")!;
+var model = ModelCatalog.FindModel("llama-4-maverick")!;
 Console.WriteLine(model.PriceSource); // ThirdParty
 ```
 
@@ -323,8 +345,8 @@ Console.WriteLine(model.PriceSource); // ThirdParty
 - `ThirdParty` — the vendor's own rate card could not be read directly (a client-side-rendered
   pricing page, a docs-only landing page, or no direct per-token price published at all), so the
   figure was cross-referenced from a third-party aggregator or another vendor's official rate card
-  instead. Currently applies to **Amazon Nova**, **Azure**, **Meta Llama**, and **Qwen** — see
-  `docs/pricing-update-guide.md` Version History for the source used per provider. Treat these as
+  instead. Currently applies to **Meta Llama** (Maverick, Scout) and **Cohere** Command A — see
+  [docs/pricing-update-guide.md](docs/pricing-update-guide.md) Version History for the source used per provider. Treat these as
   estimates for cost-sensitive accounting.
 
 ## Migration from 0.3.x
