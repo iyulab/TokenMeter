@@ -4,7 +4,7 @@ All notable changes to this project are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/); while the major version is 0, a minor release may contain
 breaking changes, and each one is marked **Breaking** with a migration note.
 
-## [0.13.1] - Unreleased
+## [0.13.1] - 2026-10-14
 
 ### Added
 - **Gemini 4 Argon** (`gemini-4-argon`, 1M context, 64K output, thinking): $2 / $10 per 1M tokens, cached input $0.10,
