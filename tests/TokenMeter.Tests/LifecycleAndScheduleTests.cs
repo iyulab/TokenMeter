@@ -119,6 +119,22 @@ public class LifecycleAndScheduleTests
     }
 
     [Fact]
+    public void Gemini4Argon_DoublesItsRates_OnTheAnnouncedDate_AndHalvesThemInBatch()
+    {
+        // ai.google.dev pricing page (Standard), 2026-10-14: $2 / $10 / cached $0.10 through 2026-11-30, then twice that;
+        // Batch is half of either. Implicit caching only, so there is no storage rate.
+        var argon = ModelCatalog.FindModel("gemini-4-argon", AliasMatchType.Exact);
+        Assert.NotNull(argon);
+        Assert.Null(argon.CacheStoragePricePerMillionPerHour);
+
+        var usage = new TokenCounts { InputTokens = 1_000_000, CacheReadTokens = 1_000_000, OutputTokens = 1_000_000 };
+        Assert.Equal(2m + 0.10m + 10m, argon.CalculateCost(usage, new CostContext { Date = new DateOnly(2026, 11, 30) }));
+        Assert.Equal(4m + 0.20m + 20m, argon.CalculateCost(usage, new CostContext { Date = new DateOnly(2026, 12, 1) }));
+        Assert.Equal((4m + 0.20m + 20m) * 0.5m,
+            argon.CalculateCost(usage, new CostContext { Date = new DateOnly(2026, 12, 1), ServiceTier = ServiceTier.Batch }));
+    }
+
+    [Fact]
     public void CalculateCacheStorageCost_NoStoragePrice_IsUnknown()
     {
         var claude = ModelCatalog.FindModel("claude-opus-4-8");

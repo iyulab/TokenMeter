@@ -4,6 +4,13 @@ All notable changes to this project are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/); while the major version is 0, a minor release may contain
 breaking changes, and each one is marked **Breaking** with a migration note.
 
+## [0.13.1] - Unreleased
+
+### Added
+- **Gemini 4 Argon** (`gemini-4-argon`, 1M context, 64K output, thinking): $2 / $10 per 1M tokens, cached input $0.10,
+  through 2026-11-30, and $4 / $20 / $0.20 from 2026-12-01 (a scheduled price); Batch at half; Google Search grounding
+  $14 / 1,000 queries. Implicit caching only, so no storage rate. Served by the vendor and absent from the catalog until now.
+
 ## [0.13.0] - 2026-10-13
 
 ### Fixed

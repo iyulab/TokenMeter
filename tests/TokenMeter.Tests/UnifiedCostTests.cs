@@ -163,7 +163,7 @@ public class ProviderFreshnessTests
 
         Assert.All(dates, d => Assert.NotNull(d));
         Assert.Equal(ModelCatalog.LastUpdated, dates.Max());
-        Assert.Equal(new DateOnly(2026, 10, 10), ModelCatalog.GetLastUpdated("Google"));
+        Assert.Equal(new DateOnly(2026, 10, 13), ModelCatalog.GetLastUpdated("Google"));
         Assert.Null(ModelCatalog.GetLastUpdated("no-such-provider"));
     }
 }
