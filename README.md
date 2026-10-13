@@ -108,10 +108,11 @@ var batchInUs = model?.CalculateCost(
 ```
 
 The order is: rates of the date (`AsOf`) → long-context / time-of-day tier → service-tier multiplier → regional
-multiplier → per-call tool fees. A service tier the model is not offered at, or a tool with no fee in the catalog, makes
+multiplier → tool fees. A service tier the model is not offered at, or a tool with no fee in the catalog, makes
 the result `null` (unknown) rather than the standard price. Tool names are the vendors' own (`web_search`, `file_search`,
-`google_search`); tokens a tool adds to the context are already in the token counts, and a vendor's monthly free
-allowance is not applied.
+`google_search`), and `ToolCalls` holds the number of calls the response reports (searches, queries); the fee's
+`ToolCallPrice.Unit` decides whether each is billed or only the request. Tokens a tool adds to the context are already in
+the token counts, and a vendor's monthly free allowance is not applied.
 
 The overloads below are the same calculation for one part at a time:
 
@@ -233,7 +234,7 @@ var strict = CostCalculator.Default(AliasMatchType.Exact);
 | `CacheWritePrices` | Cache-write price per cache lifetime (`Ttl` → price) where the vendor prices them apart — Anthropic 5-minute and 1-hour writes; `GetCacheWritePrice(ttl)` |
 | `ServiceTierMultipliers` | Batch / Flex / Fast multipliers on every token price (OpenAI, Anthropic). A tier not listed is not offered |
 | `RegionalMultipliers` | Data-residency surcharges on every token price (Anthropic `inference_geo: "us"` 1.1x on Claude 4.6+) |
-| `ToolCallPrices` | Per-call fees for server-side tools (web search, file search, Gemini Search grounding) |
+| `ToolCallPrices` | Fees for server-side tools (web search, file search, Gemini Search grounding), each with its `Unit`: `ToolFeeUnit.Call` (every search or query the response reports is billed — Anthropic and OpenAI web search, Gemini 3 grounding) or `ToolFeeUnit.Request` (one fee per request that used the tool — Gemini 2.5 grounding, «per grounded prompt») |
 | `CacheStoragePricePerMillionPerHour` | Explicit-cache storage per 1M tokens per hour (Gemini context caching); `CalculateCacheStorageCost(tokens, storedFor, date)` prices a cache's lifetime apart from the requests that read it |
 | `ScheduledPrices` | Vendor-announced price changes with an `EffectiveFrom` date; `AsOf(date)` returns the model with the rates in effect then. Past prices are not kept — record a call's cost when it is made |
 

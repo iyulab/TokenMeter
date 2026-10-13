@@ -117,8 +117,16 @@ internal static class ModelInfoLoader
         RegionalMultipliers = j.RegionalMultipliers?
             .Select(kv => new RegionalMultiplier { Region = kv.Key, Multiplier = kv.Value })
             .ToList(),
+        // A unit that does not parse leaves the fee out (the cost of a call to that tool is then unknown, not mispriced),
+        // as an unparseable lifetime is; the test suite holds every entry to parsing.
         ToolCallPrices = j.ToolCallPricesPerThousand?
-            .Select(kv => new ToolCallPrice { Tool = kv.Key, PricePerThousandCalls = kv.Value })
+            .Where(kv => ParseToolFeeUnit(kv.Value.Unit) is not null)
+            .Select(kv => new ToolCallPrice
+            {
+                Tool = kv.Key,
+                PricePerThousand = kv.Value.Price,
+                Unit = ParseToolFeeUnit(kv.Value.Unit)!.Value,
+            })
             .ToList(),
         ScheduledPrices = j.ScheduledPrices?
             .Where(p => ParseDate(p.EffectiveFrom) is not null)
@@ -178,6 +186,23 @@ internal static class ModelInfoLoader
         .Where(p => ParseTtl(p.Ttl) is not null)
         .Select(p => new CacheWritePrice { Ttl = ParseTtl(p.Ttl)!.Value, PricePerMillion = p.PricePerMillion })
         .ToList();
+
+    /// <summary>The unit of a tool fee: none written is per call; otherwise <c>call</c> or <c>request</c>.</summary>
+
+    private static ToolFeeUnit? ParseToolFeeUnit(string? unit) => unit switch
+
+    {
+
+        null => ToolFeeUnit.Call,
+
+        _ when string.Equals(unit, "call", StringComparison.OrdinalIgnoreCase) => ToolFeeUnit.Call,
+
+        _ when string.Equals(unit, "request", StringComparison.OrdinalIgnoreCase) => ToolFeeUnit.Request,
+
+        _ => null,
+
+    };
+
 
     internal static DateOnly? ParseDate(string? value) =>
         DateOnly.TryParseExact(value, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture,

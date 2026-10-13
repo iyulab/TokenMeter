@@ -235,7 +235,8 @@ public record ModelInfo
     public IReadOnlyList<RegionalMultiplier>? RegionalMultipliers { get; init; }
 
     /// <summary>
-    /// Per-call fees for the vendor's server-side tools. A tool not listed has no fee in the catalog —
+    /// Fees for the vendor's server-side tools, each with the unit the vendor counts (<see cref="ToolCallPrice.Unit"/>).
+    /// A tool not listed has no fee in the catalog —
     /// <see cref="CalculateCost(TokenCounts, CostContext)"/> returns null when the usage calls it.
     /// </summary>
     public IReadOnlyList<ToolCallPrice>? ToolCallPrices { get; init; }
@@ -406,7 +407,9 @@ public record ModelInfo
                 continue;
             if (model.ToolCallPrices?.FirstOrDefault(p => string.Equals(p.Tool, tool, StringComparison.OrdinalIgnoreCase)) is not { } fee)
                 return null;
-            cost += (calls / 1_000m) * fee.PricePerThousandCalls;
+            // A per-request fee is charged once however many calls the response reports.
+            var billed = fee.Unit == ToolFeeUnit.Request ? 1 : calls;
+            cost += (billed / 1_000m) * fee.PricePerThousand;
         }
 
         return cost;

@@ -76,9 +76,12 @@ internal sealed class ModelInfoJson
     [JsonPropertyName("regionalMultipliers")]
     public Dictionary<string, decimal>? RegionalMultipliers { get; set; }
 
-    /// <summary>Server-side tool → cost per 1,000 calls, e.g. <c>{ "web_search": 10.0 }</c>.</summary>
+    /// <summary>
+    /// Server-side tool → its fee per 1,000: a number is per call (<c>{ "web_search": 10.0 }</c>); an object names the unit
+    /// (<c>{ "google_search": { "price": 35.0, "unit": "request" } }</c>).
+    /// </summary>
     [JsonPropertyName("toolCallPricesPerThousand")]
-    public Dictionary<string, decimal>? ToolCallPricesPerThousand { get; set; }
+    public Dictionary<string, ToolFeeJson>? ToolCallPricesPerThousand { get; set; }
 
     [JsonPropertyName("scheduledPrices")]
     public List<ScheduledPriceJson>? ScheduledPrices { get; set; }

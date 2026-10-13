@@ -45,14 +45,38 @@ public sealed record RegionalMultiplier
 }
 
 /// <summary>
-/// A per-call fee for a server-side tool the vendor runs, on top of the tokens the tool's results add to the context (those
-/// are already in the token counts).
+/// A fee for a server-side tool the vendor runs, on top of the tokens the tool's results add to the context (those are
+/// already in the token counts).
 /// </summary>
 public sealed record ToolCallPrice
 {
     /// <summary>The vendor's tool name (<c>web_search</c>, <c>file_search</c>, <c>google_search</c>).</summary>
     public required string Tool { get; init; }
 
-    /// <summary>Cost per 1,000 calls. A vendor's monthly free allowance is not applied — that is account state.</summary>
-    public required decimal PricePerThousandCalls { get; init; }
+    /// <summary>
+    /// Cost per 1,000 of <see cref="Unit"/>. A vendor's monthly free allowance is not applied — that is account state.
+    /// </summary>
+    public required decimal PricePerThousand { get; init; }
+
+    /// <summary>
+    /// What one billed unit is: each call the response reports (<see cref="ToolFeeUnit.Call"/>, the default), or each
+    /// request that used the tool at all (<see cref="ToolFeeUnit.Request"/>).
+    /// </summary>
+    public ToolFeeUnit Unit { get; init; } = ToolFeeUnit.Call;
+}
+
+/// <summary>How a vendor counts a <see cref="ToolCallPrice"/>.</summary>
+public enum ToolFeeUnit
+{
+    /// <summary>
+    /// Every call is billed: each search, query or tool call the response reports (Anthropic and OpenAI web search,
+    /// Gemini 3 Search grounding — «each individual search query»).
+    /// </summary>
+    Call = 1,
+
+    /// <summary>
+    /// One fee per request that used the tool, however many calls it made (Gemini 2.5 Search grounding — «per grounded
+    /// prompt»).
+    /// </summary>
+    Request = 2,
 }

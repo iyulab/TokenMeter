@@ -27,8 +27,10 @@ public sealed record TokenCounts
     public int OutputTokens { get; init; }
 
     /// <summary>
-    /// Calls to server-side tools the vendor bills per call, by the vendor's tool name (<c>web_search</c>,
-    /// <c>file_search</c>, <c>google_search</c> — see <see cref="ModelInfo.ToolCallPrices"/>). Null or empty when none.
+    /// Calls to server-side tools the vendor bills, by the vendor's tool name (<c>web_search</c>, <c>file_search</c>,
+    /// <c>google_search</c>): the number of calls the response reports — searches, queries. The catalog's
+    /// <see cref="ToolCallPrice.Unit"/> decides whether each is billed or only the request (Gemini 2.5 Search grounding).
+    /// See <see cref="ModelInfo.ToolCallPrices"/>. Null or empty when none.
     /// </summary>
     public IReadOnlyDictionary<string, int>? ToolCalls { get; init; }
 

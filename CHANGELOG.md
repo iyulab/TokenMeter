@@ -4,6 +4,21 @@ All notable changes to this project are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/); while the major version is 0, a minor release may contain
 breaking changes, and each one is marked **Breaking** with a migration note.
 
+## [Unreleased]
+
+### Fixed
+- **A Gemini 2.5 request that ran several Google Search queries is charged one grounding fee.** Gemini 2.5 bills Search
+  grounding per grounded prompt ($35 / 1,000), Gemini 3 per search query ($14 / 1,000); `CalculateCost` multiplied both by
+  the number of calls, so a 2.5 request with three queries cost three fees. The 0.9.0 entry below calls both prices «per
+  1,000 grounded prompts» — the 3.x price is per query.
+
+### Changed
+- **Breaking** — **a tool fee says what it counts.** `ToolCallPrice.Unit` (`ToolFeeUnit.Call` — every call the response
+  reports, the default; `ToolFeeUnit.Request` — once per request that used the tool), and `PricePerThousandCalls` is
+  renamed `PricePerThousand`. `CalculateCost` applies the unit; `TokenCounts.ToolCalls` stays the count the response
+  reports. Migration: read `PricePerThousand` instead of `PricePerThousandCalls`; a fee you build yourself is per call
+  unless you set `Unit`.
+
 ## [0.12.0] - 2026-10-12
 
 ### Added
