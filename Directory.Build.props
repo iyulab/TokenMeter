@@ -22,6 +22,7 @@
     <Product>TokenMeter</Product>
     <Copyright>Copyright (c) iyulab</Copyright>
     <RepositoryUrl>https://github.com/iyulab/TokenMeter</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/iyulab/TokenMeter</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 

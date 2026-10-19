@@ -4,6 +4,11 @@ All notable changes to this project are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/); while the major version is 0, a minor release may contain
 breaking changes, and each one is marked **Breaking** with a migration note.
 
+## [Unreleased]
+
+### Fixed
+- **The package links to the repository as its project site** (`PackageProjectUrl`) — its nuget.org page had no project link.
+
 ## [0.13.1] - 2026-10-14
 
 ### Added
