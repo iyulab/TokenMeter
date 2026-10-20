@@ -223,6 +223,10 @@ internal sealed class PricingTierJson
     [JsonPropertyName("windowEndUtc")]
     public string? WindowEndUtc { get; set; }
 
+    /// <summary>English day names in UTC, e.g. ["Monday", …, "Friday"]; absent = every day.</summary>
+    [JsonPropertyName("daysOfWeekUtc")]
+    public List<string>? DaysOfWeekUtc { get; set; }
+
     [JsonPropertyName("inputPricePerMillion")]
     public decimal InputPricePerMillion { get; set; }
 

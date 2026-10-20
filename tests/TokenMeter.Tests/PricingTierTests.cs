@@ -130,6 +130,46 @@ public class PricingTierTests
         Assert.Equal(0.66m + 1.98m, atWindowEnd);
     }
 
+    // «Peak hours are 01:00 - 04:00 and 06:00 - 10:00 UTC, Monday through Friday … All other hours are off-peak,
+    // including weekends» — DeepSeek pricing page, 2026-10-20.
+    [Theory]
+    [InlineData(DayOfWeek.Saturday)]
+    [InlineData(DayOfWeek.Sunday)]
+    public void CalculateCost_InPeakWindowOnAWeekend_UsesRepresentativeRate(DayOfWeek day)
+    {
+        var model = ModelCatalog.FindModel("deepseek-v4-pro")!;
+
+        var cost = model.CalculateCost(1_000_000, 1_000_000,
+            new PricingTierContext { CallTimeUtc = new TimeOnly(2, 30), CallDayUtc = day });
+
+        Assert.Equal(0.66m + 1.98m, cost);
+    }
+
+    [Fact]
+    public void CalculateCost_InPeakWindowOnAWeekday_UsesTierRate()
+    {
+        var model = ModelCatalog.FindModel("deepseek-v4-pro")!;
+
+        var cost = model.CalculateCost(1_000_000, 1_000_000,
+            new PricingTierContext { CallTimeUtc = new TimeOnly(2, 30), CallDayUtc = DayOfWeek.Wednesday });
+
+        Assert.Equal(1.32m + 3.96m, cost);
+    }
+
+    [Fact]
+    public void Unified_cost_reads_the_day_from_the_call_date()
+    {
+        var model = ModelCatalog.FindModel("deepseek-v4-pro")!;
+        var usage = new TokenCounts { InputTokens = 1_000_000, OutputTokens = 1_000_000 };
+
+        // 2026-10-24 is a Saturday, 2026-10-21 a Wednesday; 02:30 UTC is inside a peak window on both.
+        var saturday = model.CalculateCost(usage, CostContext.At(new DateTimeOffset(2026, 10, 24, 2, 30, 0, TimeSpan.Zero)));
+        var wednesday = model.CalculateCost(usage, CostContext.At(new DateTimeOffset(2026, 10, 21, 2, 30, 0, TimeSpan.Zero)));
+
+        Assert.Equal(0.66m + 1.98m, saturday);
+        Assert.Equal(1.32m + 3.96m, wednesday);
+    }
+
     #endregion
 
     #region ICostCalculator — DI-friendly path mirrors ModelInfo
@@ -176,6 +216,22 @@ public class PricingTierTests
                     $"representative rate {info.InputPricePerMillion}");
             }
         }
+    }
+
+    [Fact]
+    public void ContextLengthTiers_OfAModelWithCacheWrites_StateTheirOwnCacheWritePrice()
+    {
+        // A tier without one falls back to the short-context cache-write rate — half the long-context price at OpenAI and
+        // Azure («gpt-6-astra | … | $12.50 | … | $25.00 |»), so a long cached prompt was understated.
+        var missing = ModelCatalog.All
+            .Where(e => e.Value.CacheWritePricePerMillion is not null)
+            .SelectMany(e => (e.Value.PricingTiers ?? [])
+                .Where(t => t.Axis == PricingTierAxis.ContextLength && t.CacheWritePricePerMillion is null && t.CacheWritePrices is null)
+                .Select(_ => e.Key))
+            .Distinct()
+            .ToList();
+
+        Assert.True(missing.Count == 0, $"long-context tiers without a cache-write price: {string.Join(", ", missing)}");
     }
 
     [Fact]

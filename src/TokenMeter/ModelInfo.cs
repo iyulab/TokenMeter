@@ -367,6 +367,7 @@ public record ModelInfo
         {
             ContextLengthTokens = usage.PromptTokens,
             CallTimeUtc = context.CallTimeUtc,
+            CallDayUtc = context.Date?.DayOfWeek,
         });
 
         var inputPrice = tier?.InputPricePerMillion ?? model.InputPricePerMillion.Value;
@@ -524,7 +525,9 @@ public record ModelInfo
                     if (context.CallTimeUtc is TimeOnly time
                         && tier.WindowStartUtc is TimeOnly start
                         && tier.WindowEndUtc is TimeOnly end
-                        && time >= start && time < end)
+                        && time >= start && time < end
+                        && (tier.DaysOfWeekUtc is null || context.CallDayUtc is not DayOfWeek day
+                            || tier.DaysOfWeekUtc.Contains(day)))
                     {
                         bestByTime = tier;
                     }

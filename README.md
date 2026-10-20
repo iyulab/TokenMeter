@@ -158,10 +158,11 @@ var normal = model?.CalculateCost(50_000, 10_000, new PricingTierContext { Conte
 // At/above 200K context — the long-context tier applies ($4.00 / $12.00 per 1M)
 var longContext = model?.CalculateCost(50_000, 10_000, new PricingTierContext { ContextLengthTokens = 250_000 });
 
-// DeepSeek: peak-hour tier, keyed off wall-clock UTC time instead of context length
+// DeepSeek: peak-hour tier (Monday–Friday UTC), keyed off wall-clock UTC time instead of context length
 var deepseek = ModelCatalog.FindModel("deepseek-v4-pro");
+var now = DateTime.UtcNow;
 var peakCost = deepseek?.CalculateCost(50_000, 10_000,
-    new PricingTierContext { CallTimeUtc = TimeOnly.FromDateTime(DateTime.UtcNow) });
+    new PricingTierContext { CallTimeUtc = TimeOnly.FromDateTime(now), CallDayUtc = now.DayOfWeek });
 ```
 
 ### Browsing the Catalog

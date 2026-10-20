@@ -21,7 +21,8 @@
           "minContextLengthTokens": 272000,
           "inputPricePerMillion": 20.00,
           "outputPricePerMillion": 75.00,
-          "cacheReadPricePerMillion": 2.00
+          "cacheReadPricePerMillion": 2.00,
+          "cacheWritePricePerMillion": 25
         }
       ],
       "supportsImageInput": true,
@@ -59,7 +60,8 @@
           "minContextLengthTokens": 272000,
           "inputPricePerMillion": 4.00,
           "outputPricePerMillion": 15.00,
-          "cacheReadPricePerMillion": 0.20
+          "cacheReadPricePerMillion": 0.20,
+          "cacheWritePricePerMillion": 5
         }
       ],
       "supportsImageInput": true,
@@ -97,7 +99,8 @@
           "minContextLengthTokens": 272000,
           "inputPricePerMillion": 4.00,
           "outputPricePerMillion": 15.00,
-          "cacheReadPricePerMillion": 0.40
+          "cacheReadPricePerMillion": 0.40,
+          "cacheWritePricePerMillion": 5
         }
       ],
       "supportsImageInput": true,
@@ -135,7 +138,8 @@
           "minContextLengthTokens": 272000,
           "inputPricePerMillion": 0.20,
           "outputPricePerMillion": 0.75,
-          "cacheReadPricePerMillion": 0.02
+          "cacheReadPricePerMillion": 0.02,
+          "cacheWritePricePerMillion": 0.25
         }
       ],
       "supportsImageInput": true,
@@ -172,7 +176,8 @@
           "minContextLengthTokens": 272000,
           "inputPricePerMillion": 8.00,
           "outputPricePerMillion": 30.00,
-          "cacheReadPricePerMillion": 0.80
+          "cacheReadPricePerMillion": 0.80,
+          "cacheWritePricePerMillion": 10
         }
       ],
       "supportsImageInput": true,
@@ -206,7 +211,8 @@
           "minContextLengthTokens": 272000,
           "inputPricePerMillion": 4.00,
           "outputPricePerMillion": 18.00,
-          "cacheReadPricePerMillion": 0.40
+          "cacheReadPricePerMillion": 0.40,
+          "cacheWritePricePerMillion": 5
         }
       ],
       "supportsImageInput": true,
@@ -240,7 +246,8 @@
           "minContextLengthTokens": 272000,
           "inputPricePerMillion": 0.40,
           "outputPricePerMillion": 1.80,
-          "cacheReadPricePerMillion": 0.04
+          "cacheReadPricePerMillion": 0.04,
+          "cacheWritePricePerMillion": 0.5
         }
       ],
       "supportsImageInput": true,

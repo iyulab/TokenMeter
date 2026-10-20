@@ -41,6 +41,14 @@ public sealed record PricingTier
     /// </summary>
     public TimeOnly? WindowEndUtc { get; init; }
 
+    /// <summary>
+    /// <see cref="PricingTierAxis.TimeOfDay"/> only: the UTC days of the week the window applies on (DeepSeek's peak hours
+    /// are Monday to Friday), or <c>null</c> for every day. A call whose day is unknown
+    /// (<see cref="PricingTierContext.CallDayUtc"/> null) pays the tier — the catalog does not understate a cost.
+    /// Vendor holidays are not modelled.
+    /// </summary>
+    public IReadOnlyList<DayOfWeek>? DaysOfWeekUtc { get; init; }
+
     /// <summary>Cost per 1 million input tokens while this tier applies.</summary>
     public required decimal InputPricePerMillion { get; init; }
 
@@ -79,4 +87,10 @@ public readonly record struct PricingTierContext
 
     /// <summary>Wall-clock time of the call in UTC, if the caller wants time-of-day tiers applied.</summary>
     public TimeOnly? CallTimeUtc { get; init; }
+
+    /// <summary>
+    /// UTC day of the week of the call, for time-of-day tiers limited to some days (<see cref="PricingTier.DaysOfWeekUtc"/>);
+    /// null applies such a tier on any day.
+    /// </summary>
+    public DayOfWeek? CallDayUtc { get; init; }
 }

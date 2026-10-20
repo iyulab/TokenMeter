@@ -10,8 +10,17 @@ breaking changes, and each one is marked **Breaking** with a migration note.
 - **Grounding with Google Maps has a fee on the ten Gemini models that offer it** (tool `google_maps`): Gemini 2.5 Pro,
   Flash and Flash-Lite $25 / 1,000 grounded prompts (one fee per request, like their Search grounding); Gemini 3 and newer
   $14 / 1,000 search queries (per query). A map-grounded request was priced as unknown before.
+- **A time-of-day tier can be limited to days of the week** (`PricingTier.DaysOfWeekUtc`, JSON `daysOfWeekUtc`;
+  `PricingTierContext.CallDayUtc`). The unified `CalculateCost(TokenCounts, CostContext)` reads the day from
+  `CostContext.Date`; a call whose day is unknown still pays the tier.
 
 ### Fixed
+- **DeepSeek charges peak rates on weekdays only.** Its peak windows (01:00–04:00 and 06:00–10:00 UTC) apply Monday to
+  Friday; the catalog applied them every day, so a weekend call in those hours was priced at double the rate. Chinese
+  public holidays (also off-peak) are not modelled and still price at peak.
+- **A long cached prompt on OpenAI and Azure GPT-5.6 / GPT-6 models is priced at the long-context cache-write rate.** Their
+  long-context tiers (over 272K input tokens) stated no cache-write price, so cache writes fell back to the short-context
+  rate — half the vendors' long-context price (e.g. `gpt-6-astra` $12.50 instead of $25.00 per 1M).
 - **The package links to the repository as its project site** (`PackageProjectUrl`) — its nuget.org page had no project link.
 
 ## [0.13.1] - 2026-10-14

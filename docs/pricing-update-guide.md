@@ -134,11 +134,14 @@ add a `pricingTiers` entry alongside them so both rates stay visible:
 - `axis` is `"ContextLength"` (gate on `minContextLengthTokens`) or `"TimeOfDay"` (gate on
   `windowStartUtc`/`windowEndUtc`, `"HH:mm"` UTC). A provider with more than one time window (e.g.
   two disjoint peak periods) gets one tier entry per window, all at the same price — not a single
-  entry with a list of windows.
+  entry with a list of windows. A window that applies only on some days carries `daysOfWeekUtc`
+  (English day names, e.g. DeepSeek's `["Monday", …, "Friday"]`); without it the window applies every day.
+  A call whose day is unknown pays the tier (never understate). Vendor holidays are not modelled.
 - The top-level `inputPricePerMillion`/etc. stay the **representative** (usually lowest/off-peak)
   rate; `CalculateCost(inputTokens, outputTokens)` with no context keeps using them unchanged.
   `CalculateCost(inputTokens, outputTokens, PricingTierContext)` applies a tier when the caller
-  supplies the matching context (`ContextLengthTokens`/`CallTimeUtc`).
+  supplies the matching context (`ContextLengthTokens`/`CallTimeUtc`/`CallDayUtc`); the unified
+  `CalculateCost(TokenCounts, CostContext)` takes the day from `CostContext.Date`.
 - A test enforces that no tier is priced below the representative rate
   (`ModelsWithPricingTiers_TierRatesAreNeverCheaperThanRepresentative`) — verify your tier's price
   against the vendor page before adding it, not just against the representative rate.

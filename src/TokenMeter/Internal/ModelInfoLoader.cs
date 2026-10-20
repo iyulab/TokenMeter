@@ -175,6 +175,7 @@ internal static class ModelInfoLoader
         MinContextLengthTokens = j.MinContextLengthTokens,
         WindowStartUtc = ParseTimeOfDay(j.WindowStartUtc),
         WindowEndUtc = ParseTimeOfDay(j.WindowEndUtc),
+        DaysOfWeekUtc = ParseDaysOfWeek(j.DaysOfWeekUtc),
         InputPricePerMillion = j.InputPricePerMillion,
         OutputPricePerMillion = j.OutputPricePerMillion,
         CacheReadPricePerMillion = j.CacheReadPricePerMillion,
@@ -231,6 +232,20 @@ internal static class ModelInfoLoader
         TimeOnly.TryParse(value, System.Globalization.CultureInfo.InvariantCulture, out var parsed)
             ? parsed
             : null;
+
+    // A name that does not parse drops the whole restriction (the tier then applies every day): an unreadable entry
+    // overstates the cost instead of understating it.
+    private static List<DayOfWeek>? ParseDaysOfWeek(List<string>? values)
+    {
+        if (values is null or []) return null;
+        var days = new List<DayOfWeek>(values.Count);
+        foreach (var value in values)
+        {
+            if (!Enum.TryParse<DayOfWeek>(value, ignoreCase: true, out var day) || !Enum.IsDefined(day)) return null;
+            days.Add(day);
+        }
+        return days;
+    }
 }
 
 internal sealed record ProviderData(
