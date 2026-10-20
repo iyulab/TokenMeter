@@ -36,7 +36,25 @@ public class ToolFeeTests
     }
 
     [Fact]
-    public void Gemini_2_5_search_fees_are_per_request_and_every_other_tool_fee_is_per_call()
+    public void Gemini_2_5_maps_grounding_is_one_fee_per_grounded_request()
+    {
+        var model = ModelCatalog.FindModel("gemini-2.5-pro", AliasMatchType.Exact)!;
+
+        // $25 / 1,000 grounded prompts.
+        Assert.Equal(model.CalculateCost(Usage) + 0.025m, model.CalculateCost(WithSearches("google_maps", 2)));
+    }
+
+    [Fact]
+    public void Gemini_3_maps_grounding_is_one_fee_per_query()
+    {
+        var model = ModelCatalog.FindModel("gemini-4-argon", AliasMatchType.Exact)!;
+
+        // $14 / 1,000 search queries.
+        Assert.Equal(model.CalculateCost(Usage) + 0.028m, model.CalculateCost(WithSearches("google_maps", 2)));
+    }
+
+    [Fact]
+    public void Gemini_2_5_grounding_fees_are_per_request_and_every_other_tool_fee_is_per_call()
     {
         var fees = ModelCatalog.GetProviderNames()
             .SelectMany(ModelCatalog.GetByProvider)
@@ -46,10 +64,10 @@ public class ToolFeeTests
         Assert.NotEmpty(fees);
         foreach (var (modelId, fee) in fees)
         {
-            var perRequest = fee.Tool == "google_search" && modelId.StartsWith("gemini-2.5-", StringComparison.Ordinal);
+            var perRequest = fee.Tool is "google_search" or "google_maps" && modelId.StartsWith("gemini-2.5-", StringComparison.Ordinal);
             Assert.True(fee.Unit == (perRequest ? ToolFeeUnit.Request : ToolFeeUnit.Call), $"{modelId} {fee.Tool}: {fee.Unit}");
         }
-        Assert.Equal(3, fees.Count(f => f.Fee.Unit == ToolFeeUnit.Request));
+        Assert.Equal(6, fees.Count(f => f.Fee.Unit == ToolFeeUnit.Request));
     }
 
     [Fact]

@@ -110,7 +110,7 @@ var batchInUs = model?.CalculateCost(
 The order is: rates of the date (`AsOf`) → long-context / time-of-day tier → service-tier multiplier → regional
 multiplier → tool fees. A service tier the model is not offered at, or a tool with no fee in the catalog, makes
 the result `null` (unknown) rather than the standard price. Tool names are the vendors' own (`web_search`, `file_search`,
-`google_search`), and `ToolCalls` holds the number of calls the response reports (searches, queries); the fee's
+`google_search`, `google_maps`), and `ToolCalls` holds the number of calls the response reports (searches, queries); the fee's
 `ToolCallPrice.Unit` decides whether each is billed or only the request. Tokens a tool adds to the context are already in
 the token counts, and a vendor's monthly free allowance is not applied.
 

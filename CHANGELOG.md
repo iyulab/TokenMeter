@@ -6,6 +6,11 @@ breaking changes, and each one is marked **Breaking** with a migration note.
 
 ## [Unreleased]
 
+### Added
+- **Grounding with Google Maps has a fee on the ten Gemini models that offer it** (tool `google_maps`): Gemini 2.5 Pro,
+  Flash and Flash-Lite $25 / 1,000 grounded prompts (one fee per request, like their Search grounding); Gemini 3 and newer
+  $14 / 1,000 search queries (per query). A map-grounded request was priced as unknown before.
+
 ### Fixed
 - **The package links to the repository as its project site** (`PackageProjectUrl`) — its nuget.org page had no project link.
 
