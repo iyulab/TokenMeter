@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/); while the major version is 0, a minor release may contain
 breaking changes, and each one is marked **Breaking** with a migration note.
 
+## [Unreleased]
+
+### Added
+- **Azure GPT-6.1 Sol, GPT-6 Sol and GPT-6 Luna** (`azure-gpt-6.1-sol` · `azure-gpt-6-sol` · `azure-gpt-6-luna`, Global standard): the
+  OpenAI rates — $2 / $10 (cached $0.10 · $0.20), Luna $0.10 / $0.50 — with their long-context tier over 272K and cache writes.
+
 ## [0.14.0] - 2026-10-20
 
 ### Added

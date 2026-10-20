@@ -41,6 +41,120 @@
       ]
     },
     {
+      "modelId": "azure-gpt-6.1-sol",
+      "displayName": "Azure GPT-6.1 Sol",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 2.0,
+      "outputPricePerMillion": 10.0,
+      "cacheReadPricePerMillion": 0.1,
+      "cacheWritePricePerMillion": 2.5,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 4.0,
+          "outputPricePerMillion": 15.0,
+          "cacheReadPricePerMillion": 0.2,
+          "cacheWritePricePerMillion": 5
+        }
+      ],
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        {
+          "pattern": "azure-gpt-6.1-sol",
+          "type": "prefix"
+        }
+      ],
+      "priceSource": "Official"
+    },
+    {
+      "modelId": "azure-gpt-6-sol",
+      "displayName": "Azure GPT-6 Sol",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 2.0,
+      "outputPricePerMillion": 10.0,
+      "cacheReadPricePerMillion": 0.2,
+      "cacheWritePricePerMillion": 2.5,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 4.0,
+          "outputPricePerMillion": 15.0,
+          "cacheReadPricePerMillion": 0.4,
+          "cacheWritePricePerMillion": 5
+        }
+      ],
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        {
+          "pattern": "azure-gpt-6-sol",
+          "type": "prefix"
+        }
+      ],
+      "priceSource": "Official"
+    },
+    {
+      "modelId": "azure-gpt-6-luna",
+      "displayName": "Azure GPT-6 Luna",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 0.1,
+      "outputPricePerMillion": 0.5,
+      "cacheReadPricePerMillion": 0.01,
+      "cacheWritePricePerMillion": 0.125,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 0.2,
+          "outputPricePerMillion": 0.75,
+          "cacheReadPricePerMillion": 0.02,
+          "cacheWritePricePerMillion": 0.25
+        }
+      ],
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        {
+          "pattern": "azure-gpt-6-luna",
+          "type": "prefix"
+        }
+      ],
+      "priceSource": "Official"
+    },
+    {
       "modelId": "azure-gpt-5.6-sol",
       "displayName": "Azure GPT-5.6 Sol",
       "modelType": "Chat",
