@@ -95,6 +95,7 @@
       "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "grok-code-fast", "type": "prefix" },
+        { "pattern": "grok-code-fast-1", "type": "exact" },
         { "pattern": "grok-build-0.1", "type": "prefix" },
         { "pattern": "grok-build-0-1", "type": "prefix" }
       ]

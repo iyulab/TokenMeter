@@ -529,4 +529,44 @@ public class PricingBugFixTests
     }
 
     #endregion
+    #region A family alias does not price a newer version of the family
+
+    [Theory]
+    // These ids fell under a family alias (`mistral-large`, `codestral`) and were priced as another model.
+    [InlineData("mistral-large-4", "mistral-large-4")]
+    [InlineData("mistral-large-4-0", "mistral-large-4")]
+    [InlineData("codestral-embed", "codestral-embed")]
+    [InlineData("codestral-embed-2505", "codestral-embed")]
+    // A snapshot or a size after a family alias still resolves to that row.
+    [InlineData("mistral-large-2512", "mistral-large-latest")]
+    [InlineData("codestral-2508", "codestral-latest")]
+    public void FamilyAlias_ResolvesToTheRowTheIdNames(string id, string expectedModelId)
+    {
+        var model = ModelCatalog.FindModel(id);
+
+        Assert.NotNull(model);
+        Assert.Equal(expectedModelId, model.ModelId);
+    }
+
+    [Theory]
+    [InlineData("mistral-large-5")]
+    [InlineData("mistral-large-5-1")]
+    [InlineData("codestral-3")]
+    public void FamilyAlias_DoesNotPriceAnUnknownNewerVersion(string id)
+    {
+        Assert.Null(ModelCatalog.FindModel(id));
+    }
+
+    [Fact]
+    public void CommandR_IsTheDeprecatedMarch2024Model()
+    {
+        var model = ModelCatalog.FindModel("command-r");
+
+        Assert.NotNull(model);
+        Assert.Equal(0.50m, model.InputPricePerMillion);
+        Assert.Equal("command-r-08-2024", model.ReplacementModelId);
+        Assert.NotNull(model.DeprecationDate);
+    }
+
+    #endregion
 }

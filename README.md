@@ -67,7 +67,8 @@ Console.WriteLine(model?.SupportsMcpToolUse);      // True
 >
 > Fuzzy passes never cross a version token: an alias ending in a version number (`claude-sonnet-5`) does not
 > match an id that continues it (`claude-sonnet-5-5`) — an unknown newer model returns `null` rather than the older
-> model's row. Snapshot and deployment suffixes (`-20250929`, `-latest`, `-v1`) still match. Nor do they cross into a
+> model's row; an alias ending in a family name (`mistral-large`) likewise does not match `mistral-large-5`. Snapshot and
+> deployment suffixes (`-20250929`, `-2512`, `-latest`, `-v1`) still match. Nor do they cross into a
 > variant: an id whose remainder names `audio`, `realtime`, `tts`, `transcribe`, `search`, `image`, `embedding`, `live`,
 > `translate` or `moderation` (`gpt-4o-mini-tts`) is a different product and resolves only by a row of its own.
 >

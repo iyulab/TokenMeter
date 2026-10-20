@@ -9,6 +9,24 @@ breaking changes, and each one is marked **Breaking** with a migration note.
 ### Added
 - **Azure GPT-6.1 Sol, GPT-6 Sol and GPT-6 Luna** (`azure-gpt-6.1-sol` · `azure-gpt-6-sol` · `azure-gpt-6-luna`, Global standard): the
   OpenAI rates — $2 / $10 (cached $0.10 · $0.20), Luna $0.10 / $0.50 — with their long-context tier over 272K and cache writes.
+- **Mistral Large 4** (`mistral-large-4`, also `mistral-large-4-0`): $0.68 / $2.09, cached input $0.07, 1M context — Mistral's
+  current sale price (list $1.36 / $4.18). Before, the id fell under the `mistral-large` alias and was priced as Mistral Large 3
+  ($0.50 / $1.50).
+- **Codestral Embed** (`codestral-embed`, embedding): $0.15 input. Before, `codestral-embed-2505` fell under the `codestral` alias
+  and was priced as the chat model ($0.30 / $0.90).
+- **Qwen3.7 Max** (`qwen3.7-max`): $2.50 / $7.50, and **Qwen3.6 Plus** (`qwen3.6-plus`): $0.50 / $3.00 up to 256K input,
+  $2.00 / $6.00 above (Model Studio, international).
+
+### Fixed
+- **A family alias no longer prices a newer version of the family.** An alias ending in a family name (`mistral-large`,
+  `codestral`) matched any id that went on with a version number — `mistral-large-5` was priced as Mistral Large 3. One or
+  two digits after a hyphen or underscore (ending the id or followed by a separator) now read as a version the catalog does
+  not know, the rule aliases ending in a number already followed; a snapshot date (`-2512`) or a size (`-17b`) still matches.
+  `grok-code-fast-1` keeps resolving through an exact alias.
+
+### Changed
+- **`command-r` is marked deprecated** (`DeprecationDate` 2025-09-15, `ReplacementModelId` `command-r-08-2024`) and named
+  «Command R (03-2024)»: Cohere's alias resolves to the March 2024 model, whose legacy price ($0.50 / $1.50) the row keeps.
 
 ## [0.14.0] - 2026-10-20
 

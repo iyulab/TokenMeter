@@ -244,8 +244,10 @@ public static class ModelCatalog
 
     private static bool CrossesVersionToken(string input, int matchEnd, string pattern)
     {
-        if (pattern.Length == 0 || !char.IsAsciiDigit(pattern[^1]) || matchEnd >= input.Length)
+        if (pattern.Length == 0 || matchEnd >= input.Length)
             return false;
+        if (!char.IsAsciiDigit(pattern[^1]))
+            return StartsAVersion(input, matchEnd);
         var next = input[matchEnd];
         if (char.IsAsciiDigit(next))
             return true;
@@ -255,6 +257,23 @@ public static class ModelCatalog
         for (var k = matchEnd + 1; k < input.Length && char.IsAsciiDigit(input[k]); k++)
             digits++;
         return digits is 1 or 2;
+    }
+
+    /// <summary>
+    /// An alias that ends in a family name rather than a number (<c>mistral-large</c>, <c>codestral</c>) does not describe
+    /// an id that goes on with a version of that family (<c>mistral-large-5</c>, <c>mistral-large-4-0</c>): one or two digits
+    /// after a hyphen or underscore, ending the id or followed by a separator. A size (<c>-17b</c>), a snapshot date
+    /// (<c>-2512</c>, <c>-2025-08-07</c>) or a word still matches.
+    /// </summary>
+    private static bool StartsAVersion(string input, int matchEnd)
+    {
+        if (input[matchEnd] is not ('-' or '_'))
+            return false;
+        var k = matchEnd + 1;
+        var digits = 0;
+        for (; k < input.Length && char.IsAsciiDigit(input[k]); k++)
+            digits++;
+        return digits is 1 or 2 && (k == input.Length || input[k] is '-' or '.' or '_');
     }
 
     // ── Filtering ─────────────────────────────────────────────────────────────
