@@ -568,5 +568,34 @@ public class PricingBugFixTests
         Assert.NotNull(model.DeprecationDate);
     }
 
+    [Fact]
+    public void PerplexitySonar_AgentApiId_HasItsOwnRow()
+    {
+        // The Agent API names the model `perplexity/sonar`; no alias of the chat-completions rows reaches it.
+        var match = ModelCatalog.FindModelMatch("perplexity/sonar");
+
+        Assert.NotNull(match);
+        Assert.Equal(AliasMatchType.Exact, match.MatchKind);
+        Assert.Equal(0.25m, match.Model.InputPricePerMillion);
+        Assert.Equal(2.50m, match.Model.OutputPricePerMillion);
+        Assert.Equal(0.0625m, match.Model.CacheReadPricePerMillion);
+    }
+
+    [Theory]
+    [InlineData("sonar")]
+    [InlineData("sonar-pro")]
+    [InlineData("sonar-reasoning-pro")]
+    [InlineData("sonar-deep-research")]
+    public void PerplexitySonarChatCompletions_IsDeprecatedButNotRetired(string modelId)
+    {
+        // Support ended 2026-09-27; synchronous requests are still served (reformulated as Agent API requests).
+        var model = ModelCatalog.FindModel(modelId);
+
+        Assert.NotNull(model);
+        Assert.Equal(ModelLifecycleStatus.Active, model.GetLifecycleStatus(new DateOnly(2026, 9, 26)));
+        Assert.Equal(ModelLifecycleStatus.Deprecated, model.GetLifecycleStatus(new DateOnly(2026, 9, 27)));
+        Assert.Null(model.RetirementDate);
+    }
+
     #endregion
 }

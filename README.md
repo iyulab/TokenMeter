@@ -258,7 +258,7 @@ var strict = CostCalculator.Default(AliasMatchType.Exact);
 | `ReplacementModelId` | The vendor's recommended successor, as the vendor names it (resolves through `ModelCatalog.FindModel`) |
 
 `GetLifecycleStatus(asOf)` returns `Active` / `Deprecated` / `Retired` for a date, computed from the dates so an older
-package still answers correctly. Filled for Anthropic, OpenAI and Google from their deprecation pages; partner clouds
+package still answers correctly. Filled for Anthropic, OpenAI, Google and Perplexity from their deprecation pages; partner clouds
 (Bedrock, Vertex AI, Azure) keep their own schedules and are not covered. Google publishes a shutdown date for a generally
 available model from its release (the earliest date it may be shut down), so a Google model can carry a `RetirementDate`
 without a `DeprecationDate`; a model whose requests Google routes to its successor carries only `ReplacementModelId`.
@@ -314,7 +314,7 @@ without a `DeprecationDate`; a model whose requests Google routes to its success
 | Amazon Nova | Premier, Pro, Lite, Micro |
 | Cohere | Command A, R+, R, R7B |
 | Meta Llama | Maverick, Scout |
-| Perplexity | Sonar Pro, Deep Research, Reasoning |
+| Perplexity | Sonar (Agent API), and the Sonar chat-completions rows (Sonar, Pro, Deep Research, Reasoning) |
 | Qwen | Max, Plus, Turbo |
 
 ## Data Freshness

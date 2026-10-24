@@ -4,6 +4,20 @@ All notable changes to this project are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/); while the major version is 0, a minor release may contain
 breaking changes, and each one is marked **Breaking** with a migration note.
 
+## [Unreleased]
+
+### Added
+- **Perplexity Sonar on the Agent API** (`perplexity/sonar`): $0.25 / $2.50, cached input $0.0625. Before, the id had no row
+  and was unpriced.
+- **The Sonar chat-completions models report `Deprecated`** — `sonar`, `sonar-pro`, `sonar-reasoning-pro` and
+  `sonar-deep-research` from 2026-09-27 (Perplexity ended support; requests are still served, reformulated as Agent API
+  requests), `sonar-reasoning` from 2025-12-15. No `ReplacementModelId`: Perplexity maps them to Agent API effort levels, not
+  to a model. Their rates are unchanged.
+
+### Changed
+- **Llama 4 Maverick is $0.1875 / $0.6525** (was $0.20 / $0.80): the host the row followed no longer serves it; the figure is
+  now the lowest listed host rate (still marked `PriceSource.ThirdParty`). Llama 4 Scout re-checked, unchanged ($0.10 / $0.30).
+
 ## [0.15.0] - 2026-10-20
 
 ### Added
