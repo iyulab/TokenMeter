@@ -4,7 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- Build Tooling -->
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.402" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.403" />
   </ItemGroup>
   <ItemGroup>
     <!-- Test (xUnit v3 / Microsoft.Testing.Platform) -->
