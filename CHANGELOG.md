@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/); while the major version is 0, a minor release may contain
 breaking changes, and each one is marked **Breaking** with a migration note.
 
+## [Unreleased]
+
+### Added
+- **OpenAI GPT-6.1 Terra** (`gpt-6.1-terra`): $1.00 / $5.00, cached input $0.05, cache write $1.25, 1.05M context; above 272K
+  input $2.00 / $7.50 (cached $0.10, write $2.50). Before, the id had no row and was unpriced.
+
 ## [0.16.0] - 2026-10-25
 
 ### Added

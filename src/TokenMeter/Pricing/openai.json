@@ -81,6 +81,45 @@
       ]
     },
     {
+      "modelId": "gpt-6.1-terra",
+      "displayName": "GPT-6.1 Terra",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 1.00,
+      "outputPricePerMillion": 5.00,
+      "serviceTierMultipliers": { "Batch": 0.5, "Flex": 0.5, "Fast": 2.0 },
+      "toolCallPricesPerThousand": { "web_search": 10.0, "file_search": 2.50 },
+      "cacheReadPricePerMillion": 0.05,
+      "cacheWritePricePerMillion": 1.25,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 2.00,
+          "outputPricePerMillion": 7.50,
+          "cacheReadPricePerMillion": 0.10,
+          "cacheWritePricePerMillion": 2.5
+        }
+      ],
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        {
+          "pattern": "gpt-6.1-terra",
+          "type": "prefix"
+        }
+      ]
+    },
+    {
       "modelId": "gpt-6-sol",
       "displayName": "GPT-6 Sol",
       "modelType": "Chat",
