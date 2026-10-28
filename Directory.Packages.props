@@ -10,7 +10,7 @@
     <!-- Test (xUnit v3 / Microsoft.Testing.Platform) -->
     <PackageVersion Include="xunit.v3" Version="4.0.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1" />
-    <PackageVersion Include="Microsoft.Testing.Extensions.HangDump" Version="2.5.1" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.HangDump" Version="2.5.2" />
     <PackageVersion Include="Iyu.Conventions.Testing" Version="0.13.0" />
   </ItemGroup>
 </Project>
