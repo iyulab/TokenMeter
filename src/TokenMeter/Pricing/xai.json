@@ -1,6 +1,6 @@
 {
   "provider": "xAI",
-  "lastUpdated": "2026-10-04",
+  "lastUpdated": "2026-10-28",
   "models": [
     {
       "modelId": "grok-4.7",

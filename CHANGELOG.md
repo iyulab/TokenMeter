@@ -20,6 +20,8 @@ breaking changes, and each one is marked **Breaking** with a migration note.
 - **The Anthropic file was re-read against the pricing page on 2026-10-28** (base input, 5-minute cache write, cache read and output
   for every model the page lists, Haiku 5.5's over-100K band included): no price changed; the file's `lastUpdated` moves with it.
   The legacy Claude 3 rows the page no longer lists were not re-checked.
+- **The xAI file was re-read against the models page on 2026-10-28** (every Grok row: input, cached input, output and the rates
+  at 200K prompt tokens and above): no price changed; the file's `lastUpdated` moves with it.
 
 ## [0.16.0] - 2026-10-25
 
