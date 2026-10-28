@@ -10,6 +10,12 @@ breaking changes, and each one is marked **Breaking** with a migration note.
 - **OpenAI GPT-6.1 Terra** (`gpt-6.1-terra`): $1.00 / $5.00, cached input $0.05, cache write $1.25, 1.05M context; above 272K
   input $2.00 / $7.50 (cached $0.10, write $2.50). Before, the id had no row and was unpriced.
 
+### Fixed
+- **`gpt-4o-2024-05-13` is priced $5.00 / $15.00** (its own row), as the price page lists it. Before, the dated id fell under the
+  `gpt-4o` prefix and was priced as the current GPT-4o ($2.50 / $10.00) — half the cost. The rest of the OpenAI file was
+  re-read against the page on 2026-10-28 (every standard text-token row, the realtime and audio text rates, Codex 5.3,
+  embeddings, TTS and transcription): no other difference.
+
 ## [0.16.0] - 2026-10-25
 
 ### Added

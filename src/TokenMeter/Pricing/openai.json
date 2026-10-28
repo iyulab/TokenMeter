@@ -1,6 +1,6 @@
 {
   "provider": "OpenAI",
-  "lastUpdated": "2026-10-04",
+  "lastUpdated": "2026-10-28",
   "models": [
     {
       "modelId": "gpt-6-astra",
@@ -779,6 +779,30 @@
       "toolCallingFormat": "OpenAI",
       "aliases": [
         { "pattern": "gpt-5", "type": "prefix" }
+      ]
+    },
+    {
+      "modelId": "gpt-4o-2024-05-13",
+      "displayName": "GPT-4o (2024-05-13)",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 128000,
+      "inputPricePerMillion": 5.00,
+      "outputPricePerMillion": 15.00,
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": false,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        {
+          "pattern": "gpt-4o-2024-05-13",
+          "type": "prefix"
+        }
       ]
     },
     {
