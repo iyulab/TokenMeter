@@ -16,6 +16,11 @@ breaking changes, and each one is marked **Breaking** with a migration note.
   re-read against the page on 2026-10-28 (every standard text-token row, the realtime and audio text rates, Codex 5.3,
   embeddings, TTS and transcription): no other difference.
 
+### Changed
+- **The Anthropic file was re-read against the pricing page on 2026-10-28** (base input, 5-minute cache write, cache read and output
+  for every model the page lists, Haiku 5.5's over-100K band included): no price changed; the file's `lastUpdated` moves with it.
+  The legacy Claude 3 rows the page no longer lists were not re-checked.
+
 ## [0.16.0] - 2026-10-25
 
 ### Added
