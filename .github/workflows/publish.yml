@@ -15,11 +15,17 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
+# Nothing by default; every job below asks for what it needs.
+permissions: {}
+
+# The push to nuget.org is not made here. This workflow builds, tests and packs, uploads the packages as an artifact and asks the
+# organization's central publisher (iyulab/nuget-publish) to push them; that repository holds the only trusted-publishing policy
+# and checks this repository, this workflow file and the package ids against an allowlist. No NuGet credential lives here.
 jobs:
-  publish:
+  pack:
     runs-on: ubuntu-latest
     permissions:
-      contents: write   # tag + GitHub release
+      contents: read
     timeout-minutes: 20
 
     steps:
@@ -48,10 +54,34 @@ jobs:
         run: |
           dotnet pack src/TokenMeter/TokenMeter.csproj --configuration Release --no-build --output ./nupkg
 
-      - name: Push to NuGet
-        run: |
-          dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
-          dotnet nuget push ./nupkg/*.snupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      # Only .nupkg and .snupkg files: the central publisher refuses an artifact that holds anything else.
+      - name: Upload packages
+        uses: actions/upload-artifact@v7
+        with:
+          name: nuget-packages
+          path: |
+            ./nupkg/*.nupkg
+            ./nupkg/*.snupkg
+          if-no-files-found: error
+          retention-days: 1
+
+  # Asks the central publisher to push the packages and waits for its answer: this job succeeds only when they are on nuget.org.
+  # Until the repository is on the publisher's allowlist the call is refused and the jobs after it do not run.
+  publish:
+    needs: pack
+    uses: iyulab/nuget-publish/.github/workflows/request.yml@2166748abf716fb58855228f65fc6b8f78c2780f # main
+    permissions: {}
+    secrets: inherit
+
+  # The tag and the GitHub release exist only for a version that reached nuget.org.
+  release:
+    needs: publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write   # tag + GitHub release
+    steps:
+      - uses: actions/checkout@v5
 
       # Release notes = this version's CHANGELOG.md section. Every iyulab publish workflow carries this awk program
       # verbatim; change it in all of them or in none.
