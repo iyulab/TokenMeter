@@ -1,7 +1,40 @@
 {
   "provider": "Anthropic",
-  "lastUpdated": "2026-10-28",
+  "lastUpdated": "2026-11-10",
   "models": [
+    {
+      "modelId": "claude-fable-5-2",
+      "displayName": "Claude Fable 5.2",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 8.0,
+      "outputPricePerMillion": 40.0,
+      "serviceTierMultipliers": { "Batch": 0.5, "Fast": 2.0 },
+      "regionalMultipliers": { "us": 1.1 },
+      "toolCallPricesPerThousand": { "web_search": 10.0 },
+      "cacheReadPricePerMillion": 0.2,
+      "cacheWritePricePerMillion": 10.0,
+      "cacheWritePrices": [
+        { "ttl": "5m", "pricePerMillion": 10.0 },
+        { "ttl": "1h", "pricePerMillion": 16.00 }
+      ],
+      "supportsImageInput": true,
+      "supportsDocumentInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Explicit",
+      "supportsStopSequences": true,
+      "supportsMcpToolUse": true,
+      "toolCallingFormat": "Anthropic",
+      "aliases": [
+        { "pattern": "claude-fable-5-2", "type": "contains" }
+      ]
+    },
     {
       "modelId": "claude-fable-5-1",
       "displayName": "Claude Fable 5.1",

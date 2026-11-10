@@ -7,6 +7,7 @@ breaking changes, and each one is marked **Breaking** with a migration note.
 ## [Unreleased]
 
 ### Added
+- **Anthropic Claude Fable 5.2** (`claude-fable-5-2`): $8.00 / $40.00, cached input $0.20 (0.025x), cache write $10.00 (5m) / $16.00 (1h), 1M context, 128K output; Batch 0.5x, Fast mode 2x ($16 / $80), US data residency 1.1x. Before, the id had no row and was unpriced (the dateless id is its own pinned snapshot; a dated suffix resolves to this row, not to Fable 5 or 5.1). Source: the vendor price page and models overview, read 2026-11-10; the Anthropic file's `lastUpdated` is 2026-11-10.
 - **OpenAI GPT-6.1 Terra** (`gpt-6.1-terra`): $1.00 / $5.00, cached input $0.05, cache write $1.25, 1.05M context; above 272K
   input $2.00 / $7.50 (cached $0.10, write $2.50). Before, the id had no row and was unpriced.
 

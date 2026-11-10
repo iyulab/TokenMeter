@@ -205,6 +205,7 @@ public class PricingBugFixTests
     // "fix the family" edit does not quietly restore the old multiplier.
 
     [Theory]
+    [InlineData("claude-fable-5-2", 8.00, 40.00, 0.20)]
     [InlineData("claude-fable-5-1", 10.00, 50.00, 0.25)]
     [InlineData("claude-mythos-5-1", 10.00, 50.00, 0.25)]
     [InlineData("gemini-3.8-flash", 0.75, 3.75, 0.075)]
@@ -230,6 +231,25 @@ public class PricingBugFixTests
 
         Assert.NotNull(match);
         Assert.Equal("claude-fable-5-1", match.Model.ModelId);
+    }
+
+    [Fact]
+    public void ClaudeFable52_CarriesItsRateCard_AndResolvesApartFromThe50And51Rows()
+    {
+        // platform.claude.com pricing + models overview, read 2026-11-10: $8 / $40 per MTok, 5m cache write $10, 1h write $16,
+        // cache read 0.025x ($0.20), Batch 0.5x, Fast mode $16 / $80 (2x), 1M context, 128K output, full context at one rate.
+        var model = ModelCatalog.FindModel("claude-fable-5-2");
+
+        Assert.NotNull(model);
+        Assert.Equal(1_000_000, model.ContextWindow);
+        Assert.Equal(128_000, model.MaxOutputTokens);
+        Assert.Equal(10.00m, model.CacheWritePricePerMillion);
+        Assert.Equal(0.5m, model.ServiceTierMultipliers!.Single(t => t.Tier == ServiceTier.Batch).Multiplier);
+        Assert.Equal(2.0m, model.ServiceTierMultipliers!.Single(t => t.Tier == ServiceTier.Fast).Multiplier);
+        // "claude-fable-5" is a contains-alias of the 5.0 row and a substring of every 5.2 id: the longest pattern must win.
+        Assert.Equal("claude-fable-5-2", ModelCatalog.FindModelMatch("claude-fable-5-2")!.Model.ModelId);
+        Assert.Equal("claude-fable-5-2", ModelCatalog.FindModelMatch("claude-fable-5-2-20261109")!.Model.ModelId);
+        Assert.Equal("claude-fable-5-1", ModelCatalog.FindModelMatch("claude-fable-5-1")!.Model.ModelId);
     }
 
     [Fact]
