@@ -1,6 +1,6 @@
 {
   "provider": "Google",
-  "lastUpdated": "2026-10-13",
+  "lastUpdated": "2026-11-11",
   "models": [
     {
       "modelId": "gemini-4-argon",
@@ -13,7 +13,7 @@
       "outputPricePerMillion": 10.00,
       "toolCallPricesPerThousand": { "google_search": 14.0, "google_maps": 14.0 },
       "cacheReadPricePerMillion": 0.10,
-      "serviceTierMultipliers": { "Batch": 0.5 },
+      "serviceTierMultipliers": { "Batch": 0.5, "Flex": 0.5, "Fast": 1.8 },
       "scheduledPrices": [
         { "effectiveFrom": "2026-12-01", "inputPricePerMillion": 4.00, "outputPricePerMillion": 20.00, "cacheReadPricePerMillion": 0.20 }
       ],
@@ -33,6 +33,39 @@
       "toolCallingFormat": "Gemini",
       "aliases": [
         { "pattern": "gemini-4-argon", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-4-carbon",
+      "displayName": "Gemini 4 Carbon",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1048576,
+      "maxOutputTokens": 65536,
+      "inputPricePerMillion": 2.00,
+      "outputPricePerMillion": 10.00,
+      "toolCallPricesPerThousand": { "google_search": 14.0, "google_maps": 14.0 },
+      "cacheReadPricePerMillion": 0.10,
+      "serviceTierMultipliers": { "Batch": 0.5, "Flex": 0.5, "Fast": 1.8 },
+      "scheduledPrices": [
+        { "effectiveFrom": "2026-12-01", "inputPricePerMillion": 4.00, "outputPricePerMillion": 20.00, "cacheReadPricePerMillion": 0.20 }
+      ],
+      "supportsImageInput": true,
+      "supportsVideoInput": true,
+      "supportsDocumentInput": true,
+      "supportsAudioInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "reasoningMode": "Optional",
+      "thinkingFormat": "Block",
+      "toolCallingFormat": "Gemini",
+      "aliases": [
+        { "pattern": "gemini-4-carbon", "type": "contains" }
       ]
     },
     {

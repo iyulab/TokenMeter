@@ -7,6 +7,9 @@ breaking changes, and each one is marked **Breaking** with a migration note.
 ## [Unreleased]
 
 ### Added
+- **Gemini 4 Carbon** (`gemini-4-carbon`, 1M context, 65K output): the same rates as Gemini 4 Argon - $2 / $10 per 1M tokens, cached input $0.10,
+  through 2026-11-30, and $4 / $20 / $0.20 from 2026-12-01 (a scheduled price); Google Search and Maps grounding $14 / 1,000. Served by the vendor and
+  absent from the catalog until now.
 - **Anthropic Claude Fable 5.2** (`claude-fable-5-2`): $8.00 / $40.00, cached input $0.20 (0.025x), cache write $10.00 (5m) / $16.00 (1h), 1M context, 128K output; Batch 0.5x, Fast mode 2x ($16 / $80), US data residency 1.1x. Before, the id had no row and was unpriced (the dateless id is its own pinned snapshot; a dated suffix resolves to this row, not to Fable 5 or 5.1). Source: the vendor price page and models overview, read 2026-11-10; the Anthropic file's `lastUpdated` is 2026-11-10.
 - **OpenAI GPT-6.1 Terra** (`gpt-6.1-terra`): $1.00 / $5.00, cached input $0.05, cache write $1.25, 1.05M context; above 272K
   input $2.00 / $7.50 (cached $0.10, write $2.50). Before, the id had no row and was unpriced.
@@ -18,6 +21,10 @@ breaking changes, and each one is marked **Breaking** with a migration note.
   embeddings, TTS and transcription): no other difference.
 
 ### Changed
+- **Gemini 4 Argon is also priced for Flex (0.5x) and Priority (`ServiceTier.Fast`, 1.8x)**, as the vendor lists them for both Gemini 4 models;
+  the row carried only Batch. The Google file was re-read against the pricing page on 2026-11-11 (input, output and cached input of every
+  model of the file that the page lists, the 2026-12-01 and 2027-01-01 increases included): no other price changed. `gemini-3.7-flash`, `gemini-3.5-flash` and the
+  Gemini 2.0 / 1.5 rows are no longer on the page and were not re-checked.
 - **The Anthropic file was re-read against the pricing page on 2026-10-28** (base input, 5-minute cache write, cache read and output
   for every model the page lists, Haiku 5.5's over-100K band included): no price changed; the file's `lastUpdated` moves with it.
   The legacy Claude 3 rows the page no longer lists were not re-checked.

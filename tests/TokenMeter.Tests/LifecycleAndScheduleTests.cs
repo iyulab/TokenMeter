@@ -134,6 +134,38 @@ public class LifecycleAndScheduleTests
             argon.CalculateCost(usage, new CostContext { Date = new DateOnly(2026, 12, 1), ServiceTier = ServiceTier.Batch }));
     }
 
+    [Theory]
+    [InlineData("gemini-4-carbon")]
+    [InlineData("gemini-4-argon")]
+    public void Gemini4_BothModelsCarryTheSameRateCard_AndEveryServiceTier(string modelId)
+    {
+        // aistudio.google.com/docs/pricing (Standard / Batch / Flex / Priority), 2026-11-11: Carbon and Argon list identical rates:
+        // $2 / $10 / cached $0.10 through 2026-11-30, twice that from 2026-12-01; Batch and Flex are half, Priority is 1.8x
+        // ($3.60 / $18.00 now, $7.20 / $36.00 after); 1M context, 65K output.
+        var model = ModelCatalog.FindModel(modelId, AliasMatchType.Exact);
+        Assert.NotNull(model);
+        Assert.Equal(1_048_576, model.ContextWindow);
+
+        var usage = new TokenCounts { InputTokens = 1_000_000, OutputTokens = 1_000_000 };
+        var before = new DateOnly(2026, 11, 30);
+        var after = new DateOnly(2026, 12, 1);
+        Assert.Equal(12m, model.CalculateCost(usage, new CostContext { Date = before }));
+        Assert.Equal(24m, model.CalculateCost(usage, new CostContext { Date = after }));
+        Assert.Equal(6m, model.CalculateCost(usage, new CostContext { Date = before, ServiceTier = ServiceTier.Batch }));
+        Assert.Equal(6m, model.CalculateCost(usage, new CostContext { Date = before, ServiceTier = ServiceTier.Flex }));
+        Assert.Equal(3.60m + 18.00m, model.CalculateCost(usage, new CostContext { Date = before, ServiceTier = ServiceTier.Fast }));
+        Assert.Equal(7.20m + 36.00m, model.CalculateCost(usage, new CostContext { Date = after, ServiceTier = ServiceTier.Fast }));
+        Assert.Equal(14m, model.ToolCallPrices!.Single(f => f.Tool == "google_search").PricePerThousand);
+    }
+
+    [Fact]
+    public void Gemini4Carbon_ResolvesToItsOwnRow_NotToArgons()
+    {
+        Assert.Equal("gemini-4-carbon", ModelCatalog.FindModelMatch("gemini-4-carbon")!.Model.ModelId);
+        Assert.Equal("gemini-4-carbon", ModelCatalog.FindModelMatch("models/gemini-4-carbon-001")!.Model.ModelId);
+        Assert.Equal("gemini-4-argon", ModelCatalog.FindModelMatch("gemini-4-argon")!.Model.ModelId);
+    }
+
     [Fact]
     public void CalculateCacheStorageCost_NoStoragePrice_IsUnknown()
     {
