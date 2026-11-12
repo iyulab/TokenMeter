@@ -7,6 +7,7 @@ breaking changes, and each one is marked **Breaking** with a migration note.
 ## [Unreleased]
 
 ### Added
+- **Gemini 4 Hydrogen** (`gemini-4-hydrogen`, 1M context): $1.50 / $7.50 per 1M tokens (thinking included), cached input $0.075 (implicit caching only); Batch and Flex 0.5x, Priority (Fast) 1.8x ($2.70 / $13.50); Google Search and Maps grounding $14 / 1,000; no scheduled price change is listed for it. Served by the vendor and absent from the catalog until now. The vendor page does not state its modalities, structured-output support or a max-output figure, so the row declares only tool calling (the page bills function declarations) and automatic caching and leaves the rest at the catalog defaults until a refresh reads them.
 - **Gemini 4 Carbon** (`gemini-4-carbon`, 1M context, 65K output): the same rates as Gemini 4 Argon - $2 / $10 per 1M tokens, cached input $0.10,
   through 2026-11-30, and $4 / $20 / $0.20 from 2026-12-01 (a scheduled price); Google Search and Maps grounding $14 / 1,000. Served by the vendor and
   absent from the catalog until now.

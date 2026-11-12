@@ -159,6 +159,26 @@ public class LifecycleAndScheduleTests
     }
 
     [Fact]
+    public void Gemini4Hydrogen_CarriesItsOwnRateCard_AndEveryServiceTier()
+    {
+        // aistudio.google.com/docs/pricing (Standard / Batch / Flex / Priority), read 2026-11-13: $1.50 input / $7.50 output
+        // (thinking included) / cached $0.075 (implicit caching only); Batch and Flex are half; Priority $2.70 / $13.50 (1.8x);
+        // Search and Maps grounding $14 per 1,000; 1M context; no scheduled change is listed for it (Carbon's rises on 2026-12-01).
+        var model = ModelCatalog.FindModel("gemini-4-hydrogen", AliasMatchType.Exact);
+        Assert.NotNull(model);
+        Assert.Equal(1_048_576, model.ContextWindow);
+
+        var usage = new TokenCounts { InputTokens = 1_000_000, OutputTokens = 1_000_000 };
+        Assert.Equal(9m, model.CalculateCost(usage, new CostContext { Date = new DateOnly(2026, 11, 30) }));
+        Assert.Equal(9m, model.CalculateCost(usage, new CostContext { Date = new DateOnly(2026, 12, 1) }));
+        Assert.Equal(4.5m, model.CalculateCost(usage, new CostContext { ServiceTier = ServiceTier.Batch }));
+        Assert.Equal(4.5m, model.CalculateCost(usage, new CostContext { ServiceTier = ServiceTier.Flex }));
+        Assert.Equal(2.70m + 13.50m, model.CalculateCost(usage, new CostContext { ServiceTier = ServiceTier.Fast }));
+        Assert.Equal(14m, model.ToolCallPrices!.Single(f => f.Tool == "google_search").PricePerThousand);
+        Assert.Equal("gemini-4-hydrogen", ModelCatalog.FindModelMatch("models/gemini-4-hydrogen-001")!.Model.ModelId);
+    }
+
+    [Fact]
     public void Gemini4Carbon_ResolvesToItsOwnRow_NotToArgons()
     {
         Assert.Equal("gemini-4-carbon", ModelCatalog.FindModelMatch("gemini-4-carbon")!.Model.ModelId);

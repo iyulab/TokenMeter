@@ -69,6 +69,23 @@
       ]
     },
     {
+      "modelId": "gemini-4-hydrogen",
+      "displayName": "Gemini 4 Hydrogen",
+      "modelType": "Chat",
+      "contextWindow": 1048576,
+      "inputPricePerMillion": 1.50,
+      "outputPricePerMillion": 7.50,
+      "toolCallPricesPerThousand": { "google_search": 14.0, "google_maps": 14.0 },
+      "cacheReadPricePerMillion": 0.075,
+      "serviceTierMultipliers": { "Batch": 0.5, "Flex": 0.5, "Fast": 1.8 },
+      "supportsToolCalling": true,
+      "promptCachingMode": "Automatic",
+      "toolCallingFormat": "Gemini",
+      "aliases": [
+        { "pattern": "gemini-4-hydrogen", "type": "contains" }
+      ]
+    },
+    {
       "modelId": "gemini-3.8-flash",
       "displayName": "Gemini 3.8 Flash",
       "modelType": "Chat",
