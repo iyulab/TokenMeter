@@ -81,6 +81,84 @@
       ]
     },
     {
+      "modelId": "gpt-6.2-astra",
+      "displayName": "GPT-6.2 Astra",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 8.00,
+      "outputPricePerMillion": 40.00,
+      "serviceTierMultipliers": { "Batch": 0.5, "Fast": 2.0 },
+      "toolCallPricesPerThousand": { "web_search": 10.0, "file_search": 2.50 },
+      "cacheReadPricePerMillion": 0.40,
+      "cacheWritePricePerMillion": 10.00,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 16.00,
+          "outputPricePerMillion": 60.00,
+          "cacheReadPricePerMillion": 0.80,
+          "cacheWritePricePerMillion": 20
+        }
+      ],
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        {
+          "pattern": "gpt-6.2-astra",
+          "type": "prefix"
+        }
+      ]
+    },
+    {
+      "modelId": "gpt-6.2-sol",
+      "displayName": "GPT-6.2 Sol",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 2.00,
+      "outputPricePerMillion": 10.00,
+      "serviceTierMultipliers": { "Batch": 0.5, "Fast": 2.0 },
+      "toolCallPricesPerThousand": { "web_search": 10.0, "file_search": 2.50 },
+      "cacheReadPricePerMillion": 0.10,
+      "cacheWritePricePerMillion": 2.50,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 4.00,
+          "outputPricePerMillion": 15.00,
+          "cacheReadPricePerMillion": 0.20,
+          "cacheWritePricePerMillion": 5
+        }
+      ],
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        {
+          "pattern": "gpt-6.2-sol",
+          "type": "prefix"
+        }
+      ]
+    },
+    {
       "modelId": "gpt-6.1-terra",
       "displayName": "GPT-6.1 Terra",
       "modelType": "Chat",
