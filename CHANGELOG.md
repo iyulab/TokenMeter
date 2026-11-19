@@ -7,6 +7,9 @@ breaking changes, and each one is marked **Breaking** with a migration note.
 ## [Unreleased]
 
 ### Added
+- **Gemini 4 Neon** (`gemini-4-neon`, 1M context, 65K output): $3.00 / $15.00 per 1M tokens (thinking included), cached input $0.15 (implicit caching only); Batch and Flex 0.5x,
+  Priority (Fast) 1.8x ($5.40 / $27.00); Google Search and Maps grounding $14 / 1,000. The vendor serves the id and the pricing page lists it with no dated change; before, it had
+  no row, so it was unpriced.
 - **OpenAI GPT-6.2 Sol** (`gpt-6.2-sol`, 1.05M context, 128K output): $2.00 / $10.00, cached input $0.10, cache write $2.50 (30-minute); above 272K input $4.00 / $15.00
   (cached $0.20, write $5.00). **GPT-6.2 Astra** (`gpt-6.2-astra`): $8.00 / $40.00, cached input $0.40, cache write $10.00; above 272K input $16.00 / $60.00 (cached $0.80,
   write $20.00). Batch 0.5x and Fast 2x as the pricing page lists them; the page has no Flex row for either, so the rows carry no Flex multiplier, and the Ultrafast tiers

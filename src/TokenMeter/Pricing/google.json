@@ -1,6 +1,6 @@
 {
   "provider": "Google",
-  "lastUpdated": "2026-11-11",
+  "lastUpdated": "2026-11-19",
   "models": [
     {
       "modelId": "gemini-4-argon",
@@ -83,6 +83,23 @@
       "toolCallingFormat": "Gemini",
       "aliases": [
         { "pattern": "gemini-4-hydrogen", "type": "contains" }
+      ]
+    },
+    {
+      "modelId": "gemini-4-neon",
+      "displayName": "Gemini 4 Neon",
+      "modelType": "Chat",
+      "contextWindow": 1048576,
+      "maxOutputTokens": 65536,
+      "inputPricePerMillion": 3.00,
+      "outputPricePerMillion": 15.00,
+      "toolCallPricesPerThousand": { "google_search": 14.0, "google_maps": 14.0 },
+      "cacheReadPricePerMillion": 0.15,
+      "serviceTierMultipliers": { "Batch": 0.5, "Flex": 0.5, "Fast": 1.8 },
+      "promptCachingMode": "Automatic",
+      "toolCallingFormat": "Gemini",
+      "aliases": [
+        { "pattern": "gemini-4-neon", "type": "contains" }
       ]
     },
     {
