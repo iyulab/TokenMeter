@@ -6,7 +6,7 @@ namespace TokenMeter;
 /// Built-in model metadata catalog loaded from embedded provider JSON files.
 /// Provides alias-aware lookup and filtering by provider or model type.
 /// </summary>
-public static class ModelCatalog
+public static partial class ModelCatalog
 {
     private static readonly IReadOnlyDictionary<string, ModelInfo> s_empty =
         new Dictionary<string, ModelInfo>(StringComparer.OrdinalIgnoreCase);
@@ -16,6 +16,7 @@ public static class ModelCatalog
     private static readonly List<AliasRule> s_aliasRules;
     private static readonly DateOnly s_lastUpdated;
     private static readonly Dictionary<string, DateOnly> s_providerLastUpdated = new(StringComparer.OrdinalIgnoreCase);
+    private static readonly Dictionary<string, IReadOnlyDictionary<string, CapabilityTier>> s_lines = new(StringComparer.OrdinalIgnoreCase);
 
     static ModelCatalog()
     {
@@ -31,6 +32,7 @@ public static class ModelCatalog
                 s_all[kv.Key] = kv.Value;
 
             s_byProvider[provider.ProviderName] = provider.Models;
+            s_lines[provider.ProviderName] = provider.Lines;
             s_aliasRules.AddRange(provider.AliasRules);
 
             if (provider.LastUpdated is { } date)

@@ -1,9 +1,12 @@
 {
   "provider": "OpenAI",
   "lastUpdated": "2026-10-28",
+  "lines": { "luna": "entry", "terra": "balanced", "sol": "advanced", "astra": "frontier" },
   "models": [
     {
       "modelId": "gpt-6-astra",
+      "line": "astra",
+      "version": "6.0",
       "displayName": "GPT-6 Astra",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -43,6 +46,8 @@
     },
     {
       "modelId": "gpt-6.1-sol",
+      "line": "sol",
+      "version": "6.1",
       "displayName": "GPT-6.1 Sol",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -82,6 +87,8 @@
     },
     {
       "modelId": "gpt-6.2-astra",
+      "line": "astra",
+      "version": "6.2",
       "displayName": "GPT-6.2 Astra",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -121,6 +128,8 @@
     },
     {
       "modelId": "gpt-6.2-sol",
+      "line": "sol",
+      "version": "6.2",
       "displayName": "GPT-6.2 Sol",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -160,6 +169,8 @@
     },
     {
       "modelId": "gpt-6.1-terra",
+      "line": "terra",
+      "version": "6.1",
       "displayName": "GPT-6.1 Terra",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -199,6 +210,8 @@
     },
     {
       "modelId": "gpt-6-sol",
+      "line": "sol",
+      "version": "6.0",
       "displayName": "GPT-6 Sol",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -238,6 +251,8 @@
     },
     {
       "modelId": "gpt-6-luna",
+      "line": "luna",
+      "version": "6.0",
       "displayName": "GPT-6 Luna",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -277,6 +292,8 @@
     },
     {
       "modelId": "gpt-5.6-sol",
+      "line": "sol",
+      "version": "5.6",
       "displayName": "GPT-5.6 Sol",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -312,6 +329,8 @@
     },
     {
       "modelId": "gpt-5.6-terra",
+      "line": "terra",
+      "version": "5.6",
       "displayName": "GPT-5.6 Terra",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -347,6 +366,8 @@
     },
     {
       "modelId": "gpt-5.6-luna",
+      "line": "luna",
+      "version": "5.6",
       "displayName": "GPT-5.6 Luna",
       "modelType": "Chat",
       "isInstructTuned": true,

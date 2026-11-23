@@ -172,6 +172,25 @@ documented price-parity policy, from that vendor's own official file) and mark i
 - A test (`ModelPricingValidationTests.ThirdPartySourcedProviders_AllModelsFlagged`) pins which
   providers currently carry this flag — update it if you add or remove a provider from the list.
 
+### 3.7. Placing a Model on a Line and a Rung (Anthropic, OpenAI, Google)
+
+For a provider that has `lines` at the top of its file, a new model row also needs its place - written by hand, never derived
+from the id:
+
+- `"line"` (lower case, the vendor's name: `sonnet`, `sol`, `carbon`) and `"version"` (`"5.5"`; a bare `"6"` is read as `6.0`).
+  `CapabilityTierTests.LineAndVersion_WrittenInTheData_EqualWhatTheIdSays_WhereTheIdSaysIt` holds the two to the id where the id
+  carries them, so a typo shows. A model that is not on a tiered line (a dated snapshot of an old chat family, an embedding) has
+  neither field.
+- `"availability": "preview"` for a preview model, `"restricted"` for a model only cleared accounts can call (default: general).
+- A **new line** goes in the provider's `"lines"` table (`"name": "rung"`, rung one of `entry` / `basic` / `balanced` /
+  `advanced` / `frontier`), or stays out of it when the vendor does not say where it sits (as Gemini 4 Neon and Argon). A rung
+  is the line's *current position*: a vendor that repositions a line (OpenAI moved Sol from flagship to a lower-cost model) is
+  one edit to this table.
+- **What an alias resolves to is a promise.** When a refresh changes the latest model of a rung (a new generation, a moved
+  line), update `tests/TokenMeter.Tests/tier-latest.snapshot` and add a CHANGELOG line that names the alias and the old and new
+  model - the snapshot test fails until you do. A rung holds one general line per provider
+  (`CapabilityTierTests.EachRung_HasAtMostOneGeneralLine_PerProvider`).
+
 ### 4. Bump `lastUpdated` in Every File You Touched
 
 Each provider JSON carries its own date at the top:

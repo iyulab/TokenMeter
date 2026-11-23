@@ -31,6 +31,8 @@ no DI extension or setup call. Register `ICostCalculator` yourself if you want i
 | Bounded / confidence-aware lookup | `ModelCatalog.FindModel(id, AliasMatchType)`, `ModelCatalog.FindModelMatch(id)` → `ModelMatch.MatchKind` | Pass `AliasMatchType.Exact` or `Prefix` to limit fuzziness; `Exact` finds every name the vendor's API takes (dated snapshots and the vendor's undated aliases such as `claude-sonnet-4-5`) |
 | Embedding model pricing (OpenAI `text-embedding-3-small` / `-large` / `ada-002`, Gemini `gemini-embedding-2`) | `ModelCatalog.GetByType(ModelType.Embedding)`, `ModelInfo.CalculateCost(inputTokens, 0)` | Rows priced on input tokens; Gemini's image/audio/video input in `ModalityPrices` |
 | Catalog browsing | `ModelCatalog.All`, `ByProvider`, `GetProvider(name)`, `GetByProvider`, `GetByType(ModelType)`, `GetProviderNames()`, typed properties (`ModelCatalog.OpenAI`, `.Anthropic`, …) | Static, always on |
+| The provider's latest model of a capability tier (`entry` … `frontier`), by rung or by line alias | `ModelCatalog.Resolve("anthropic:balanced")`, `Resolve(provider, CapabilityTier, ResolveOptions?)` → `TierResolution` | Separate from `FindModel`; an empty rung is `null` unless `ResolveOptions.Fallback` says otherwise. See [Capability Tiers](#capability-tiers) |
+| A model list: the latest of each tier, or every version | `ModelCatalog.List(ModelQuery)` | `ModelQuery.Scope` is required — `LatestPerTier` or `All`; filters for deprecated / retired / preview / restricted and a live id list |
 | Model metadata (limits, modalities, capabilities, reasoning/thinking format, tool-calling wire format) | `ModelInfo` properties | See [Model Metadata](#model-metadata) |
 | Full request cost (date rates, tiers, cache reads, cache writes by lifetime, modality prices, service tier, region, tool fees) | `ModelInfo.CalculateCost(TokenCounts, CostContext)`, `ICostCalculator.CalculateCost(modelId, TokenCounts, CostContext)` | `CostContext.At(callTimeUtc)`; set `ServiceTier` / `Region` with `with { … }` |
 | Per-part cost overloads | `ModelInfo.CalculateCost(input, output[, cacheRead, cacheWrite[, cacheWriteTtl]])`, `CalculateCost(input, output, PricingTierContext)` | Always on |
@@ -183,6 +185,40 @@ var chatModels = ModelCatalog.GetByType(ModelType.Chat);
 var providers = ModelCatalog.GetProviderNames();
 ```
 
+### Capability Tiers
+
+Every vendor names its lines differently (Haiku–Sonnet–Opus–Fable, Luna–Terra–Sol–Astra, Hydrogen–Neon–Carbon–Argon) and
+ships new generations of each. The catalog places each line on one five-rung scale — `entry < basic < balanced < advanced <
+frontier` — and a model has a `Line` and a `Version`, so "the latest `balanced` model" is a rule over the catalog, not a
+table you keep:
+
+```csharp
+// The provider's latest generally available, not-deprecated model of a rung
+var model = ModelCatalog.Resolve("anthropic:balanced")?.Model;            // claude-sonnet-5-5 at the time of writing
+var same  = ModelCatalog.Resolve("Anthropic", CapabilityTier.Balanced);   // TierResolution: Model, Tier, Substituted, Id
+
+// A rung the vendor has no line for is null - not the neighbour. Say which way to look if you want one:
+var basic = ModelCatalog.Resolve("Anthropic", CapabilityTier.Basic,
+    new ResolveOptions { Fallback = TierFallback.Lower });                // entry model, resolution.Substituted == true
+
+// Only what the account serves (a provider's live model list); a dated snapshot counts as its model
+var live = ModelCatalog.Resolve("Anthropic", CapabilityTier.Advanced,
+    new ResolveOptions { Available = idsFromTheProvider });               // resolution.Id is the id to send
+
+// A model picker: the latest of each tier, or every version of every line
+var latest = ModelCatalog.List(new ModelQuery { Scope = ModelListScope.LatestPerTier, Provider = "OpenAI" });
+var every  = ModelCatalog.List(new ModelQuery { Scope = ModelListScope.All, Provider = "OpenAI", IncludeDeprecated = true });
+```
+
+- A rung is a line's **current position at its vendor**, so every version of a line shares it, and the scale is ordered
+  *inside* one provider only — `balanced` at one vendor is not "as good as" `balanced` at another.
+- A move of what an alias resolves to (a new generation, a line that changes rung) is announced in the CHANGELOG.
+- Anthropic, OpenAI and Google are placed; the others carry no lines yet. Google's Neon and Argon are not placed because
+  the vendor documents no order for them. Models only cleared accounts can call (Anthropic Mythos) are `Restricted`: they
+  are never "the latest" of a rung.
+- `FindModel` does not resolve rungs or line names — it prices a concrete id and refuses to cross a version number.
+  Resolve a rung first, then price `resolution.Model`.
+
 ### Custom Models
 
 ```csharp
@@ -215,6 +251,10 @@ var strict = CostCalculator.Default(AliasMatchType.Exact);
 | `ModelId` | `string` | Canonical model identifier for API calls |
 | `Provider` | `string?` | Provider name (e.g., "OpenAI", "Anthropic") |
 | `DisplayName` | `string?` | Human-readable name |
+| `Line` | `string?` | The vendor's name for the line the model belongs to (`sonnet`, `sol`, `carbon`); `null` when the catalog has not placed it |
+| `Version` | `Version?` | Generation inside the line, comparable (`5.5` is later than `5.0`); `null` exactly when `Line` is |
+| `Tier` | `CapabilityTier?` | Rung of the capability scale the line sits on at its provider; `null` when the line is not placed |
+| `Availability` | `ModelAvailability` | `General`, `Preview`, or `Restricted` (only cleared accounts can call it) |
 | `ModelType` | `ModelType` | Chat, Embedding, Reranker, ImageGeneration, TextToSpeech, SpeechToText |
 | `IsInstructTuned` | `bool` | Instruction-tuned vs. base model |
 

@@ -19,6 +19,27 @@ public record ModelInfo
     /// <summary>Human-readable display name (e.g., "Claude Opus 4.7").</summary>
     public string? DisplayName { get; init; }
 
+    /// <summary>
+    /// The vendor's own name for the line this model belongs to, lower case (<c>sonnet</c>, <c>sol</c>, <c>carbon</c>) -
+    /// the thing that has versions. <c>null</c> when the catalog has not placed the model on a line.
+    /// </summary>
+    public string? Line { get; init; }
+
+    /// <summary>
+    /// The model's generation inside its <see cref="Line"/>, comparable with the other versions of the line
+    /// (<c>5.5</c> is later than <c>5.0</c>, <c>4.10</c> later than <c>4.9</c>). <c>null</c> exactly when <see cref="Line"/> is.
+    /// </summary>
+    public Version? Version { get; init; }
+
+    /// <summary>
+    /// The rung of the capability scale this model's <see cref="Line"/> sits on at the provider, or <c>null</c> when the
+    /// line is not placed (the vendor does not say, or the model has no line). Every version of a line shares one rung.
+    /// </summary>
+    public CapabilityTier? Tier { get; init; }
+
+    /// <summary>Who can call the model. Defaults to <see cref="ModelAvailability.General"/>.</summary>
+    public ModelAvailability Availability { get; init; }
+
     // ── Model Classification ──────────────────────────────────────────────────
 
     /// <summary>Primary output type of the model. Defaults to <see cref="ModelType.Chat"/>.</summary>

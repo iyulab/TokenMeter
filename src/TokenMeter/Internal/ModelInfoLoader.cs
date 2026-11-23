@@ -43,10 +43,13 @@ internal static class ModelInfoLoader
     {
         var models = new Dictionary<string, ModelInfo>(StringComparer.OrdinalIgnoreCase);
         var aliasRules = new List<AliasRule>();
+        var lines = ToLines(json.Lines);
 
         foreach (var m in json.Models)
         {
             var info = ToModelInfo(m, json.Provider);
+            if (info.Line is { } line && lines.TryGetValue(line, out var tier))
+                info = info with { Tier = tier };
             models[m.ModelId] = info;
 
             foreach (var alias in m.Aliases ?? [])
@@ -74,7 +77,28 @@ internal static class ModelInfoLoader
                 ? parsed
                 : null;
 
-        return new ProviderData(json.Provider, models, aliasRules, lastUpdated);
+        return new ProviderData(json.Provider, models, aliasRules, lastUpdated, lines);
+    }
+
+    // A line whose rung does not parse is left out (unplaced, as an unparseable lifetime is dropped); the test suite holds
+    // every entry to parsing.
+    private static Dictionary<string, CapabilityTier> ToLines(Dictionary<string, string>? lines)
+    {
+        var result = new Dictionary<string, CapabilityTier>(StringComparer.OrdinalIgnoreCase);
+        foreach (var (line, rung) in lines ?? [])
+        {
+            if (CapabilityTierExtensions.TryParse(rung, out var tier))
+                result[line] = tier;
+        }
+        return result;
+    }
+
+    // "5.5" -> 5.5; a bare "6" -> 6.0. Anything else is left unset, and the test suite holds every line to a version.
+    private static Version? ParseVersion(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return null;
+        if (!text.Contains('.')) text += ".0";
+        return Version.TryParse(text, out var version) ? version : null;
     }
 
     private static ModelInfo ToModelInfo(ModelInfoJson j, string provider) => new()
@@ -82,6 +106,9 @@ internal static class ModelInfoLoader
         ModelId = j.ModelId,
         Provider = provider,
         DisplayName = j.DisplayName,
+        Line = j.Line?.ToLowerInvariant(),
+        Version = ParseVersion(j.Version),
+        Availability = ParseEnum<ModelAvailability>(j.Availability ?? "", ModelAvailability.General),
         ModelType = ParseEnum<ModelType>(j.ModelType, ModelType.Chat),
         IsInstructTuned = j.IsInstructTuned,
         ContextWindow = j.ContextWindow,
@@ -252,4 +279,5 @@ internal sealed record ProviderData(
     string ProviderName,
     IReadOnlyDictionary<string, ModelInfo> Models,
     IReadOnlyList<AliasRule> AliasRules,
-    DateOnly? LastUpdated);
+    DateOnly? LastUpdated,
+    IReadOnlyDictionary<string, CapabilityTier> Lines);

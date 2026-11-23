@@ -31,6 +31,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- The latest model of each rung per provider: an alias that moves must be moved on purpose (CapabilityTierTests). -->
+    <None Include="tier-latest.snapshot" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 

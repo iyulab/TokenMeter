@@ -15,6 +15,14 @@ internal sealed class ProviderDataJson
     [JsonPropertyName("lastUpdated")]
     public string? LastUpdated { get; set; }
 
+    /// <summary>
+    /// The provider's lines placed on the capability scale: line name → rung alias. A line left out is not placed (the
+    /// vendor does not say where it sits). Written by hand; a rung is the line's current position, so every version of
+    /// the line shares it.
+    /// </summary>
+    [JsonPropertyName("lines")]
+    public Dictionary<string, string>? Lines { get; set; }
+
     [JsonPropertyName("models")]
     public List<ModelInfoJson> Models { get; set; } = [];
 }
@@ -27,6 +35,17 @@ internal sealed class ModelInfoJson
 
     [JsonPropertyName("displayName")]
     public string? DisplayName { get; set; }
+
+    // The vendor's line and the model's generation in it ("5.5"), written by hand next to the id they describe.
+    [JsonPropertyName("line")]
+    public string? Line { get; set; }
+
+    [JsonPropertyName("version")]
+    public string? Version { get; set; }
+
+    // "general" (the default), "preview" or "restricted".
+    [JsonPropertyName("availability")]
+    public string? Availability { get; set; }
 
     // Classification
     [JsonPropertyName("modelType")]

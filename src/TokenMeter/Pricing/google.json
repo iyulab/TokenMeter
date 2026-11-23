@@ -1,9 +1,12 @@
 {
   "provider": "Google",
   "lastUpdated": "2026-11-19",
+  "lines": { "hydrogen": "entry", "carbon": "frontier" },
   "models": [
     {
       "modelId": "gemini-4-argon",
+      "line": "argon",
+      "version": "4.0",
       "displayName": "Gemini 4 Argon",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -37,6 +40,8 @@
     },
     {
       "modelId": "gemini-4-carbon",
+      "line": "carbon",
+      "version": "4.0",
       "displayName": "Gemini 4 Carbon",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -70,6 +75,8 @@
     },
     {
       "modelId": "gemini-4-hydrogen",
+      "line": "hydrogen",
+      "version": "4.0",
       "displayName": "Gemini 4 Hydrogen",
       "modelType": "Chat",
       "contextWindow": 1048576,
@@ -87,6 +94,8 @@
     },
     {
       "modelId": "gemini-4-neon",
+      "line": "neon",
+      "version": "4.0",
       "displayName": "Gemini 4 Neon",
       "modelType": "Chat",
       "contextWindow": 1048576,
@@ -272,6 +281,7 @@
     },
     {
       "modelId": "gemini-3-pro-preview",
+      "availability": "preview",
       "displayName": "Gemini 3 Pro Preview",
       "deprecationDate": "2026-02-26",
       "retirementDate": "2026-03-09",
@@ -303,6 +313,7 @@
     },
     {
       "modelId": "gemini-3.1-pro-preview",
+      "availability": "preview",
       "displayName": "Gemini 3.1 Pro Preview",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -366,6 +377,7 @@
     },
     {
       "modelId": "gemini-3.1-flash-lite-preview",
+      "availability": "preview",
       "displayName": "Gemini 3.1 Flash-Lite Preview",
       "deprecationDate": "2026-05-11",
       "retirementDate": "2026-05-25",
@@ -394,6 +406,7 @@
     },
     {
       "modelId": "gemini-3-flash-preview",
+      "availability": "preview",
       "displayName": "Gemini 3 Flash Preview",
       "replacementModelId": "gemini-3.6-flash",
       "modelType": "Chat",
@@ -716,6 +729,7 @@
     },
     {
       "modelId": "gemini-3.1-flash-tts-preview",
+      "availability": "preview",
       "displayName": "Gemini 3.1 Flash TTS Preview",
       "retirementDate": "2026-11-17",
       "replacementModelId": "gemini-3.8-flash-tts",
@@ -730,6 +744,7 @@
     },
     {
       "modelId": "gemini-2.5-flash-preview-tts",
+      "availability": "preview",
       "displayName": "Gemini 2.5 Flash Preview TTS",
       "retirementDate": "2026-11-17",
       "replacementModelId": "gemini-3.8-flash-tts",
@@ -744,6 +759,7 @@
     },
     {
       "modelId": "gemini-2.5-pro-preview-tts",
+      "availability": "preview",
       "displayName": "Gemini 2.5 Pro Preview TTS",
       "retirementDate": "2026-11-17",
       "replacementModelId": "gemini-3.8-flash-tts",

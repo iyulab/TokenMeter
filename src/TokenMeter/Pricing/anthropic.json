@@ -1,9 +1,12 @@
 {
   "provider": "Anthropic",
   "lastUpdated": "2026-11-10",
+  "lines": { "haiku": "entry", "sonnet": "balanced", "opus": "advanced", "fable": "frontier", "mythos": "frontier" },
   "models": [
     {
       "modelId": "claude-fable-5-2",
+      "line": "fable",
+      "version": "5.2",
       "displayName": "Claude Fable 5.2",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -37,6 +40,8 @@
     },
     {
       "modelId": "claude-fable-5-1",
+      "line": "fable",
+      "version": "5.1",
       "displayName": "Claude Fable 5.1",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -73,6 +78,9 @@
     },
     {
       "modelId": "claude-mythos-5-1",
+      "line": "mythos",
+      "version": "5.1",
+      "availability": "restricted",
       "displayName": "Claude Mythos 5.1",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -109,6 +117,8 @@
     },
     {
       "modelId": "claude-fable-5",
+      "line": "fable",
+      "version": "5.0",
       "displayName": "Claude Fable 5",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -142,6 +152,9 @@
     },
     {
       "modelId": "claude-mythos-5",
+      "line": "mythos",
+      "version": "5.0",
+      "availability": "restricted",
       "displayName": "Claude Mythos 5",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -177,6 +190,8 @@
     },
     {
       "modelId": "claude-opus-5-5",
+      "line": "opus",
+      "version": "5.5",
       "displayName": "Claude Opus 5.5",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -212,6 +227,8 @@
     },
     {
       "modelId": "claude-opus-5",
+      "line": "opus",
+      "version": "5.0",
       "displayName": "Claude Opus 5",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -247,6 +264,8 @@
     },
     {
       "modelId": "claude-opus-4-8",
+      "line": "opus",
+      "version": "4.8",
       "displayName": "Claude Opus 4.8",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -281,6 +300,8 @@
     },
     {
       "modelId": "claude-opus-4-7",
+      "line": "opus",
+      "version": "4.7",
       "displayName": "Claude Opus 4.7",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -315,6 +336,8 @@
     },
     {
       "modelId": "claude-sonnet-5-5",
+      "line": "sonnet",
+      "version": "5.5",
       "displayName": "Claude Sonnet 5.5",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -351,6 +374,8 @@
     },
     {
       "modelId": "claude-sonnet-5",
+      "line": "sonnet",
+      "version": "5.0",
       "displayName": "Claude Sonnet 5",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -385,6 +410,8 @@
     },
     {
       "modelId": "claude-opus-4-6",
+      "line": "opus",
+      "version": "4.6",
       "displayName": "Claude Opus 4.6",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -423,6 +450,8 @@
     },
     {
       "modelId": "claude-sonnet-4-6",
+      "line": "sonnet",
+      "version": "4.6",
       "displayName": "Claude Sonnet 4.6",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -461,6 +490,8 @@
     },
     {
       "modelId": "claude-opus-4-1",
+      "line": "opus",
+      "version": "4.1",
       "displayName": "Claude Opus 4.1",
       "deprecationDate": "2026-06-05",
       "retirementDate": "2026-08-05",
@@ -501,6 +532,8 @@
     },
     {
       "modelId": "claude-opus-4-5",
+      "line": "opus",
+      "version": "4.5",
       "displayName": "Claude 4.5 Opus",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -542,6 +575,8 @@
     },
     {
       "modelId": "claude-opus-4-0",
+      "line": "opus",
+      "version": "4.0",
       "displayName": "Claude Opus 4",
       "deprecationDate": "2026-04-14",
       "retirementDate": "2026-06-15",
@@ -581,6 +616,8 @@
     },
     {
       "modelId": "claude-sonnet-4-5",
+      "line": "sonnet",
+      "version": "4.5",
       "displayName": "Claude 4.5 Sonnet",
       "deprecationDate": "2026-09-30",
       "retirementDate": "2026-11-30",
@@ -625,6 +662,8 @@
     },
     {
       "modelId": "claude-haiku-5-5",
+      "line": "haiku",
+      "version": "5.5",
       "displayName": "Claude Haiku 5.5",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -675,6 +714,8 @@
     },
     {
       "modelId": "claude-haiku-4-5",
+      "line": "haiku",
+      "version": "4.5",
       "displayName": "Claude 4.5 Haiku",
       "modelType": "Chat",
       "isInstructTuned": true,
@@ -711,6 +752,8 @@
     },
     {
       "modelId": "claude-sonnet-4",
+      "line": "sonnet",
+      "version": "4.0",
       "displayName": "Claude Sonnet 4",
       "deprecationDate": "2026-04-14",
       "retirementDate": "2026-06-15",
@@ -751,6 +794,8 @@
     },
     {
       "modelId": "claude-3-7-sonnet-20250219",
+      "line": "sonnet",
+      "version": "3.7",
       "displayName": "Claude Sonnet 3.7",
       "deprecationDate": "2025-10-28",
       "retirementDate": "2026-02-19",
@@ -790,6 +835,8 @@
     },
     {
       "modelId": "claude-3-5-sonnet-20241022",
+      "line": "sonnet",
+      "version": "3.5",
       "displayName": "Claude 3.5 Sonnet",
       "deprecationDate": "2025-08-13",
       "retirementDate": "2025-10-28",
@@ -829,6 +876,8 @@
     },
     {
       "modelId": "claude-3-5-haiku-20241022",
+      "line": "haiku",
+      "version": "3.5",
       "displayName": "Claude 3.5 Haiku",
       "deprecationDate": "2025-12-19",
       "retirementDate": "2026-02-19",
@@ -867,6 +916,8 @@
     },
     {
       "modelId": "claude-3-opus-20240229",
+      "line": "opus",
+      "version": "3.0",
       "displayName": "Claude 3 Opus",
       "deprecationDate": "2025-06-30",
       "retirementDate": "2026-01-05",
@@ -901,6 +952,8 @@
     },
     {
       "modelId": "claude-3-sonnet-20240229",
+      "line": "sonnet",
+      "version": "3.0",
       "displayName": "Claude 3 Sonnet",
       "deprecationDate": "2025-01-21",
       "retirementDate": "2025-07-21",
@@ -934,6 +987,8 @@
     },
     {
       "modelId": "claude-3-haiku-20240307",
+      "line": "haiku",
+      "version": "3.0",
       "displayName": "Claude 3 Haiku",
       "deprecationDate": "2026-02-19",
       "retirementDate": "2026-04-20",

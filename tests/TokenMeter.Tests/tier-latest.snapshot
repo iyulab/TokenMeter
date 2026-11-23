@@ -1,0 +1,10 @@
+Anthropic	entry	claude-haiku-5-5
+Anthropic	balanced	claude-sonnet-5-5
+Anthropic	advanced	claude-opus-5-5
+Anthropic	frontier	claude-fable-5-2
+Google	entry	gemini-4-hydrogen
+Google	frontier	gemini-4-carbon
+OpenAI	entry	gpt-6-luna
+OpenAI	balanced	gpt-6.1-terra
+OpenAI	advanced	gpt-6.2-sol
+OpenAI	frontier	gpt-6.2-astra

@@ -4,6 +4,27 @@ All notable changes to this project are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/); while the major version is 0, a minor release may contain
 breaking changes, and each one is marked **Breaking** with a migration note.
 
+## [Unreleased]
+
+### Added
+- **Capability tiers: ask for "the latest model of a tier" and list "the latest of each tier".** The catalog now places a vendor's lines
+  (Haiku, Sonnet, Opus, Fable; Luna, Terra, Sol, Astra; Hydrogen, Carbon) on one five-rung scale - `entry < basic < balanced <
+  advanced < frontier` - and a model carries its `Line`, a comparable `Version`, its `Tier` and its `Availability` (`General`,
+  `Preview`, `Restricted`). New and separate from `FindModel` (which still never crosses a version number):
+  `ModelCatalog.Resolve("anthropic:balanced")` / `Resolve(provider, CapabilityTier, ResolveOptions?)` returns a `TierResolution`
+  (the catalog model, the rung it sits on, whether a fallback rung answered, and the id to send), and
+  `ModelCatalog.List(ModelQuery)` lists `LatestPerTier` or `All` - the scope is required, there is no default. A rung with no line is
+  `null`, never the neighbour; `ResolveOptions.Fallback` (`Lower` / `Higher`) opts in and the result says it substituted. An
+  `Available` id list (a provider's live model list) narrows both, and a dated snapshot of a model counts as that model.
+  Lifecycle is judged on `AsOf` (default today): a deprecated or retired model is not the latest.
+  **Placed today** (what each alias resolves to now): Anthropic `entry` Haiku 5.5, `balanced` Sonnet 5.5, `advanced` Opus 5.5,
+  `frontier` Fable 5.2; OpenAI `entry` GPT-6 Luna, `balanced` GPT-6.1 Terra, `advanced` GPT-6.2 Sol, `frontier` GPT-6.2 Astra;
+  Google `entry` Gemini 4 Hydrogen, `frontier` Gemini 4 Carbon. Gemini 4 Neon and Argon are not placed (the vendor documents no
+  order for them), and Anthropic's Mythos is `Restricted` (verified organizations only), so it is never the latest of a rung. Other
+  providers have no lines yet. A catalog refresh that moves what an alias resolves to changes `tier-latest.snapshot` in the test
+  project and needs a line here.
+- **`ModelInfo.Availability`**: `General`, `Preview` (the `-preview` ids) or `Restricted`.
+
 ## [0.17.0] - 2026-11-23
 
 ### Added
