@@ -70,7 +70,7 @@ Console.WriteLine(model?.SupportsMcpToolUse);      // True
 > Fuzzy passes never cross a version token: an alias ending in a version number (`claude-sonnet-5`) does not
 > match an id that continues it (`claude-sonnet-5-5`) — an unknown newer model returns `null` rather than the older
 > model's row; an alias ending in a family name (`mistral-large`) likewise does not match `mistral-large-5`. A longer family
-> that refuses an id this way keeps a shorter one out too (`command-r-plus-2` is not priced as `command-r`). Snapshot and
+> that refuses an id this way keeps a shorter prefix alias out too (`command-r-plus-2` is not priced as `command-r`). Snapshot and
 > deployment suffixes (`-20250929`, `-2512`, the month-year form `-04-2024`, `-latest`, `-v1`) still match. Nor do they cross into a
 > variant: an id whose remainder names `audio`, `realtime`, `tts`, `transcribe`, `search`, `image`, `embedding`, `live`,
 > `translate` or `moderation` (`gpt-4o-mini-tts`) is a different product and resolves only by a row of its own.
@@ -361,7 +361,7 @@ without a `DeprecationDate`; a model whose requests Google routes to its success
 ## Data Freshness
 
 ```csharp
-Console.WriteLine(ModelCatalog.LastUpdated);        // e.g. 2026-10-10
+Console.WriteLine(ModelCatalog.LastUpdated);        // e.g. 2026-11-24
 Console.WriteLine(ModelCatalog.DataAgeDays);        // days since last update
 Console.WriteLine(ModelCatalog.IsDataStale());      // true if > 90 days old
 ```
