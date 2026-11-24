@@ -7,6 +7,13 @@ breaking changes, and each one is marked **Breaking** with a migration note.
 ## [Unreleased]
 
 ### Added
+- **Rows for the ids OpenAI serves as healthcare model configurations, three Azure models.** `gpt-6-astra-healthcare`,
+  `gpt-6.1-sol-healthcare`, `gpt-6.2-astra-healthcare` and `gpt-6.2-sol-healthcare` now resolve to their own rows (before, the base
+  model's prefix alias answered for them): Standard rates, long context above 272K, Fast 2x only (no Batch or Flex rate is listed for
+  them), and no cache-write rate on the two older ones. The price page lists them as configurations of the base model and states no
+  capabilities of their own, so the capability fields are the base model's. They carry no `Line`, so no tier alias resolves to them.
+  OpenAI calls the rates promotional, available at least through 2026-12-31. Azure: `azure-gpt-6.2-astra`, `azure-gpt-6.2-sol`,
+  `azure-gpt-6.1-terra` (Global Standard).
 - **Capability tiers: ask for "the latest model of a tier" and list "the latest of each tier".** The catalog now places a vendor's lines
   (Haiku, Sonnet, Opus, Fable; Luna, Terra, Sol, Astra; Hydrogen, Carbon) on one five-rung scale - `entry < basic < balanced <
   advanced < frontier` - and a model carries its `Line`, a comparable `Version`, its `Tier` and its `Availability` (`General`,
@@ -24,6 +31,13 @@ breaking changes, and each one is marked **Breaking** with a migration note.
   providers have no lines yet. A catalog refresh that moves what an alias resolves to changes `tier-latest.snapshot` in the test
   project and needs a line here.
 - **`ModelInfo.Availability`**: `General`, `Preview` (the `-preview` ids) or `Restricted`.
+
+### Changed
+- **Prices re-checked against the vendors on 2026-11-24; three rows moved.** `command-r-plus` (the bare alias is Command R+ 04-2024)
+  2.50 / 10.00 -> **3.00 / 15.00**, now marked deprecated 2025-09-15 with `command-r-plus-08-2024` as the replacement;
+  `mistral-large-4` 0.68 / 2.09 -> **0.70 / 2.10**; `llama-4-maverick` 0.1875 / 0.6525 -> **0.35 / 1.00** (the one host the reference
+  aggregator still lists). Amazon Nova, Azure (existing rows), DeepSeek, Qwen, Perplexity and OpenAI rows that are still listed are
+  unchanged. A caller that priced those three ids sees the new numbers.
 
 ## [0.17.0] - 2026-11-23
 

@@ -1,6 +1,6 @@
 {
   "provider": "Mistral",
-  "lastUpdated": "2026-10-20",
+  "lastUpdated": "2026-11-24",
   "models": [
     {
       "modelId": "mistral-large-latest",
@@ -27,8 +27,8 @@
       "modelType": "Chat",
       "isInstructTuned": true,
       "contextWindow": 1000000,
-      "inputPricePerMillion": 0.68,
-      "outputPricePerMillion": 2.09,
+      "inputPricePerMillion": 0.7,
+      "outputPricePerMillion": 2.1,
       "cacheReadPricePerMillion": 0.07,
       "promptCachingMode": "Automatic",
       "supportsToolCalling": true,

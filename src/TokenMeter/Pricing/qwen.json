@@ -1,6 +1,6 @@
 {
   "provider": "Qwen",
-  "lastUpdated": "2026-10-20",
+  "lastUpdated": "2026-11-24",
   "models": [
     {
       "modelId": "qwen-max",

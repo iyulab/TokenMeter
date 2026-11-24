@@ -1,6 +1,6 @@
 {
   "provider": "OpenAI",
-  "lastUpdated": "2026-10-28",
+  "lastUpdated": "2026-11-24",
   "lines": { "luna": "entry", "terra": "balanced", "sol": "advanced", "astra": "frontier" },
   "models": [
     {
@@ -40,6 +40,48 @@
       "aliases": [
         {
           "pattern": "gpt-6-astra",
+          "type": "prefix"
+        }
+      ]
+    },
+    {
+      "modelId": "gpt-6-astra-healthcare",
+      "displayName": "GPT-6 Astra Healthcare",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 10.0,
+      "outputPricePerMillion": 50.0,
+      "serviceTierMultipliers": {
+        "Fast": 2.0
+      },
+      "toolCallPricesPerThousand": {
+        "web_search": 10.0,
+        "file_search": 2.5
+      },
+      "cacheReadPricePerMillion": 1.0,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 20.0,
+          "outputPricePerMillion": 75.0,
+          "cacheReadPricePerMillion": 2.0
+        }
+      ],
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        {
+          "pattern": "gpt-6-astra-healthcare",
           "type": "prefix"
         }
       ]
@@ -86,6 +128,48 @@
       ]
     },
     {
+      "modelId": "gpt-6.1-sol-healthcare",
+      "displayName": "GPT-6.1 Sol Healthcare",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 2.0,
+      "outputPricePerMillion": 10.0,
+      "serviceTierMultipliers": {
+        "Fast": 2.0
+      },
+      "toolCallPricesPerThousand": {
+        "web_search": 10.0,
+        "file_search": 2.5
+      },
+      "cacheReadPricePerMillion": 0.1,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 4.0,
+          "outputPricePerMillion": 15.0,
+          "cacheReadPricePerMillion": 0.2
+        }
+      ],
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        {
+          "pattern": "gpt-6.1-sol-healthcare",
+          "type": "prefix"
+        }
+      ]
+    },
+    {
       "modelId": "gpt-6.2-astra",
       "line": "astra",
       "version": "6.2",
@@ -127,6 +211,50 @@
       ]
     },
     {
+      "modelId": "gpt-6.2-astra-healthcare",
+      "displayName": "GPT-6.2 Astra Healthcare",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 8.0,
+      "outputPricePerMillion": 40.0,
+      "serviceTierMultipliers": {
+        "Fast": 2.0
+      },
+      "toolCallPricesPerThousand": {
+        "web_search": 10.0,
+        "file_search": 2.5
+      },
+      "cacheReadPricePerMillion": 0.4,
+      "cacheWritePricePerMillion": 10.0,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 16.0,
+          "outputPricePerMillion": 60.0,
+          "cacheReadPricePerMillion": 0.8,
+          "cacheWritePricePerMillion": 20.0
+        }
+      ],
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        {
+          "pattern": "gpt-6.2-astra-healthcare",
+          "type": "prefix"
+        }
+      ]
+    },
+    {
       "modelId": "gpt-6.2-sol",
       "line": "sol",
       "version": "6.2",
@@ -163,6 +291,50 @@
       "aliases": [
         {
           "pattern": "gpt-6.2-sol",
+          "type": "prefix"
+        }
+      ]
+    },
+    {
+      "modelId": "gpt-6.2-sol-healthcare",
+      "displayName": "GPT-6.2 Sol Healthcare",
+      "modelType": "Chat",
+      "isInstructTuned": true,
+      "contextWindow": 1050000,
+      "maxOutputTokens": 128000,
+      "inputPricePerMillion": 2.0,
+      "outputPricePerMillion": 10.0,
+      "serviceTierMultipliers": {
+        "Fast": 2.0
+      },
+      "toolCallPricesPerThousand": {
+        "web_search": 10.0,
+        "file_search": 2.5
+      },
+      "cacheReadPricePerMillion": 0.1,
+      "cacheWritePricePerMillion": 2.5,
+      "pricingTiers": [
+        {
+          "axis": "ContextLength",
+          "minContextLengthTokens": 272000,
+          "inputPricePerMillion": 4.0,
+          "outputPricePerMillion": 15.0,
+          "cacheReadPricePerMillion": 0.2,
+          "cacheWritePricePerMillion": 5.0
+        }
+      ],
+      "supportsImageInput": true,
+      "supportsToolCalling": true,
+      "supportsParallelToolCalling": true,
+      "supportsStructuredOutput": true,
+      "supportsJsonMode": true,
+      "supportsStreaming": true,
+      "promptCachingMode": "Automatic",
+      "supportsStopSequences": true,
+      "toolCallingFormat": "OpenAI",
+      "aliases": [
+        {
+          "pattern": "gpt-6.2-sol-healthcare",
           "type": "prefix"
         }
       ]
