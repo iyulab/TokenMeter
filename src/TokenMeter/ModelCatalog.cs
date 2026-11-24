@@ -172,18 +172,29 @@ public static partial class ModelCatalog
 
         if (maxFuzziness < AliasMatchType.Prefix) return null;
 
-        // Pass 2: Prefix alias — longest wins
+        // Pass 2: Prefix alias — longest wins. A longer family that names the id up to a whole token and still refuses it
+        // (a version it does not describe) keeps the shorter family out too: "command-r-plus-2" is not a Command R.
         AliasRule? bestPrefix = null;
+        var refusedFamilyLength = 0;
         foreach (var rule in s_aliasRules)
         {
-            if (rule.MatchType == AliasMatchType.Prefix &&
-                normalized.StartsWith(rule.Pattern, StringComparison.Ordinal) &&
-                !CrossesVersionToken(normalized, rule.Pattern.Length, rule.Pattern) &&
-                !NamesAVariant(normalized, rule.Pattern.Length) &&
-                (bestPrefix is null || rule.Pattern.Length > bestPrefix.Pattern.Length))
+            if (rule.MatchType != AliasMatchType.Prefix ||
+                !normalized.StartsWith(rule.Pattern, StringComparison.Ordinal))
+                continue;
+
+            if (CrossesVersionToken(normalized, rule.Pattern.Length, rule.Pattern) ||
+                NamesAVariant(normalized, rule.Pattern.Length))
+            {
+                if (EndsAToken(normalized, rule.Pattern.Length))
+                    refusedFamilyLength = Math.Max(refusedFamilyLength, rule.Pattern.Length);
+            }
+            else if (bestPrefix is null || rule.Pattern.Length > bestPrefix.Pattern.Length)
+            {
                 bestPrefix = rule;
+            }
         }
-        if (bestPrefix is not null) return new ModelMatch(bestPrefix.Target, AliasMatchType.Prefix);
+        if (bestPrefix is not null && bestPrefix.Pattern.Length > refusedFamilyLength)
+            return new ModelMatch(bestPrefix.Target, AliasMatchType.Prefix);
 
         if (maxFuzziness < AliasMatchType.Contains) return null;
 
@@ -248,6 +259,8 @@ public static partial class ModelCatalog
     {
         if (pattern.Length == 0 || matchEnd >= input.Length)
             return false;
+        if (StartsAMonthYearSnapshot(input, matchEnd))
+            return false;
         if (!char.IsAsciiDigit(pattern[^1]))
             return StartsAVersion(input, matchEnd);
         var next = input[matchEnd];
@@ -277,6 +290,25 @@ public static partial class ModelCatalog
             digits++;
         return digits is 1 or 2 && (k == input.Length || input[k] is '-' or '.' or '_');
     }
+
+    /// <summary>
+    /// A month-year snapshot suffix (<c>-04-2024</c>, ending the id or followed by a separator) is a date, although it opens
+    /// with two digits like a version.
+    /// </summary>
+    private static bool StartsAMonthYearSnapshot(string input, int matchEnd)
+    {
+        const int Length = 8; // "-MM-YYYY"
+        if (matchEnd + Length > input.Length) return false;
+        var s = input.AsSpan(matchEnd, Length);
+        if (s[0] is not ('-' or '_') || s[3] != '-') return false;
+        if (!char.IsAsciiDigit(s[1]) || !char.IsAsciiDigit(s[2])) return false;
+        var month = (s[1] - '0') * 10 + (s[2] - '0');
+        if (month is < 1 or > 12) return false;
+        if (s[4] != '2' || s[5] != '0' || !char.IsAsciiDigit(s[6]) || !char.IsAsciiDigit(s[7])) return false;
+        return EndsAToken(input, matchEnd + Length);
+    }
+
+    private static bool EndsAToken(string input, int at) => at >= input.Length || input[at] is '-' or '.' or '_';
 
     // ── Filtering ─────────────────────────────────────────────────────────────
 

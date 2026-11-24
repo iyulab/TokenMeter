@@ -39,6 +39,13 @@ breaking changes, and each one is marked **Breaking** with a migration note.
   aggregator still lists). Amazon Nova, Azure (existing rows), DeepSeek, Qwen, Perplexity and OpenAI rows that are still listed are
   unchanged. A caller that priced those three ids sees the new numbers.
 
+### Fixed
+- **Breaking: a dated or newer id is no longer priced as a shorter model family.** A month-year snapshot (`command-r-plus-04-2024`,
+  `command-a-03-2025`, `command-r7b-12-2024`) was read as a new version: the first was priced as `command-r` (0.50 / 1.50 instead of
+  3.00 / 15.00), the third likewise, and the second had no price. All now resolve to the model they are a snapshot of. And when a
+  longer family refuses an id for naming a further version or a variant, a shorter family no longer takes it: `command-r-plus-2`
+  returns `null` where it returned Command R. Migration: treat `null` as "price unknown"; add a custom row if you need the old guess.
+
 ## [0.17.0] - 2026-11-23
 
 ### Added
